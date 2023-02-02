@@ -1,0 +1,22 @@
+test data have been created with the program:
+
+makewff.c by Bart Selman
+
+a convenient script in TCL is:
+
+create_instances.tcl  
+
+all tasks used have been collected in:
+
+max_3_sat/ directory for MAX-3-SAT tasks
+max_4_sat/ directory for MAX-4-SAT tasks
+
+the file name format is:
+
+Ksat_nvars_nclauses_number.cnf
+
+where:
+K is 3 for MAX-3-SAT, 4 for MAX-4-SAT
+nvars is th enumber of variables
+nclauses is the number of clauses
+number is a sequential identifier

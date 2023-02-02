@@ -65,10 +65,7 @@ SATInstance::SATInstance(string filename) {
 
         // Read the number of variables and clauses
         if (line[0] == 'p') {
-            sscanf(line.c_str(), "p cnf %d %d", &nVars, &nClauses);
-
-            cout << "nVars: " << nVars << endl;
-            cout << "nClauses: " << nClauses << endl;
+            sscanf(line.c_str(), "p cnf %d %d", &(this->nVars), &(this->nClauses));
             continue;
         }
 
@@ -81,15 +78,16 @@ SATInstance::SATInstance(string filename) {
         while (sscanf(line_copy.c_str(), "%d", &literal) == 1) {
             if (literal == 0) break;
 
-            // Map the literal
-            if (literal > 0) {
-                literal = (literal-1) * 2;
-                clause.push_back(literal);
-            } else {
-                // Negate the literal
-                literal = -2*literal - 1;
-                clause.push_back(literal);
-            }
+            /*
+             * Map the literal
+             *  x -> 2x-2
+             * !x -> 2x-1
+             * So negated literals are odd and non-negated literals are even
+             * Eases bitwise maniputations
+             */
+            if (literal > 0) clause.push_back((literal-1) * 2);
+            else clause.push_back(-2*literal - 1);
+
             line_copy = line_copy.substr(line_copy.find(" ") + 1);
         }
         clauses.push_back(clause);
@@ -97,6 +95,30 @@ SATInstance::SATInstance(string filename) {
     
     // Close the file
     file.close();
+}
+
+/**
+ * @brief Print the SAT instance in a DIMACS-like format
+ */
+ostream& operator<<(ostream &os, const SATInstance &satInstance) {
+    // Print the metadata
+    os << satInstance.nVars << " variables" << endl;
+    os << satInstance.nClauses << " clauses" << endl << endl;
+
+    // Print every clause
+    vector<vector<int>> clauses = satInstance.clauses;
+    for (uint i=0; i<clauses.size(); i++) {
+        for (uint j=0; j<clauses[i].size(); j++) {
+            // Unmaps variables to their original form
+            if (clauses[i][j] % 2) os << "-" << (clauses[i][j]+1)/2;
+            else os << clauses[i][j]/2 + 1;
+
+            os << " ";
+        }
+        os << endl;
+    }
+
+    return os;
 }
 
 /**
@@ -113,6 +135,9 @@ int main(int argc, char *argv[]) {
 
     // Parse the SAT instance
     SATInstance satInstance(argv[1]);
+
+    // Print the SAT instance
+    cout << satInstance;
 
     return 0;
 }

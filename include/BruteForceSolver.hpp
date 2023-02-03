@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2023 Christopher Gómez, Ka Fung
  */
-#ifndef MAXSATBRUTEFORCE_H
-#define MAXSATBRUTEFORCE_H
+#ifndef BRUTEFORCESOLVER_H
+#define BRUTEFORCESOLVER_H
 
 /**
  * @brief A MaxSAT solver

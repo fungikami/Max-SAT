@@ -56,17 +56,21 @@ SATInstance::SATInstance(string filename) {
 
         bool weight_read = false;
         while (sscanf(line.c_str(), "%d", &literal) == 1) {
-            line = line.substr(line.find(" ") + 1);
 
             if (literal == 0) {
                 weight_read = false;
                 break;
             }
 
-            if (is_weighted && !weight_read) {
-                weights.push_back(literal);
-                weight_read = true;
+            if (!weight_read) {
+                if (is_weighted) {
+                    weights.push_back(literal);
+                    line = line.substr(line.find(" ") + 1);
+                } else {
+                    weights.push_back(1);
+                }
 
+                weight_read = true;
                 continue;
             }
             
@@ -80,6 +84,7 @@ SATInstance::SATInstance(string filename) {
             if (literal > 0) clause.push_back((literal-1) * 2);
             else clause.push_back(-2*literal - 1);
 
+            line = line.substr(line.find(" ") + 1);
         }
         clauses.push_back(clause);
     }

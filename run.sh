@@ -1,0 +1,1 @@
+./bin/maxsatsolver $1

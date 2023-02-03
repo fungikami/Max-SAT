@@ -37,19 +37,39 @@ SATInstance::SATInstance(string filename) {
 
         // Read the number of variables and clauses
         if (line[0] == 'p') {
-            sscanf(line.c_str(), "p cnf %d %d", &(this->nVars), &(this->nClauses));
+            // Check if the instances is weighted
+            if (line[2] == 'w') {
+                is_weighted = true;
+
+                sscanf(line.c_str(),"p wcnf %d %d", &nVars, &nClauses);
+            }
+            else {
+                sscanf(line.c_str(), "p cnf %d %d", &nVars, &nClauses);
+            } 
+
             continue;
         }
 
         // Store the clauses
         vector<int> clause;
         int literal;
-        
-        string line_copy = line;
 
-        while (sscanf(line_copy.c_str(), "%d", &literal) == 1) {
-            if (literal == 0) break;
+        bool weight_read = false;
+        while (sscanf(line.c_str(), "%d", &literal) == 1) {
+            line = line.substr(line.find(" ") + 1);
 
+            if (literal == 0) {
+                weight_read = false;
+                break;
+            }
+
+            if (is_weighted && !weight_read) {
+                weights.push_back(literal);
+                weight_read = true;
+
+                continue;
+            }
+            
             /*
              * Map the literal
              *  x -> 2x-2
@@ -60,7 +80,6 @@ SATInstance::SATInstance(string filename) {
             if (literal > 0) clause.push_back((literal-1) * 2);
             else clause.push_back(-2*literal - 1);
 
-            line_copy = line_copy.substr(line_copy.find(" ") + 1);
         }
         clauses.push_back(clause);
     }
@@ -72,15 +91,23 @@ SATInstance::SATInstance(string filename) {
 /**
  * @brief Print the SAT instance in a DIMACS-like format
  */
-ostream& operator<<(ostream &os, const SATInstance &satInstance) {
+ostream& operator<<(ostream &os, const SATInstance &sat_instance) {
     // Print the metadata
-    os << satInstance.nVars << " variables" << endl;
-    os << satInstance.nClauses << " clauses" << endl << endl;
+    os << sat_instance.nVars << " variables" << endl;
+    os << sat_instance.nClauses << " clauses" << endl;
+    
+    if (sat_instance.is_weighted) {
+        os << "Weighted instance" << endl;
+    }
+    os << endl;
 
     // Print every clause
-    vector<vector<int>> clauses = satInstance.clauses;
+    vector<vector<int>> clauses = sat_instance.clauses;
     for (uint i=0; i<clauses.size(); i++) {
+        if (sat_instance.is_weighted) os << sat_instance.weights[i] << " ";
+
         for (uint j=0; j<clauses[i].size(); j++) {
+
             // Unmaps variables to their original form
             if (clauses[i][j] % 2) os << "-" << (clauses[i][j]+1)/2;
             else os << clauses[i][j]/2 + 1;

@@ -21,10 +21,10 @@ int main(int argc, char *argv[]) {
     }
 
     // Parse the SAT instance
-    SATInstance satInstance(argv[1]);
+    SATInstance sat_instance(argv[1]);
 
     // Print the SAT instance
-    cout << satInstance;
+    cout << sat_instance;
 
     return 0;
 }

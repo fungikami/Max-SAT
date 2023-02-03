@@ -27,7 +27,9 @@ class SATInstance {
     vector<vector<int>> clauses;
 
     // Weights of clauses
+    bool is_weighted = false;
     vector<int> weights;
+
 };
 
 ostream& operator<<(ostream &os, const SATInstance &satInstance);

@@ -30,7 +30,6 @@ class SATInstance {
 };
 
 // TODO
-// Arreglar lo de literal para hacer operaciones bit a bit
 // Hacer que el parser vea los pesos si dice wcnf
 // Implementar el algoritmo de MaxSAT
 

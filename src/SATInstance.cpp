@@ -41,10 +41,10 @@ SATInstance::SATInstance(string filename) {
             if (line[2] == 'w') {
                 is_weighted = true;
 
-                sscanf(line.c_str(),"p wcnf %d %d", &nVars, &nClauses);
+                sscanf(line.c_str(),"p wcnf %d %d", &n_vars, &n_clauses);
             }
             else {
-                sscanf(line.c_str(), "p cnf %d %d", &nVars, &nClauses);
+                sscanf(line.c_str(), "p cnf %d %d", &n_vars, &n_clauses);
             } 
 
             continue;
@@ -98,8 +98,8 @@ SATInstance::SATInstance(string filename) {
  */
 ostream& operator<<(ostream &os, const SATInstance &sat_instance) {
     // Print the metadata
-    os << sat_instance.nVars << " variables" << endl;
-    os << sat_instance.nClauses << " clauses" << endl;
+    os << sat_instance.n_vars << " variables" << endl;
+    os << sat_instance.n_clauses << " clauses" << endl;
     
     if (sat_instance.is_weighted) {
         os << "Weighted instance" << endl;

@@ -20,8 +20,8 @@ class SATInstance {
     SATInstance(string filename);
 
     // Metadata
-    int nVars;
-    int nClauses;
+    int n_vars;
+    int n_clauses;
 
     // Clauses as arrays of vectors
     vector<vector<int>> clauses;

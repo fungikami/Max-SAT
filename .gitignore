@@ -32,5 +32,5 @@
 *.app
 
 # Otros
-maxsatsolver
-.vscode
+*/maxsatsolver
+.vscode/

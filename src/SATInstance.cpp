@@ -11,7 +11,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include "SATInstance.hpp"
+#include "../include/SATInstance.hpp"
 
 using namespace std;
 

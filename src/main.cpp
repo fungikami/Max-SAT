@@ -4,18 +4,9 @@
  * Copyright (C) 2023 Christopher Gómez, Ka Fung
  */
 #include <iostream>
-#include "SATInstance.hpp"
+#include "../include/SATInstance.hpp"
 
 using namespace std;
-
-/**
- * @brief A MaxSAT solver
- * 
- */
-class MaxSATSolver {
-  void initialize(); // to accept input and initialize
-  void solve();      // to solve and show the result
-};
 
 /**
  * @brief Initialize the solver

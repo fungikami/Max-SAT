@@ -22,6 +22,11 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    // TODO:
+    // - Check if the file exists inside the instance constructor and do
+    // something if it doesn't
+    // - Make a verifier for the outputted solution to be valid, maybe a
+    // separate executable, a SATSolver method or another class.
     SATInstance instance(argv[1]);
     BruteForceSolver solver(instance);
     solver.solve();

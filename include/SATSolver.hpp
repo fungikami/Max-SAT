@@ -29,7 +29,7 @@ class SATSolver {
     int max_weight = -1;
     int optimal_found = false;
 
-    vector<char> optimal_assignment;
+    vector<bool> optimal_assignment;
     vector<vector<int>> watchlist;
 };
 

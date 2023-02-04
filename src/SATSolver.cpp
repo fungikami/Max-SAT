@@ -8,11 +8,10 @@ using namespace std;
 
 /**
  * @brief Generates an initial solution for the instance to be solved
+ * 
  * @param instance The SAT instance
  */
-SATSolver::SATSolver(const SATInstance &instance) : instance(instance) {
-    vector<int> optimal_assignment(instance.n_vars, 0);
-}
+SATSolver::SATSolver(const SATInstance &instance) : instance(instance) {}
 
 /**
  * @brief Print the solution found (may be approximate)

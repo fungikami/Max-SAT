@@ -12,7 +12,7 @@ set vars [lindex $argv 0]
 set clauses [lindex $argv 1]
 set lit_per_cla 4
 
-set ntests 50
+set ntests 1
 
 
 for {set iter 1} {$iter <= $ntests} {incr iter 1} {

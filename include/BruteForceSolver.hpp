@@ -17,6 +17,7 @@ class BruteForceSolver : public SATSolver {
     using SATSolver::SATSolver;
 
     virtual void solve();
+    void solve_helper(int i);
 };
 
 #endif

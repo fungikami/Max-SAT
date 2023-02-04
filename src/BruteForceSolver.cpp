@@ -23,6 +23,9 @@ void BruteForceSolver::solve() {
 }
 
 void BruteForceSolver::solve_helper(int i) {
+    // If every clause is already satisfied, stop
+    if (optimal_found) return;
+
     // If all the variables have been assigned
     if (i == instance.n_vars) {
         // Compute the weight of the assignment
@@ -33,28 +36,19 @@ void BruteForceSolver::solve_helper(int i) {
         for (int j = 0; j < instance.n_clauses; j++) {
             bool satisfied = false;
 
+            // For each variable in the clause
             for (auto var : instance.clauses[j]) {
-                // If the variable is negative
-                if (var % 2) {
-                    // If it's assigned to true, skip the clause
-                    if (assignment[var>>1]) continue;
+                bool var_assignment = assignment[var>>1];
 
-                    // Otherwise, the clause is satisfied
-                    satisfied = true;
+                // var & 1 is true if var is negated
+                satisfied = var & 1 ? !var_assignment : var_assignment;
+
+                // If the clause is satisfied, skip to the next one
+                if (satisfied) {
+                    weight += instance.weights[j];
+                    n_satisfied++;
                     break;
-
-                // If the variable is positive
-                } else {
-                    // If it's assigned to true, the clause is satisfied
-                    if (assignment[var>>1]) {
-                        satisfied = true;
-                        break;
-                    }
                 }
-            }
-            if (satisfied) {
-                weight += instance.weights[j];
-                n_satisfied++;
             }
         }
 
@@ -64,15 +58,12 @@ void BruteForceSolver::solve_helper(int i) {
             optimal_assignment = assignment;
         }
 
-        // If all the clauses are satisfied, stop
-        if (n_satisfied == instance.n_clauses) {
-            optimal_found = true;
-            break;
-        }
+        if (n_satisfied == instance.n_clauses) optimal_found = true;
+        return;
     }
 
     // For each possible assignment of the variables compute the assignment
-    for (bool j = 0; j <= 1; j++) {
+    for (int j = 0; j <= 1; j++) {
         assignment[i] = j;
         solve_helper(i+1);
     }

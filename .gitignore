@@ -32,5 +32,6 @@
 *.app
 
 # Otros
-*/maxsatsolver
+bin/
+build/
 .vscode/

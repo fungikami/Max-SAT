@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2023 Christopher Gómez, Ka Fung
  */
+
 #ifndef BRUTEFORCESOLVER_H
 #define BRUTEFORCESOLVER_H
 
@@ -16,7 +17,7 @@ class BruteForceSolver : public SATSolver {
     using SATSolver::SATSolver;
 
     virtual void solve();
-    void solve_helper(int i);
+    void solve_helper(vector<bool> &assignment, int i);
 };
 
 #endif

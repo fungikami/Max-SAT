@@ -17,14 +17,24 @@ using namespace std;
  * Implementation of a MaxSAT solver with brute force
  */
 void BruteForceSolver::solve() {
-    // Try every assignment
-    solve_helper(0);
+    // Initialize the assignment
+    vector<bool> assignment(instance.n_vars, false);
 
-    // Optimal is guaranteed to be found
+    // Try every assignment
+    solve_helper(assignment, 0);
+
+    // Optimum is guaranteed to be found
     optimal_found = true;
 }
 
-void BruteForceSolver::solve_helper(int i) {
+/**
+ * @brief Recursively generates all the possible assignments and computes the
+ * weight of each one, stops when the optimal assignment is found
+ * 
+ * @param assignment 
+ * @param i 
+ */
+void BruteForceSolver::solve_helper(vector<bool> &assignment, int i) {
     // If every clause is already satisfied, stop
     if (optimal_found) return;
 
@@ -60,13 +70,13 @@ void BruteForceSolver::solve_helper(int i) {
             optimal_assignment = assignment;
         }
 
-        if (n_satisfied == instance.n_clauses) optimal_found = true;
+        optimal_found = n_satisfied == instance.n_clauses;
         return;
     }
 
-    // For each possible assignment of the variables compute the assignment
-    for (int j = 0; j <= 1; j++) {
-        assignment[i] = j;
-        solve_helper(i+1);
+    // Try assigning the variable to false
+    for (bool boolean : {false, true}) {
+        assignment[i] = boolean;
+        solve_helper(assignment, i+1);
     }
 }

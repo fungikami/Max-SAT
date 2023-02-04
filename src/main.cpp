@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2023 Christopher Gómez, Ka Fung
  */
+
 #include <iostream>
 
 #include "../include/BruteForceSolver.hpp"

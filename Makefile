@@ -8,13 +8,19 @@ INCLUDE_DIR = include
 
 all: $(BIN_DIR)/maxsatsolver
 
-$(BIN_DIR)/maxsatsolver: $(SRC_DIR)/main.cpp $(BUILD_DIR)/SATInstance.o
-	$(CC) $(CFLAGS) -o $(BIN_DIR)/maxsatsolver $(SRC_DIR)/main.cpp $(BUILD_DIR)/SATInstance.o
+$(BIN_DIR)/maxsatsolver: $(SRC_DIR)/main.cpp $(BUILD_DIR)/SATInstance.o $(BUILD_DIR)/BruteForceSolver.o $(BUILD_DIR)/SATSolver.o
+	$(CC) $(CFLAGS) -o $(BIN_DIR)/maxsatsolver $(SRC_DIR)/main.cpp $(BUILD_DIR)/SATInstance.o $(BUILD_DIR)/BruteForceSolver.o $(BUILD_DIR)/SATSolver.o
+
+$(BUILD_DIR)/BruteForceSolver.o: $(SRC_DIR)/BruteForceSolver.cpp $(INCLUDE_DIR)/BruteForceSolver.hpp $(BUILD_DIR)/SATSolver.o
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/BruteForceSolver.cpp -o $(BUILD_DIR)/BruteForceSolver.o $(BUILD_DIR)/SATSolver.o
+
+$(BUILD_DIR)/SATSolver.o: $(SRC_DIR)/SATSolver.cpp $(INCLUDE_DIR)/SATSolver.hpp $(BUILD_DIR)/SATInstance.o
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/SATSolver.cpp -o $(BUILD_DIR)/SATSolver.o $(BUILD_DIR)/SATInstance.o
 
 $(BUILD_DIR)/SATInstance.o: $(SRC_DIR)/SATInstance.cpp $(INCLUDE_DIR)/SATInstance.hpp
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/SATInstance.cpp -o $(BUILD_DIR)/SATInstance.o
 
 clean:
-	rm -f $(BIN_DIR)/maxsatsolver $(BUILD_DIR)/*.o
+	rm -rf $(BIN_DIR) $(BUILD_DIR)
 
 $(shell mkdir -p $(BUILD_DIR) $(BIN_DIR) $(SRC_DIR) $(INCLUDE_DIR))

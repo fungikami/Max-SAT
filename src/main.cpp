@@ -4,6 +4,7 @@
  * Copyright (C) 2023 Christopher Gómez, Ka Fung
  */
 #include <iostream>
+
 #include "../include/BruteForceSolver.hpp"
 #include "../include/SATInstance.hpp"
 
@@ -21,11 +22,10 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    // Parse the SAT instance
-    SATInstance sat_instance(argv[1]);
-
-    // Print the SAT instance
-    cout << sat_instance;
+    SATInstance instance(argv[1]);
+    BruteForceSolver solver(instance);
+    solver.solve();
+    solver.print_solution();
 
     return 0;
 }

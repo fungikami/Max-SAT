@@ -6,13 +6,17 @@
 #ifndef BRUTEFORCESOLVER_H
 #define BRUTEFORCESOLVER_H
 
+#include "../include/SATSolver.hpp"
+
 /**
  * @brief A MaxSAT solver
  * 
  */
-class BruteForceSolver {
-  void initialize(); // to accept input and initialize
-  void solve();      // to solve and show the result
+class BruteForceSolver : public SATSolver {
+  public:
+    using SATSolver::SATSolver;
+
+    virtual void solve();
 };
 
 #endif

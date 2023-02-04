@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2023 Christopher Gómez, Ka Fung
  */
+
 #ifndef SATSOLVER_H
 #define SATSOLVER_H
 
@@ -28,7 +29,6 @@ class SATSolver {
     int max_weight = -1;
     int optimal_found = false;
 
-    vector<char> assignment;
     vector<char> optimal_assignment;
     vector<vector<int>> watchlist;
 };

@@ -1,4 +1,4 @@
-#include <string>
+#include <vector>
 #include <iostream>
 
 #include "../include/SATSolver.hpp"
@@ -7,20 +7,17 @@
 using namespace std;
 
 /**
- * @brief Constructor
- * @param filename The name of the file containing the SAT instance
+ * @brief Generates an initial solution for the instance to be solved
+ * @param instance The SAT instance
  */
-SATSolver::SATSolver(const SATInstance &instance) : instance(instance) {      
-    // Initialize the assignment and optimal assignment with -1 (not assigned)
-    for (int i = 0; i < instance.n_vars; i++) {
-        assignment.push_back(-1);
-        optimal_assignment.push_back(-1);
-    }
+SATSolver::SATSolver(const SATInstance &instance) : instance(instance) {
+    vector<int> optimal_assignment(instance.n_vars, 0);
 }
 
 /**
- * @brief Print the solution
- * "s" line indicates if the optimal solution was found or not
+ * @brief Print the solution found (may be approximate)
+ * 
+ * "s" line indicates if the optimal solution was known to be found or not
  * "o" line indicates the optimal weight 
  * "v" line indicates the optimal assignment
  */

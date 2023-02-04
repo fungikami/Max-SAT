@@ -91,20 +91,19 @@ SATInstance::SATInstance(string filename) {
 ostream& operator<<(ostream &os, const SATInstance &instance) {
     // Prints the header
     os << "c Ka Fung & Christopher Gómez, 2022" << endl;
-    os << "p wcnf " << instance.n_vars << " " << instance.n_clauses << endl;
+    os << "p wcnf " << instance.n_vars << " " << instance.n_clauses;
 
     // Prints the clauses
     vector<vector<int>> clauses = instance.clauses;
-    for (uint i=0; i<clauses.size(); i++) {
-        for (uint j=0; j<clauses[i].size(); j++) {
-            os << instance.weights[i] << " ";
-            int literal = clauses[i][j];
+    for (uint i=0; i<instance.clauses.size(); i++) {
+        os << endl << instance.weights[i] << " ";
 
+        for (int literal : clauses[i]) {
             // Unmaps variables to their original form
             if (literal & 1) os << "-";
             os << ((literal>>1) +1) << " ";
         }
-        os << endl;
+        os << "0";
     }
 
     return os;

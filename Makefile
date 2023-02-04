@@ -2,15 +2,19 @@
 CC = g++
 CFLAGS = -Wall -g -std=c++11
 BUILD_DIR = build
+BIN_DIR = bin
 SRC_DIR = src
+INCLUDE_DIR = include
 
-all: bin/maxsatsolver
+all: $(BIN_DIR)/maxsatsolver
 
-bin/maxsatsolver: src/main.cpp build/SATInstance.o
-	$(CC) $(CFLAGS) -o bin/maxsatsolver src/main.cpp build/SATInstance.o
+$(BIN_DIR)/maxsatsolver: $(SRC_DIR)/main.cpp $(BUILD_DIR)/SATInstance.o
+	$(CC) $(CFLAGS) -o $(BIN_DIR)/maxsatsolver $(SRC_DIR)/main.cpp $(BUILD_DIR)/SATInstance.o
 
-build/SATInstance.o: src/SATInstance.cpp include/SATInstance.hpp
-	$(CC) $(CFLAGS) -c src/SATInstance.cpp -o build/SATInstance.o
+$(BUILD_DIR)/SATInstance.o: $(SRC_DIR)/SATInstance.cpp $(INCLUDE_DIR)/SATInstance.hpp
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/SATInstance.cpp -o $(BUILD_DIR)/SATInstance.o
 
 clean:
-	rm -f bin/maxsatsolver build/*.o
+	rm -f $(BIN_DIR)/maxsatsolver $(BUILD_DIR)/*.o
+
+$(shell mkdir -p $(BUILD_DIR) $(BIN_DIR) $(SRC_DIR) $(INCLUDE_DIR))

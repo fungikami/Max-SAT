@@ -31,3 +31,4 @@ int main(int argc, char *argv[]) {
     cout << sat_instance;
 
     return 0;
+}

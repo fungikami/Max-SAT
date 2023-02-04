@@ -27,6 +27,8 @@ int main(int argc, char *argv[]) {
     // something if it doesn't
     // - Make a verifier for the outputted solution to be valid, maybe a
     // separate executable, a SATSolver method or another class.
+    // - See if we can factorize the weight computation into another function,
+    // and maybe make use of the watchlist for that purpose
     SATInstance instance(argv[1]);
     BruteForceSolver solver(instance);
     solver.solve();

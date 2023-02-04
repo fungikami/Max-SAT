@@ -10,7 +10,6 @@
 
 /**
  * @brief A MaxSAT solver
- * 
  */
 class BruteForceSolver : public SATSolver {
   public:

@@ -1,11 +1,8 @@
 /**
- * Solver de Max-SAT
+ * A SAT problem instance
  *
  * Copyright (C) 2023 Christopher Gómez, Ka Fung
  */
-
-// TODO
-// Hacer que el parser vea los pesos si dice wcnf
 
 #include <iostream>
 #include <fstream>
@@ -16,7 +13,7 @@
 using namespace std;
 
 /**
- * @brief Parse a SAT instance from a file
+ * @brief Parse a SAT instance in DIMACS format from a file
  * 
  * @param filename string with the path to the file
  */
@@ -24,45 +21,41 @@ SATInstance::SATInstance(string filename) {
     ifstream file;
     file.open(filename);
 
-    // Check if the file is open
     if (!file.is_open()) {
         cout << "Error opening file" << endl;
         return;
     }
 
-    // Skip comments at the beginning of the file
     string line;
+    bool is_weighted = false;
     while (getline(file, line)) {
+        // Skip comments at the beginning of the file
         if (line[0] == 'c') continue;
 
         // Read the number of variables and clauses
         if (line[0] == 'p') {
-            // Check if the instances is weighted
-            if (line[2] == 'w') {
-                is_weighted = true;
+            is_weighted = line[2] == 'w';
 
+            if (is_weighted)
                 sscanf(line.c_str(),"p wcnf %d %d", &n_vars, &n_clauses);
-            }
-            else {
+            else
                 sscanf(line.c_str(), "p cnf %d %d", &n_vars, &n_clauses);
-            } 
-
             continue;
         }
 
-        // Store the clauses
         vector<int> clause;
         int literal;
 
         bool weight_read = false;
         while (sscanf(line.c_str(), "%d", &literal) == 1) {
-
+            // Reset the weight_read boolean if the clause is finished
             if (literal == 0) {
                 weight_read = false;
                 break;
             }
 
             if (!weight_read) {
+                // Push the weight of the clause
                 if (is_weighted) {
                     weights.push_back(literal);
                     line = line.substr(line.find(" ") + 1);
@@ -88,36 +81,28 @@ SATInstance::SATInstance(string filename) {
         }
         clauses.push_back(clause);
     }
-    
-    // Close the file
+
     file.close();
 }
 
 /**
- * @brief Print the SAT instance in a DIMACS-like format
+ * @brief Print the SAT instance in a DIMACS wcnf format
  */
-ostream& operator<<(ostream &os, const SATInstance &sat_instance) {
-    // Print the metadata
-    os << sat_instance.n_vars << " variables" << endl;
-    os << sat_instance.n_clauses << " clauses" << endl;
-    
-    if (sat_instance.is_weighted) {
-        os << "Weighted instance" << endl;
-    }
-    os << endl;
+ostream& operator<<(ostream &os, const SATInstance &instance) {
+    // Prints the header
+    os << "c Ka Fung & Christopher Gómez, 2022" << endl;
+    os << "p wcnf " << instance.n_vars << " " << instance.n_clauses << endl;
 
-    // Print every clause
-    vector<vector<int>> clauses = sat_instance.clauses;
+    // Prints the clauses
+    vector<vector<int>> clauses = instance.clauses;
     for (uint i=0; i<clauses.size(); i++) {
-        if (sat_instance.is_weighted) os << sat_instance.weights[i] << " ";
-
         for (uint j=0; j<clauses[i].size(); j++) {
+            os << instance.weights[i] << " ";
+            int literal = clauses[i][j];
 
             // Unmaps variables to their original form
-            if (clauses[i][j] % 2) os << "-" << (clauses[i][j]+1)/2;
-            else os << clauses[i][j]/2 + 1;
-
-            os << " ";
+            if (literal & 1) os << "-";
+            os << ((literal>>1) +1) << " ";
         }
         os << endl;
     }

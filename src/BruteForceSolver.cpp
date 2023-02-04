@@ -17,9 +17,11 @@ using namespace std;
  * Implementation of a MaxSAT solver with brute force
  */
 void BruteForceSolver::solve() {
-    // TODO: Hacer que el solver funcione
-    // con solve_helper(int i)
+    // Try every assignment
     solve_helper(0);
+
+    // Optimal is guaranteed to be found
+    optimal_found = true;
 }
 
 void BruteForceSolver::solve_helper(int i) {

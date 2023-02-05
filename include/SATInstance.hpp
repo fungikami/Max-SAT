@@ -25,6 +25,7 @@ class SATInstance {
     vector<vector<int>> clauses;
     vector<int> weights;
 
+    bool is_literal_true(int literal, const vector<bool> &assignment);
 };
 
 ostream& operator<<(ostream &os, const SATInstance &satInstance);

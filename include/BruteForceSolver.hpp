@@ -15,7 +15,8 @@
 class BruteForceSolver : public SATSolver {
   public:
     using SATSolver::SATSolver;
-
+    BruteForceSolver(const SATInstance &instance);
+    
     virtual void solve();
     void solve_helper(vector<bool> &assignment, int i);
 };

@@ -19,7 +19,7 @@ using namespace std;
  */
 class SATSolver {
   public:
-    SATSolver(const SATInstance &instance);
+    SATSolver(const SATInstance &instance) : instance(instance) {};
 
     virtual void solve() = 0;
     int compute_weight(const vector<bool> &assignment, int &n_satisfied);
@@ -32,7 +32,6 @@ class SATSolver {
     bool optimal_found = false;
 
     vector<bool> optimal_assignment;
-    vector<vector<int>> watchlist;
 };
 
 #endif

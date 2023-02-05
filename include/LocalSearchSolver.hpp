@@ -10,13 +10,23 @@
 #include "../include/SATSolver.hpp"
 
 /**
- * @brief A MaxSAT solver based on local search
+ * @brief A MaxSAT solver based on local search metaheuristic
  */
 class LocalSearchSolver : public SATSolver {
   public:
     using SATSolver::SATSolver;
+    LocalSearchSolver(const SATInstance &instance);
+    LocalSearchSolver(const SATInstance &instance, time_t seed);
 
     virtual void solve();
+
+    time_t seed;
+
+    // Maps a variable to the clauses it appears in
+    vector<vector<int>> affected_clauses;
+
+    int evaluate_flip(vector<bool> &assignment, int flipped_var, int &new_satisfied);
+    void print_solution();
 };
 
 #endif

@@ -12,6 +12,15 @@
 using namespace std;
 
 /**
+ * @brief Generates an initial solution for the instance to be solved
+ * 
+ * @param instance The SAT instance
+ */
+BruteForceSolver::BruteForceSolver(const SATInstance &instance) : SATSolver(instance) {
+    optimal_assignment = vector<bool>(instance.n_vars, false);
+}
+
+/**
  * Implementation of a MaxSAT solver with brute force
  */
 void BruteForceSolver::solve() {

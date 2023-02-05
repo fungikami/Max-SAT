@@ -86,6 +86,20 @@ SATInstance::SATInstance(string filename) {
 }
 
 /**
+ * @brief Check if a given literal is satisfied by an assignment
+ * 
+ * @param assignment vector of booleans with the assignment
+ * @return true if the assignment satisfies the instance
+ *   false otherwise
+ */
+bool SATInstance::is_literal_true(int literal, const vector<bool> &assignment) {
+    bool var_assignment = assignment[literal>>1];
+
+    // literal & 1 is true if literal is negated
+    return literal & 1 ? !var_assignment : var_assignment;
+}
+
+/**
  * @brief Print the SAT instance in a DIMACS wcnf format
  */
 ostream& operator<<(ostream &os, const SATInstance &instance) {

@@ -9,6 +9,7 @@
 #include <chrono>
 
 #include "../include/BruteForceSolver.hpp"
+#include "../include/LocalSearchSolver.hpp"
 #include "../include/SATInstance.hpp"
 
 using namespace std;
@@ -31,24 +32,26 @@ int main(int argc, char *argv[]) {
     SATInstance instance(argv[1]);
 
     // ========== BRUTE FORCE ==========
-    BruteForceSolver bf_solver(instance);
-    double bf_solver_t = measure_time([&] { bf_solver.solve(); });
-    bf_solver.verify_solution();
+    // BruteForceSolver bf_solver(instance);
+    // double bf_solver_t = measure_time([&] { bf_solver.solve(); });
+    // bf_solver.print_solution();
+    // bf_solver.verify_solution();
 
     // ========== LOCAL SEARCH ==========
-    // LocalSearchSolver ls_solver(instance);
-    // double ls_solver_t = measure_time([&] { solver.solve(); });
-    // ls_solver.verify_solution();
+    LocalSearchSolver ls_solver(instance);
+    double ls_solver_t = measure_time([&] { ls_solver.solve(); });
+    ls_solver.print_solution();
+    ls_solver.verify_solution();
 
     // ========== GUIDED LOCAL SEARCH ==========
     // GLSSolver gls_solver(instance);
-    // double gls_solver_t = measure_time([&] { solver.solve(); });
+    // double gls_solver_t = measure_time([&] { gls_solver.solve(); });
     // gls_solver.verify_solution();
 
     // ========== PRINT RESULTS ==========
     cout << "Time elapsed:" << endl;
-    cout << "  Exact solver: " << bf_solver_t << "s" << endl;
-    // cout << "  Local search: " << ls_solver_t << "s" << endl;
+    // cout << "  Exact solver: " << bf_solver_t << "s" << endl;
+    cout << "  Local search: " << ls_solver_t << "s" << endl;
     // cout << "           GLS: " << gls_solver_t << "s" << endl;
 
     return 0;

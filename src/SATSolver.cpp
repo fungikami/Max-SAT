@@ -7,15 +7,6 @@
 using namespace std;
 
 /**
- * @brief Generates an initial solution for the instance to be solved
- * 
- * @param instance The SAT instance
- */
-SATSolver::SATSolver(const SATInstance &instance) : instance(instance) {
-    optimal_assignment = vector<bool>(instance.n_vars, false);
-}
-
-/**
  * @brief Computes the weight given an assignment according to the SAT instance
  * 
  * @param assignment The assignment to be evaluated
@@ -29,11 +20,8 @@ int SATSolver::compute_weight(const vector<bool> &assignment, int &n_satisfied) 
         bool satisfied = false;
 
         // For each variable in the clause
-        for (auto var : instance.clauses[j]) {
-            bool var_assignment = assignment[var>>1];
-
-            // var & 1 is true if var is negated
-            satisfied = var & 1 ? !var_assignment : var_assignment;
+        for (auto literal : instance.clauses[j]) {
+            satisfied = instance.is_literal_true(literal, assignment);
 
             // If the clause is satisfied, skip to the next one
             if (satisfied) {

@@ -4,8 +4,6 @@
  * Copyright (C) 2023 Christopher Gómez, Ka Fung
  */
 #include <iostream>
-#include <fstream>
-#include <string>
 #include <vector>
 
 #include "../include/BruteForceSolver.hpp"
@@ -18,7 +16,7 @@ using namespace std;
  */
 void BruteForceSolver::solve() {
     // Initialize the assignment
-    vector<bool> assignment(instance.n_vars, false);
+    vector<bool> assignment = optimal_assignment;
 
     // Try every assignment
     solve_helper(assignment, 0);
@@ -41,32 +39,12 @@ void BruteForceSolver::solve_helper(vector<bool> &assignment, int i) {
     // If all the variables have been assigned
     if (i == instance.n_vars) {
         // Compute the weight of the assignment
-        int weight = 0;
-
-        // For each clause
-        int n_satisfied = 0;
-        for (int j = 0; j < instance.n_clauses; j++) {
-            bool satisfied = false;
-
-            // For each variable in the clause
-            for (auto var : instance.clauses[j]) {
-                bool var_assignment = assignment[var>>1];
-
-                // var & 1 is true if var is negated
-                satisfied = var & 1 ? !var_assignment : var_assignment;
-
-                // If the clause is satisfied, skip to the next one
-                if (satisfied) {
-                    weight += instance.weights[j];
-                    n_satisfied++;
-                    break;
-                }
-            }
-        }
+        int n_satisfied;
+        int weight = compute_weight(assignment, n_satisfied);
 
         // Update the optimal assignment
-        if (weight > max_weight) {
-            max_weight = weight;
+        if (weight > optimal_weight) {
+            optimal_weight = weight;
             optimal_assignment = assignment;
         }
 

@@ -22,12 +22,14 @@ class SATSolver {
     SATSolver(const SATInstance &instance);
 
     virtual void solve() = 0;
+    int compute_weight(const vector<bool> &assignment, int &n_satisfied);
     void print_solution();
+    void verify_solution();
 
     SATInstance instance;
 
-    int max_weight = -1;
-    int optimal_found = false;
+    int optimal_weight = -1;
+    bool optimal_found = false;
 
     vector<bool> optimal_assignment;
     vector<vector<int>> watchlist;

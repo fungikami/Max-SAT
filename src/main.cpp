@@ -27,30 +27,29 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    // TODO:
-    // - Check if the file exists inside the instance constructor and do
-    // something if it doesn't
-    // - Make a verifier for the outputted solution to be valid, maybe a
-    // separate executable, a SATSolver method or another class.
-    // - See if we can factorize the weight computation into another function,
-    // and maybe make use of the watchlist for that purpose
+    // ========== READ THE INSTANCE ==========
     SATInstance instance(argv[1]);
 
-    // Initialize every solver
-    BruteForceSolver solver(instance);
+    // ========== BRUTE FORCE ==========
+    BruteForceSolver bf_solver(instance);
+    double bf_solver_t = measure_time([&] { bf_solver.solve(); });
+    bf_solver.verify_solution();
 
-    // Benchmark every solver
-    double brute_force_t = measure_time([&] { solver.solve(); });
+    // ========== LOCAL SEARCH ==========
+    // LocalSearchSolver ls_solver(instance);
+    // double ls_solver_t = measure_time([&] { solver.solve(); });
+    // ls_solver.verify_solution();
 
-    // For debugging purposes
-    solver.print_solution();
+    // ========== GUIDED LOCAL SEARCH ==========
+    // GLSSolver gls_solver(instance);
+    // double gls_solver_t = measure_time([&] { solver.solve(); });
+    // gls_solver.verify_solution();
 
-    // Verify the solution is valid
-    // solver.verify_solution();
-
-    // Print the time elapsed
+    // ========== PRINT RESULTS ==========
     cout << "Time elapsed:" << endl;
-    cout << "  Exact solver: " << brute_force_t << "s" << endl;
+    cout << "  Exact solver: " << bf_solver_t << "s" << endl;
+    // cout << "  Local search: " << ls_solver_t << "s" << endl;
+    // cout << "           GLS: " << gls_solver_t << "s" << endl;
 
     return 0;
 }

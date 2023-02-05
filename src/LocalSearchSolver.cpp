@@ -15,23 +15,13 @@
 using namespace std;
 
 /**
- * @brief Generates a random initial solution for the instance to be solved
- * 
- * @param instance The SAT instance
- */
-LocalSearchSolver::LocalSearchSolver(const SATInstance &instance) 
-    : SATSolver(instance), seed(time(NULL)), affected_clauses(instance.n_vars, vector<int>()) {
-    // Initialize the optimal assignment with random values
-    LocalSearchSolver(instance, seed);
-}
-/**
  * @brief Generates an initial solution for the instance to be solved, using
  * the given seed
  * 
  * @param instance The SAT instance
  * @param seed The seed for the random number generator
  */
-LocalSearchSolver::LocalSearchSolver(const SATInstance &instance, time_t seed)
+LocalSearchSolver::LocalSearchSolver(const SATInstance &instance, uint seed)
     : SATSolver(instance), seed(seed), affected_clauses(instance.n_vars, vector<int>()) {
     // Initialize the optimal assignment with random values
     srand(seed);
@@ -39,12 +29,9 @@ LocalSearchSolver::LocalSearchSolver(const SATInstance &instance, time_t seed)
         optimal_assignment.push_back(rand() & 1);
 
     // For each clause, save for each variable the clauses it affects
-    vector<vector<int>> affected_clauses(instance.n_vars, vector<int>());
-    for (int i = 0; i < instance.n_clauses; i++) {
-        for (auto literal : instance.clauses[i]) {
+    for (int i = 0; i < instance.n_clauses; i++)
+        for (auto literal : instance.clauses[i])
             affected_clauses[literal>>1].push_back(i);
-        }
-    }
 }
 
 /**
@@ -54,7 +41,7 @@ LocalSearchSolver::LocalSearchSolver(const SATInstance &instance, time_t seed)
  */
 void LocalSearchSolver::solve() {
     // Compute the initial weight
-    int i;
+    int i = 0;
     int n_satisfied;
     optimal_weight = compute_weight(optimal_assignment, n_satisfied);
 

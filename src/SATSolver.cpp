@@ -59,6 +59,10 @@ void SATSolver::print_solution() {
  */
 void SATSolver::verify_solution() {
     int n_satisfied;
-    if (compute_weight(optimal_assignment, n_satisfied) != optimal_weight)
+    int computed_weight = compute_weight(optimal_assignment, n_satisfied);
+    if (computed_weight != optimal_weight) {
         cout << "ERROR: Found solution is inconsistent" << endl;
+        cout << "Reported weight is " << optimal_weight;
+        cout << ", actual weight is " << computed_weight << endl;
+    }
 }

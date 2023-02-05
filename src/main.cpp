@@ -31,16 +31,22 @@ int main(int argc, char *argv[]) {
     // ========== READ THE INSTANCE ==========
     SATInstance instance(argv[1]);
 
+    // Verificar por qué local search da peores resultados si se ejecuta brute
+    // force primero
     // ========== BRUTE FORCE ==========
-    // BruteForceSolver bf_|solver(instance);
-    // double bf_solver_t = measure_time([&] { bf_solver.solve(); });
-    // bf_solver.verify_solution();
+    BruteForceSolver bf_solver(SATInstance("test_data/others/test1.cnf"));
+    double bf_solver_t = measure_time([&] { bf_solver.solve(); });
+    bf_solver.verify_solution();
 
     // ========== LOCAL SEARCH ==========
-    // Buena semilla ? 1675590184
-    LocalSearchSolver ls_solver(instance, 1675590184);
+    /**
+     * Buenas semillas:
+     *  -test_7 = 1675590184
+     *  -test_3 = 1675618427
+     */
+    LocalSearchSolver ls_solver(instance);
     double ls_solver_t = measure_time([&] { ls_solver.solve(); });
-    ls_solver.print_solution();
+    // cout << ls_solver.optimal_weight << endl;
     ls_solver.verify_solution();
 
     // ========== GUIDED LOCAL SEARCH ==========
@@ -50,7 +56,7 @@ int main(int argc, char *argv[]) {
 
     // ========== PRINT RESULTS ==========
     cout << "Time elapsed:" << endl;
-    // cout << "  Exact solver: " << bf_solver_t << "s" << endl;
+    cout << "  Exact solver: " << bf_solver_t << "s" << endl;
     cout << "  Local search: " << ls_solver_t << "s" << endl;
     // cout << "           GLS: " << gls_solver_t << "s" << endl;
 

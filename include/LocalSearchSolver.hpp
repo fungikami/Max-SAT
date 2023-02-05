@@ -7,6 +7,7 @@
 #ifndef LOCALSEARCHSOLVER_H
 #define LOCALSEARCHSOLVER_H
 
+#include <time.h>
 #include "../include/SATSolver.hpp"
 
 /**
@@ -15,12 +16,11 @@
 class LocalSearchSolver : public SATSolver {
   public:
     using SATSolver::SATSolver;
-    LocalSearchSolver(const SATInstance &instance);
-    LocalSearchSolver(const SATInstance &instance, time_t seed);
+    LocalSearchSolver(const SATInstance &instance, uint seed = time(NULL));
 
     virtual void solve();
 
-    time_t seed;
+    uint seed;
 
     // Maps a variable to the clauses it appears in
     vector<vector<int>> affected_clauses;

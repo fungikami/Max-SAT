@@ -20,13 +20,15 @@ class LocalSearchSolver : public SATSolver {
 
     virtual void solve();
 
+    void print_solution();
+
+  private:
     uint seed;
 
     // Maps a variable to the clauses it appears in
     vector<vector<int>> affected_clauses;
 
     int evaluate_flip(vector<bool> &assignment, int flipped_var, int &new_satisfied);
-    void print_solution();
 };
 
 #endif

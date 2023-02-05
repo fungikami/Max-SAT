@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
      */
     LocalSearchSolver ls_solver(instance);
     double ls_solver_t = measure_time([&] { ls_solver.solve(); });
-    // cout << ls_solver.optimal_weight << endl;
+    ls_solver.print_solution();
     ls_solver.verify_solution();
 
     // ========== GUIDED LOCAL SEARCH ==========

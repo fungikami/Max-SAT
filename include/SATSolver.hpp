@@ -22,9 +22,12 @@ class SATSolver {
     SATSolver(const SATInstance &instance) : instance(instance) {};
 
     virtual void solve() = 0;
-    int compute_weight(const vector<bool> &assignment, int &n_satisfied);
+
     void print_solution();
     void verify_solution();
+  
+  protected:
+    int compute_weight(const vector<bool> &assignment, int &n_satisfied);
 
     SATInstance instance;
 

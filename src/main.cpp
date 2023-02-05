@@ -43,6 +43,8 @@ int main(int argc, char *argv[]) {
      * Buenas semillas:
      *  -test_7 = 1675590184
      *  -test_3 = 1675618427
+     * 
+     * Saca mal los pesos, probar en test4
      */
     LocalSearchSolver ls_solver(instance);
     double ls_solver_t = measure_time([&] { ls_solver.solve(); });

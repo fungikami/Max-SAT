@@ -20,14 +20,9 @@ using namespace std;
  * @param instance The SAT instance
  */
 LocalSearchSolver::LocalSearchSolver(const SATInstance &instance) 
-    : SATSolver(instance) {
-    // Set the seed for the random number generator
-    seed = time(NULL);
-    srand(seed);
-
+    : SATSolver(instance), seed(time(NULL)), affected_clauses(instance.n_vars, vector<int>()) {
     // Initialize the optimal assignment with random values
-    for (int i = 0; i < instance.n_vars; i++)
-        optimal_assignment.push_back(rand() & 1);
+    LocalSearchSolver(instance, seed);
 }
 /**
  * @brief Generates an initial solution for the instance to be solved, using
@@ -37,18 +32,17 @@ LocalSearchSolver::LocalSearchSolver(const SATInstance &instance)
  * @param seed The seed for the random number generator
  */
 LocalSearchSolver::LocalSearchSolver(const SATInstance &instance, time_t seed)
-    : SATSolver(instance), seed(seed) {
+    : SATSolver(instance), seed(seed), affected_clauses(instance.n_vars, vector<int>()) {
     // Initialize the optimal assignment with random values
     srand(seed);
     for (int i = 0; i < instance.n_vars; i++)
         optimal_assignment.push_back(rand() & 1);
 
-
     // For each clause, save for each variable the clauses it affects
     vector<vector<int>> affected_clauses(instance.n_vars, vector<int>());
     for (int i = 0; i < instance.n_clauses; i++) {
-        for (auto var : instance.clauses[i]) {
-            affected_clauses[var>>1].push_back(i);
+        for (auto literal : instance.clauses[i]) {
+            affected_clauses[literal>>1].push_back(i);
         }
     }
 }

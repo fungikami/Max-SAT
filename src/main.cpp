@@ -32,13 +32,13 @@ int main(int argc, char *argv[]) {
     SATInstance instance(argv[1]);
 
     // ========== BRUTE FORCE ==========
-    // BruteForceSolver bf_solver(instance);
+    // BruteForceSolver bf_|solver(instance);
     // double bf_solver_t = measure_time([&] { bf_solver.solve(); });
-    // bf_solver.print_solution();
     // bf_solver.verify_solution();
 
     // ========== LOCAL SEARCH ==========
-    LocalSearchSolver ls_solver(instance);
+    // Buena semilla ? 1675590184
+    LocalSearchSolver ls_solver(instance, 1675590184);
     double ls_solver_t = measure_time([&] { ls_solver.solve(); });
     ls_solver.print_solution();
     ls_solver.verify_solution();

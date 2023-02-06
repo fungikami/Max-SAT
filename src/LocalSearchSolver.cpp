@@ -55,9 +55,18 @@ void LocalSearchSolver::solve() {
             int new_satisfied = n_satisfied;
             int new_weight = evaluate_flip(assignment, i, new_satisfied);
             if (new_weight > optimal_weight) {
+
+                // Verify that the new assignment is valid
+                cout << "verify before = " << optimal_weight << endl;
+                verify_solution();
+
                 optimal_weight = new_weight;
                 optimal_assignment = assignment;
                 n_satisfied = new_satisfied;
+
+                cout << "verify after = " << optimal_weight << endl;
+                verify_solution();
+                cout << "\n";
                 break;
             }
 

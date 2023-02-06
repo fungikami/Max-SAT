@@ -90,10 +90,16 @@ int LocalSearchSolver::evaluate_flip(
     for (auto i : affected_clauses[flipped_var]) {
 
         bool already_satisfied = false;
-        int flipped_literal;
+        int flipped_literal = -1;
+
         for (auto literal : instance.clauses[i]) {
             if (literal>>1 == flipped_var) {
-                flipped_literal = literal;
+                if (flipped_literal == -1) flipped_literal = literal;
+                else if (flipped_literal != literal) {
+                    // Edge case: the clause contains p v -p
+                    already_satisfied = true;
+                    break;
+                }
                 continue;
             }
 

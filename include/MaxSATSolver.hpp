@@ -8,7 +8,6 @@
 #define SATSOLVER_H
 
 #include <vector>
-#include <string>
 
 #include "../include/SATInstance.hpp"
 

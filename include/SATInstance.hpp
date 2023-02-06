@@ -21,7 +21,7 @@ class SATInstance {
 
     int n_vars;
     int n_clauses;
-    int max_weight = 0;
+    int total_weight = 0;
 
     vector<vector<int>> clauses;
     vector<int> weights;

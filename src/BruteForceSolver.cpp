@@ -56,7 +56,7 @@ void BruteForceSolver::solve_helper(vector<bool> &assignment, int i) {
             optimal_assignment = assignment;
         }
 
-        optimal_found = instance.max_weight == optimal_weight;
+        optimal_found = instance.total_weight == optimal_weight;
         return;
     }
 

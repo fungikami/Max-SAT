@@ -5,10 +5,6 @@
  */
 
 #include <iostream>
-#include <fstream>
-#include <cstdlib>
-#include <time.h>
-#include <string>
 #include <vector>
 
 #include "../include/LocalSearchSolver.hpp"
@@ -64,7 +60,7 @@ void LocalSearchSolver::solve() {
             assignment[i] = !assignment[i];
         }
 
-        optimal_found = instance.max_weight == optimal_weight;
+        optimal_found = instance.total_weight == optimal_weight;
         if (optimal_found) break;
     }
 }

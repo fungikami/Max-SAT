@@ -43,12 +43,12 @@ GLSSolver::GLSSolver(const SATInstance &instance, uint seed)
  */
 void GLSSolver::solve() {
     // Compute the initial weight
-    int i = 0;
     optimal_weight = compute_weight(optimal_assignment);
 
     // Local search
     int trials = 0;
     while (trials < 100) {
+        int i = 0;
         // ============== No existe penalty ==============
         while (i < instance.n_vars) {
             vector<bool> assignment = optimal_assignment;
@@ -63,10 +63,10 @@ void GLSSolver::solve() {
                 if (new_weight > optimal_weight) {
 
                     // =========== DEBUG ===========
-                    if (trials > 0) {
-                        cout << "c     weight = " << optimal_weight << endl;
-                        cout << "c new weight = " << new_weight << endl;
-                    }
+                    // if (trials > 0) {
+                        // cout << "c     weight = " << optimal_weight << endl;
+                        // cout << "c new weight = " << new_weight << endl;
+                    // }
                     // =========== DEBUG ===========
 
                     optimal_weight = new_weight;
@@ -83,12 +83,6 @@ void GLSSolver::solve() {
             if (optimal_found) break;
         }
         // ============== Hasta aqui ==============
-        cout << "[";
-        for (int j = 0; j < instance.n_clauses; j++) {
-            cout << penalty[j];
-            if (j < instance.n_clauses - 1) cout << ", ";
-        }
-        cout << "]" << endl;
 
         // Calculate the utility of each clause
         priority_queue<pair<double, int>> utility;
@@ -104,7 +98,8 @@ void GLSSolver::solve() {
         // For each clause with maximum utility, augment the penalty
         pair<double, int> max_utility = utility.top();
         do {
-            penalty[max_utility.second]++;
+            int index = utility.top().second;
+            penalty[index]++;
             utility.pop();
         } while (utility.size() && utility.top().first == max_utility.first);
 
@@ -161,10 +156,10 @@ int GLSSolver::evaluate_guided_flip(
 
     for (int i = 0; i < instance.n_clauses; i++)  {
         if (indicator(optimal_assignment, i)) sum += penalty[i];
-        // cout << "c penalty[" << i << "] = " << penalty[i] << endl;
+        // if (penalty[i]) cout << "c penalty[" << i << "] = " << penalty[i] << endl;
     }
 
-    return new_weight + param * sum;
+    return new_weight - param * sum;
 }
 
 /**

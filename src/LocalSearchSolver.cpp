@@ -55,18 +55,10 @@ void LocalSearchSolver::solve() {
             int new_satisfied = n_satisfied;
             int new_weight = evaluate_flip(assignment, i, new_satisfied);
             if (new_weight > optimal_weight) {
-
-                // Verify that the new assignment is valid
-                cout << "verify before = " << optimal_weight << endl;
-                verify_solution();
-
                 optimal_weight = new_weight;
                 optimal_assignment = assignment;
                 n_satisfied = new_satisfied;
 
-                cout << "verify after = " << optimal_weight << endl;
-                verify_solution();
-                cout << "\n";
                 break;
             }
 
@@ -92,16 +84,14 @@ int LocalSearchSolver::evaluate_flip(
     int flipped_var,
     int &new_satisfied
 ) {
-    // Search the affected clauses
-    vector<int> clauses = affected_clauses[flipped_var];
     int new_weight = optimal_weight;
 
-    for (auto i : clauses) {
+    // Scan the clauses affected by the flipped variable
+    for (auto i : affected_clauses[flipped_var]) {
 
         bool already_satisfied = false;
         int flipped_literal;
         for (auto literal : instance.clauses[i]) {
-
             if (literal>>1 == flipped_var) {
                 flipped_literal = literal;
                 continue;

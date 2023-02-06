@@ -1,5 +1,7 @@
 /**
  * Implementation of a Max-SAT solver based on local search
+ *
+ * Copyright (C) 2023 Christopher Gómez, Ka Fung
  */
 
 #include <iostream>
@@ -46,7 +48,6 @@ void LocalSearchSolver::solve() {
     optimal_weight = compute_weight(optimal_assignment, n_satisfied);
 
     while (i < instance.n_vars) {
-
         vector<bool> assignment = optimal_assignment;
         for (i = 0; i < instance.n_vars; i++) {
             // Flip a variable

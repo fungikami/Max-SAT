@@ -1,3 +1,9 @@
+/**
+ * Implementation of a Max-SAT solver
+ *
+ * Copyright (C) 2023 Christopher Gómez, Ka Fung
+ */
+ 
 #include <vector>
 #include <iostream>
 

@@ -17,9 +17,9 @@ using namespace std;
 /**
  * @brief A Max-SAT solver
  */
-class SATSolver {
+class MaxSATSolver {
   public:
-    SATSolver(const SATInstance &instance) : instance(instance) {};
+    MaxSATSolver(const SATInstance &instance) : instance(instance) {};
 
     virtual void solve() = 0;
 
@@ -27,7 +27,7 @@ class SATSolver {
     void verify_solution();
   
   protected:
-    int compute_weight(const vector<bool> &assignment, int &n_satisfied);
+    int compute_weight(const vector<bool> &assignment);
 
     SATInstance instance;
 

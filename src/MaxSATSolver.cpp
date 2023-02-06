@@ -7,7 +7,7 @@
 #include <vector>
 #include <iostream>
 
-#include "../include/SATSolver.hpp"
+#include "../include/MaxSATSolver.hpp"
 #include "../include/SATInstance.hpp"
 
 using namespace std;
@@ -17,9 +17,8 @@ using namespace std;
  * 
  * @param assignment The assignment to be evaluated
  */
-int SATSolver::compute_weight(const vector<bool> &assignment, int &n_satisfied) {
+int MaxSATSolver::compute_weight(const vector<bool> &assignment) {
     int weight = 0;
-    n_satisfied = 0;
 
     // For each clause
     for (int j = 0; j < instance.n_clauses; j++) {
@@ -32,7 +31,6 @@ int SATSolver::compute_weight(const vector<bool> &assignment, int &n_satisfied) 
             // If the clause is satisfied, skip to the next one
             if (satisfied) {
                 weight += instance.weights[j];
-                n_satisfied++;
                 break;
             }
         }
@@ -48,7 +46,7 @@ int SATSolver::compute_weight(const vector<bool> &assignment, int &n_satisfied) 
  * "o" line indicates the optimal weight 
  * "v" line indicates the optimal assignment
  */
-void SATSolver::print_solution() {
+void MaxSATSolver::print_solution() {
     // Print the optimal assignment
     string solution = optimal_found ? "OPTIMUM FOUND" : "UNKNOWN";
     cout << "s " << solution << endl;
@@ -63,9 +61,8 @@ void SATSolver::print_solution() {
 /**
  * @brief Verify that the weight of the solution found is correct
  */
-void SATSolver::verify_solution() {
-    int n_satisfied;
-    int computed_weight = compute_weight(optimal_assignment, n_satisfied);
+void MaxSATSolver::verify_solution() {
+    int computed_weight = compute_weight(optimal_assignment);
     if (computed_weight != optimal_weight) {
         cout << "ERROR: Found solution is inconsistent" << endl;
         cout << "Reported weight is " << optimal_weight;

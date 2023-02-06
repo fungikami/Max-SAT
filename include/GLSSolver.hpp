@@ -9,14 +9,14 @@
 
 #include <time.h>
 #include <queue>
-#include "../include/SATSolver.hpp"
+#include "../include/MaxSATSolver.hpp"
 
 /**
  * @brief A MaxSAT solver based on local search metaheuristic
  */
-class GLSSolver : public SATSolver {
+class GLSSolver : public MaxSATSolver {
   public:
-    using SATSolver::SATSolver;
+    using MaxSATSolver::MaxSATSolver;
     GLSSolver(const SATInstance &instance, uint seed = time(NULL));
 
     virtual void solve();
@@ -35,7 +35,7 @@ class GLSSolver : public SATSolver {
 
     priority_queue<pair<double, int>> utility;
 
-    int evaluate_guided_flip(vector<bool> &assignment, int flipped_var, int &new_satisfied);
+    int evaluate_guided_flip(vector<bool> &assignment, int flipped_var);
     bool indicator(vector<bool> &assignment, int i);
 };
 

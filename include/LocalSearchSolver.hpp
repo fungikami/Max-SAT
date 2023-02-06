@@ -8,14 +8,14 @@
 #define LOCALSEARCHSOLVER_H
 
 #include <time.h>
-#include "../include/SATSolver.hpp"
+#include "../include/MaxSATSolver.hpp"
 
 /**
  * @brief A MaxSAT solver based on local search metaheuristic
  */
-class LocalSearchSolver : public SATSolver {
+class LocalSearchSolver : public MaxSATSolver {
   public:
-    using SATSolver::SATSolver;
+    using MaxSATSolver::MaxSATSolver;
     LocalSearchSolver(const SATInstance &instance, uint seed = time(NULL));
 
     virtual void solve();
@@ -28,7 +28,7 @@ class LocalSearchSolver : public SATSolver {
     // Maps a variable to the clauses it appears in
     vector<vector<int>> affected_clauses;
 
-    int evaluate_flip(vector<bool> &assignment, int flipped_var, int &new_satisfied);
+    int evaluate_flip(vector<bool> &assignment, int flipped_var);
 };
 
 #endif

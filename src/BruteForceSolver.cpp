@@ -16,7 +16,7 @@ using namespace std;
  * 
  * @param instance The SAT instance
  */
-BruteForceSolver::BruteForceSolver(const SATInstance &instance) : SATSolver(instance) {
+BruteForceSolver::BruteForceSolver(const SATInstance &instance) : MaxSATSolver(instance) {
     optimal_assignment = vector<bool>(instance.n_vars, false);
 }
 
@@ -48,8 +48,7 @@ void BruteForceSolver::solve_helper(vector<bool> &assignment, int i) {
     // If all the variables have been assigned
     if (i == instance.n_vars) {
         // Compute the weight of the assignment
-        int n_satisfied;
-        int weight = compute_weight(assignment, n_satisfied);
+        int weight = compute_weight(assignment);
 
         // Update the optimal assignment
         if (weight > optimal_weight) {
@@ -57,7 +56,7 @@ void BruteForceSolver::solve_helper(vector<bool> &assignment, int i) {
             optimal_assignment = assignment;
         }
 
-        optimal_found = n_satisfied == instance.n_clauses;
+        optimal_found = instance.max_weight == optimal_weight;
         return;
     }
 

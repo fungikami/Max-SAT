@@ -58,9 +58,11 @@ SATInstance::SATInstance(string filename) {
                 // Push the weight of the clause
                 if (is_weighted) {
                     weights.push_back(literal);
+                    max_weight += literal;
                     line = line.substr(line.find(" ") + 1);
                 } else {
                     weights.push_back(1);
+                    max_weight++;
                 }
 
                 weight_read = true;

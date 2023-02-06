@@ -24,7 +24,7 @@ using namespace std;
  * @param seed The seed for the random number generator
  */
 LocalSearchSolver::LocalSearchSolver(const SATInstance &instance, uint seed)
-    : SATSolver(instance), seed(seed), affected_clauses(instance.n_vars, vector<int>()) {
+    : MaxSATSolver(instance), seed(seed), affected_clauses(instance.n_vars, vector<int>()) {
     // Initialize the optimal assignment with random values
     srand(seed);
     for (int i = 0; i < instance.n_vars; i++)
@@ -44,8 +44,7 @@ LocalSearchSolver::LocalSearchSolver(const SATInstance &instance, uint seed)
 void LocalSearchSolver::solve() {
     // Compute the initial weight
     int i = 0;
-    int n_satisfied;
-    optimal_weight = compute_weight(optimal_assignment, n_satisfied);
+    optimal_weight = compute_weight(optimal_assignment);
 
     while (i < instance.n_vars) {
         vector<bool> assignment = optimal_assignment;
@@ -53,12 +52,10 @@ void LocalSearchSolver::solve() {
             // Flip a variable
             assignment[i] = !assignment[i];
 
-            int new_satisfied = n_satisfied;
-            int new_weight = evaluate_flip(assignment, i, new_satisfied);
+            int new_weight = evaluate_flip(assignment, i);
             if (new_weight > optimal_weight) {
                 optimal_weight = new_weight;
                 optimal_assignment = assignment;
-                n_satisfied = new_satisfied;
 
                 break;
             }
@@ -67,7 +64,7 @@ void LocalSearchSolver::solve() {
             assignment[i] = !assignment[i];
         }
 
-        optimal_found = n_satisfied == instance.n_clauses;
+        optimal_found = instance.max_weight == optimal_weight;
         if (optimal_found) break;
     }
 }
@@ -77,13 +74,11 @@ void LocalSearchSolver::solve() {
  * 
  * @param assignment The assignment to be evaluated
  * @param flipped_var The variable that was flipped to obtain the assignment
- * @param n_satisfied The number of satisfied clauses in the previous assignment
  * @return int The new weight of the assignment
  */
 int LocalSearchSolver::evaluate_flip(
     vector<bool> &assignment,
-    int flipped_var,
-    int &new_satisfied
+    int flipped_var
 ) {
     int new_weight = optimal_weight;
 
@@ -111,14 +106,10 @@ int LocalSearchSolver::evaluate_flip(
 
         // If the clause was not already satisfied, check how the flip affects
         if (!already_satisfied) {
-            if (instance.is_literal_true(flipped_literal, assignment)) {
+            if (instance.is_literal_true(flipped_literal, assignment)) 
                 new_weight += instance.weights[i];
-                new_satisfied++;
-            }
-            else {
+            else 
                 new_weight -= instance.weights[i];
-                new_satisfied--;
-            }
         }
     }
 
@@ -128,5 +119,5 @@ int LocalSearchSolver::evaluate_flip(
 
 void LocalSearchSolver::print_solution() {
     cout << "c seed = " << seed << endl;
-    SATSolver::print_solution();
+    MaxSATSolver::print_solution();
 }

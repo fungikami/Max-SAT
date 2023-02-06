@@ -7,14 +7,14 @@
 #ifndef BRUTEFORCESOLVER_H
 #define BRUTEFORCESOLVER_H
 
-#include "../include/SATSolver.hpp"
+#include "../include/MaxSATSolver.hpp"
 
 /**
  * @brief A MaxSAT solver
  */
-class BruteForceSolver : public SATSolver {
+class BruteForceSolver : public MaxSATSolver {
   public:
-    using SATSolver::SATSolver;
+    using MaxSATSolver::MaxSATSolver;
     BruteForceSolver(const SATInstance &instance);
 
     virtual void solve();

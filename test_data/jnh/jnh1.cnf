@@ -1,4 +1,16 @@
-c File: jnh1.cnf
+c File:  jnh1.cnf
+c
+c SOURCE: John Hooker (jh38+@andrew.cmu.edu)
+c
+c DESCRIPTION: Random Problems with hard generator (no single clauses,
+c              hard density, and so on)
+c
+c NOTE: Part of the collection at the Forschungsinstitut fuer 
+c       anwendungsorientierte Wissensverarbeitung in Ulm Germany.
+c
+c NOTE: Updated September 7, 1993 to correct format
+c
+c
 c NOTE: Satisfiable
 c
 p cnf 100 850

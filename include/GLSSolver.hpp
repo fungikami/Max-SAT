@@ -7,6 +7,8 @@
 #ifndef GLSSOLVER_H
 #define GLSSOLVER_H
 
+#define MAXTRIALS 2
+
 #include <time.h>
 #include <queue>
 #include "../include/MaxSATSolver.hpp"
@@ -25,6 +27,7 @@ class GLSSolver : public MaxSATSolver {
 
   private:
     uint seed;
+    int max_trials = MAXTRIALS;
     double param = 0.45;
 
     // Maps a variable to the clauses it appears in

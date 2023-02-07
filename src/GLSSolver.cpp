@@ -52,6 +52,12 @@ void GLSSolver::solve() {
         // ============== No existe penalty ==============
         while (i < instance.n_vars) {
             vector<bool> assignment = optimal_assignment;
+            // Print the penalties as a Python list
+            cout << "c penalties = [";
+            for (int i = 0; i < instance.n_clauses; i++)
+                cout << penalty[i] << ", ";
+            cout << "]" << endl;
+
 
             for (i = 0; i < instance.n_vars; i++) {
                 // Flip a variable

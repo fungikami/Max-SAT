@@ -43,34 +43,25 @@ GLSSolver::GLSSolver(const SATInstance &instance, uint seed)
  */
 void GLSSolver::solve() {
     // Compute the initial weight
-    // optimal_weight = compute_weight(optimal_assignment);
-
-    while (max_trials) {
+    while (trials < MAX_TRIALS) {
         // Local search algorithm
         int i = 0;
-        optimal_weight = 0;
+        int current_weight = compute_weight(optimal_assignment);
+        optimal_weight = current_weight - param * penalty_sum(optimal_assignment);
+
         while (i < instance.n_vars) {
             vector<bool> assignment = optimal_assignment;
-
-            // // Print the penalties as a Python list
-            // cout << "c penalties = [";
-            // for (int i = 0; i < instance.n_clauses; i++)
-            //     cout << penalty[i] << ", ";
-            // cout << "]" << endl;
-
 
             for (i = 0; i < instance.n_vars; i++) {
                 // Flip a variable and evaluate the new assignment
                 assignment[i] = !assignment[i];
 
                 int new_weight = evaluate_guided_flip(assignment, i);
-                cout << "new_weight = " << new_weight << endl;
                 if (new_weight > optimal_weight) {
                     optimal_weight = new_weight;
                     optimal_assignment = assignment;
                     break;
                 }
-
                 // Undo the flip
                 assignment[i] = !assignment[i];
             }
@@ -78,6 +69,7 @@ void GLSSolver::solve() {
             optimal_found = instance.total_weight == optimal_weight;
             if (optimal_found) break;
         }
+        if (optimal_found) break;
 
         // Calculate the utility of each clause
         priority_queue<pair<double, int>> utility;
@@ -95,10 +87,9 @@ void GLSSolver::solve() {
             utility.pop();
         } while (utility.size() && utility.top().first == max_utility.first);
 
-        max_trials--;
+        trials++;
     }
 
-    // Update the weight of the optimal assignment
     optimal_weight = compute_weight(optimal_assignment);
 }
 
@@ -107,60 +98,55 @@ void GLSSolver::solve() {
  * 
  * @param assignment The assignment to be evaluated
  * @param flipped_var The variable that was flipped to obtain the assignment
+ * @param current_weight The weight of the current assignment
  * @return int The new weight of the assignment
  */
 int GLSSolver::evaluate_guided_flip(
     vector<bool> &assignment,
     int flipped_var
 ) {
-    int new_weight = optimal_weight;
+    int new_weight = compute_weight(assignment);
 
-    // Scan the clauses affected by the flipped variable
-    for (auto i : affected_clauses[flipped_var]) {
+    // // Scan the clauses affected by the flipped variable
+    // for (auto i : affected_clauses[flipped_var]) {
 
-        bool already_satisfied = false;
-        int flipped_literal = -1;
+    //     bool already_satisfied = false;
+    //     int flipped_literal = -1;
 
-        for (auto literal : instance.clauses[i]) {
-            if (literal>>1 == flipped_var) {
-                if (flipped_literal == -1) flipped_literal = literal;
-                else if (flipped_literal != literal) {
-                    // Edge case: the clause contains p v -p
-                    already_satisfied = true;
-                    break;
-                }
-                continue;
-            }
+    //     for (auto literal : instance.clauses[i]) {
+    //         if (literal>>1 == flipped_var) {
+    //             if (flipped_literal == -1) flipped_literal = literal;
+    //             else if (flipped_literal != literal) {
+    //                 // Edge case: the clause contains p v -p
+    //                 already_satisfied = true;
+    //                 break;
+    //             }
+    //             continue;
+    //         }
 
-            // Check if the clause was already satisfied regardless of the flip
-            already_satisfied = instance.is_literal_true(literal, assignment);
-            if (already_satisfied) break;
-        }
+    //         // Check if the clause was already satisfied regardless of the flip
+    //         already_satisfied = instance.is_literal_true(literal, assignment);
+    //         if (already_satisfied) break;
+    //     }
 
-        // If the clause was not already satisfied, check how the flip affects
-        if (!already_satisfied) {
-            if (instance.is_literal_true(flipped_literal, assignment))
-                new_weight += instance.weights[i];
-            else
-                new_weight -= instance.weights[i];
-        }
-    }
-    
-    // Compute the new weight, skipping the first iteration
-    int sum = 0;
-    if (max_trials != MAXTRIALS) {
-        for (int i = 0; i < instance.n_clauses; i++) {
-            bool i_s = indicator(assignment, i);
-            sum += i_s * penalty[i];
-        }
-    }
+    //     // If the clause was not already satisfied, check how the flip affects
+    //     if (!already_satisfied) {
+    //         if (instance.is_literal_true(flipped_literal, assignment)) 
+    //             new_weight += instance.weights[i];
+    //         else 
+    //             new_weight -= instance.weights[i];
+    //     }
+    // }
 
-    return new_weight - param * sum;
+    return new_weight - param * penalty_sum(assignment);
 }
 
 /**
  * @brief Indicate if the clause i is violated by the assignment
  *        true if violated | false otherwise
+ * 
+ * @param assignment The assignment to be evaluated
+ * @param i The clause to be evaluated
  */
 bool GLSSolver::indicator(vector<bool> &assignment, int i) {
     // Scans every literal in the clause to see if it is violated
@@ -169,6 +155,19 @@ bool GLSSolver::indicator(vector<bool> &assignment, int i) {
             return false;
 
     return true;
+}
+
+int GLSSolver::penalty_sum(vector<bool> &assignment) {
+    // Compute the new weight, skipping the first iteration
+    int sum = 0;
+    if (trials != 0) {
+        for (int i = 0; i < instance.n_clauses; i++) {
+            bool i_s = indicator(assignment, i);
+            sum += i_s * penalty[i];
+        }
+    }
+
+    return sum;
 }
 
 void GLSSolver::print_solution() {

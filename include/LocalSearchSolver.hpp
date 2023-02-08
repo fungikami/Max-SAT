@@ -20,6 +20,8 @@ class LocalSearchSolver : public MaxSATSolver {
 
     virtual void solve();
 
+    int eval_function(vector<bool> &assignment, int flipped_var);
+    void do_local_search(int penalty_sum);
     void print_solution();
 
   private:
@@ -27,8 +29,6 @@ class LocalSearchSolver : public MaxSATSolver {
 
     // Maps a variable to the clauses it appears in
     vector<vector<int>> affected_clauses;
-
-    int evaluate_flip(vector<bool> &assignment, int flipped_var);
 };
 
 #endif

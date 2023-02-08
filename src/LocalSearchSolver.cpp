@@ -4,6 +4,7 @@
  * Copyright (C) 2023 Christopher Gómez, Ka Fung
  */
 
+#include <functional>
 #include <iostream>
 #include <vector>
 
@@ -38,9 +39,21 @@ LocalSearchSolver::LocalSearchSolver(const SATInstance &instance, uint seed)
  * variable
  */
 void LocalSearchSolver::solve() {
-    // Compute the initial weight
+    do_local_search(0);
+}
+
+/**
+ * @brief Solves the instance using local search, taking as a neighborhood the
+ * set of assignments that differ from the current one by flipping a single
+ * variable
+ * 
+ * @param penalty_sum The sum of the penalties of the clauses that are already
+ * satisfied
+ */
+void LocalSearchSolver::do_local_search(int penalty_sum) {
     int i = 0;
-    optimal_weight = compute_weight(optimal_assignment);
+    int current_weight = compute_weight(optimal_assignment);
+    optimal_weight = current_weight - penalty_sum;
 
     while (i < instance.n_vars) {
         vector<bool> assignment = optimal_assignment;
@@ -48,11 +61,10 @@ void LocalSearchSolver::solve() {
             // Flip a variable
             assignment[i] = !assignment[i];
 
-            int new_weight = evaluate_flip(assignment, i);
+            int new_weight = eval_function(assignment, i);
             if (new_weight > optimal_weight) {
                 optimal_weight = new_weight;
                 optimal_assignment = assignment;
-
                 break;
             }
 
@@ -72,7 +84,7 @@ void LocalSearchSolver::solve() {
  * @param flipped_var The variable that was flipped to obtain the assignment
  * @return int The new weight of the assignment
  */
-int LocalSearchSolver::evaluate_flip(
+int LocalSearchSolver::eval_function(
     vector<bool> &assignment,
     int flipped_var
 ) {
@@ -104,12 +116,11 @@ int LocalSearchSolver::evaluate_flip(
         if (!already_satisfied) {
             if (instance.is_literal_true(flipped_literal, assignment)) 
                 new_weight += instance.weights[i];
-            else 
+            else
                 new_weight -= instance.weights[i];
         }
     }
 
-    // Return the new weight and the number of satisfied clauses
     return new_weight;
 }
 

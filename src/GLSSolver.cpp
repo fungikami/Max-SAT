@@ -43,15 +43,10 @@ GLSSolver::GLSSolver(const SATInstance &instance, uint seed)
  */
 void GLSSolver::solve() {
     // Compute the initial weight
-    optimal_weight = instance.total_weight - compute_weight(optimal_assignment);
-
     while (trials < MAX_TRIALS) {
         // Local search algorithm
         int i = 0;
         optimal_weight = instance.total_weight - compute_weight(optimal_assignment);
-
-        // cout << "optimal_weigth_before=" << optimal_weight << endl;
-        // int owb = optimal_weight;
 
         // Compute the new weight, skipping the first iteration
         int sum = 0;
@@ -62,17 +57,11 @@ void GLSSolver::solve() {
             }
         }
 
-        optimal_weight += param*sum;
-        // cout << "optimal_weigth_after=" << optimal_weight << endl;
+        optimal_weight += param * sum;
+        cout << "optimal_weigth_after=" << optimal_weight << endl;
 
         while (i < instance.n_vars) {
             vector<bool> assignment = optimal_assignment;
-
-            // // Print the penalties as a Python list
-            // cout << "c penalties = [";
-            // for (int i = 0; i < instance.n_clauses; i++)
-            //     cout << penalty[i] << ", ";
-            // cout << "]" << endl;
 
             for (i = 0; i < instance.n_vars; i++) {
                 // Flip a variable and evaluate the new assignment
@@ -92,6 +81,7 @@ void GLSSolver::solve() {
             optimal_found = optimal_weight == 0;
             if (optimal_found) break;
         }
+        if (optimal_found) break;
 
         // Calculate the utility of each clause
         priority_queue<pair<double, int>> utility;
@@ -111,9 +101,6 @@ void GLSSolver::solve() {
 
         trials++;
     }
-
-    // Update the weight of the optimal assignment
-    // optimal_weight = compute_weight(optimal_assignment);
 }
 
 /**
@@ -127,38 +114,7 @@ int GLSSolver::evaluate_guided_flip(
     vector<bool> &assignment,
     int flipped_var
 ) {
-    int new_weight = optimal_weight;
-
-    // Scan the clauses affected by the flipped variable
-    for (auto i : affected_clauses[flipped_var]) {
-
-        bool already_satisfied = false;
-        int flipped_literal = -1;
-
-        for (auto literal : instance.clauses[i]) {
-            if (literal>>1 == flipped_var) {
-                if (flipped_literal == -1) flipped_literal = literal;
-                else if (flipped_literal != literal) {
-                    // Edge case: the clause contains p v -p
-                    already_satisfied = true;
-                    break;
-                }
-                continue;
-            }
-
-            // Check if the clause was already satisfied regardless of the flip
-            already_satisfied = instance.is_literal_true(literal, assignment);
-            if (already_satisfied) break;
-        }
-
-        // If the clause was not already satisfied, check how the flip affects
-        if (!already_satisfied) {
-            if (instance.is_literal_true(flipped_literal, assignment))
-                new_weight -= instance.weights[i];
-            else
-                new_weight += instance.weights[i];
-        }
-    }
+    int new_weight = instance.total_weight - compute_weight(assignment);
 
     // Compute the new weight, skipping the first iteration
     int sum = 0;
@@ -167,9 +123,6 @@ int GLSSolver::evaluate_guided_flip(
             bool i_s = indicator(assignment, i);
             sum += i_s * penalty[i];
         }
-        // cout << "fliclaerp " << flipped_var << endl;
-        // cout << "restando " << param*sum << endl;
-        // cout << "restando " << param*sum << endl;
     }
 
     return new_weight + param * sum;

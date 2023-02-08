@@ -28,7 +28,7 @@ class GLSSolver : public MaxSATSolver {
   private:
     uint seed;
     int trials = 0;
-    double param = 0.8;
+    double param = 1;
 
     // Maps a variable to the clauses it appears in
     vector<vector<int>> affected_clauses;

@@ -25,7 +25,7 @@ class MaxSATSolver {
     void print_solution();
     void verify_solution();
   
-  protected:
+  // protected:
     int compute_weight(const vector<bool> &assignment);
 
     SATInstance instance;

@@ -25,7 +25,7 @@ class GLSSolver : public MaxSATSolver {
 
     void print_solution();
 
-  private:
+  // private:
     uint seed;
     int trials = 0;
     double param = 1;

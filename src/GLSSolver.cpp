@@ -43,12 +43,28 @@ GLSSolver::GLSSolver(const SATInstance &instance, uint seed)
  */
 void GLSSolver::solve() {
     // Compute the initial weight
-    // optimal_weight = compute_weight(optimal_assignment);
+    optimal_weight = instance.total_weight - compute_weight(optimal_assignment);
 
-    while (max_trials) {
+    while (trials < MAX_TRIALS) {
         // Local search algorithm
         int i = 0;
-        optimal_weight = 0;
+        optimal_weight = instance.total_weight - compute_weight(optimal_assignment);
+
+        // cout << "optimal_weigth_before=" << optimal_weight << endl;
+        // int owb = optimal_weight;
+
+        // Compute the new weight, skipping the first iteration
+        int sum = 0;
+        if (trials != 0) {
+            for (int i = 0; i < instance.n_clauses; i++) {
+                bool i_s = indicator(optimal_assignment, i);
+                sum += i_s * penalty[i];
+            }
+        }
+
+        optimal_weight += param*sum;
+        // cout << "optimal_weigth_after=" << optimal_weight << endl;
+
         while (i < instance.n_vars) {
             vector<bool> assignment = optimal_assignment;
 
@@ -58,14 +74,12 @@ void GLSSolver::solve() {
             //     cout << penalty[i] << ", ";
             // cout << "]" << endl;
 
-
             for (i = 0; i < instance.n_vars; i++) {
                 // Flip a variable and evaluate the new assignment
                 assignment[i] = !assignment[i];
 
                 int new_weight = evaluate_guided_flip(assignment, i);
-                cout << "new_weight = " << new_weight << endl;
-                if (new_weight > optimal_weight) {
+                if (new_weight < optimal_weight) {
                     optimal_weight = new_weight;
                     optimal_assignment = assignment;
                     break;
@@ -75,7 +89,7 @@ void GLSSolver::solve() {
                 assignment[i] = !assignment[i];
             }
 
-            optimal_found = instance.total_weight == optimal_weight;
+            optimal_found = optimal_weight == 0;
             if (optimal_found) break;
         }
 
@@ -95,11 +109,11 @@ void GLSSolver::solve() {
             utility.pop();
         } while (utility.size() && utility.top().first == max_utility.first);
 
-        max_trials--;
+        trials++;
     }
 
     // Update the weight of the optimal assignment
-    optimal_weight = compute_weight(optimal_assignment);
+    // optimal_weight = compute_weight(optimal_assignment);
 }
 
 /**
@@ -140,22 +154,25 @@ int GLSSolver::evaluate_guided_flip(
         // If the clause was not already satisfied, check how the flip affects
         if (!already_satisfied) {
             if (instance.is_literal_true(flipped_literal, assignment))
-                new_weight += instance.weights[i];
-            else
                 new_weight -= instance.weights[i];
+            else
+                new_weight += instance.weights[i];
         }
     }
-    
+
     // Compute the new weight, skipping the first iteration
     int sum = 0;
-    if (max_trials != MAXTRIALS) {
+    if (trials != 0) {
         for (int i = 0; i < instance.n_clauses; i++) {
             bool i_s = indicator(assignment, i);
             sum += i_s * penalty[i];
         }
+        // cout << "fliclaerp " << flipped_var << endl;
+        // cout << "restando " << param*sum << endl;
+        // cout << "restando " << param*sum << endl;
     }
 
-    return new_weight - param * sum;
+    return new_weight + param * sum;
 }
 
 /**

@@ -1,6 +1,6 @@
 c created by makewff from Bart Selman
 c seed= 1
-p cnf 20 120
+p wcnf 20 120
 5 14 -6 8 0
 9 -15 -17 -3 0
 -6 -12 2 9 0

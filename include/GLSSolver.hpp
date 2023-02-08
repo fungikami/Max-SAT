@@ -7,7 +7,7 @@
 #ifndef GLSSOLVER_H
 #define GLSSOLVER_H
 
-#define MAXTRIALS 2
+#define MAX_TRIALS 100
 
 #include <time.h>
 #include <queue>
@@ -27,8 +27,8 @@ class GLSSolver : public MaxSATSolver {
 
   private:
     uint seed;
-    int max_trials = MAXTRIALS;
-    double param = 0.45;
+    int trials = 0;
+    double param = 0.8;
 
     // Maps a variable to the clauses it appears in
     vector<vector<int>> affected_clauses;

@@ -43,14 +43,19 @@ GLSSolver::GLSSolver(const SATInstance &instance, uint seed)
  */
 void GLSSolver::solve() {
     // Compute the initial number of satisfied clauses
+    int internal_optimal_n_satisfied;
+    vector<bool> internal_optimal_assignment = optimal_assignment;
+
     while (trials < MAX_TRIALS) {
         // Local search algorithm
         int i = 0;
-        int current_n_satisfied = compute_n_satisfied(optimal_assignment);
-        optimal_n_satisfied = current_n_satisfied - param * penalty_sum(optimal_assignment);
+        int current_n_satisfied = compute_n_satisfied(internal_optimal_assignment);
+        internal_optimal_n_satisfied = current_n_satisfied - (
+            param * penalty_sum(internal_optimal_assignment)
+        );
 
         while (i < instance.n_vars) {
-            vector<bool> assignment = optimal_assignment;
+            vector<bool> assignment = internal_optimal_assignment;
 
             for (i = 0; i < instance.n_vars; i++) {
                 // Flip a variable and evaluate the new assignment
@@ -59,20 +64,27 @@ void GLSSolver::solve() {
                 pair<int, int> new_n_satisfied = evaluate_guided_flip(
                     assignment, i, current_n_satisfied
                 );
-                if (new_n_satisfied.first > optimal_n_satisfied) {
-                    optimal_n_satisfied = new_n_satisfied.first;
-                    optimal_assignment = assignment;
+                if (new_n_satisfied.first > internal_optimal_n_satisfied) {
+                    internal_optimal_n_satisfied = new_n_satisfied.first;
+                    internal_optimal_assignment = assignment;
                     current_n_satisfied = new_n_satisfied.second;
                     break;
                 }
-                
+
                 // Undo the flip
                 assignment[i] = !assignment[i];
             }
 
-            optimal_found = instance.n_clauses == optimal_n_satisfied;
+            optimal_found = instance.n_clauses == internal_optimal_n_satisfied;
             if (optimal_found) break;
         }
+
+        // Update the overall optimal assignment if the internal optimal is better
+        if (internal_optimal_n_satisfied > optimal_n_satisfied) {
+            optimal_assignment = internal_optimal_assignment;
+            optimal_n_satisfied = current_n_satisfied;
+        }
+
         if (optimal_found) break;
 
         // Calculate the utility of each clause

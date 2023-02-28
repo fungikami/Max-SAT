@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
 
     cout << "\nLocal Search" << endl;
     // ========== LOCAL SEARCH ==========
-    LocalSearchSolver ls_solver(instance);
+    LocalSearchSolver ls_solver(instance, 1675844709);
     double ls_solver_t = measure_time([&] { ls_solver.solve(); });
     ls_solver.print_solution();
     // ls_solver.verify_solution();

@@ -4,37 +4,41 @@
  * Copyright (C) 2023 Christopher Gómez, Ka Fung
  */
 
-// #ifndef GENETICSOLVER_H
-// #define GENETICSOLVER_H
+#ifndef GENETICSOLVER_H
+#define GENETICSOLVER_H
 
-// #include "../include/MaxSATSolver.hpp"
+#include <time.h>
+#include <vector>
+#include "../include/MaxSATSolver.hpp"
 
-// /**
-//  * @brief A MaxSAT solver based on genetic algorithm
-//  */
-// class GeneticSolver : public MaxSATSolver {
-//     public:
-//         using MaxSATSolver::MaxSATSolver;
-//         GeneticSolver(const SATInstance &instance, uint seed = time(NULL));
+/**
+ * @brief A MaxSAT solver based on genetic algorithm
+ */
+class GeneticSolver : public MaxSATSolver {
+    public:
+        using MaxSATSolver::MaxSATSolver;
+        GeneticSolver(const SATInstance &instance, uint seed = time(NULL));
     
-//         virtual void solve();
+        virtual void solve();
     
-//         void print_solution();
+        void print_solution();
     
-//     private:
-//         uint seed;
-//         int population_size = 100;
-//         int max_generations = 1000;
-//         double mutation_rate = 0.1;
+    private:
+        uint seed;
+        int population_size = 100;
+        int max_generations = 1000;
+        int max_stagnation = 100;
+        int tournament_size = 5;
+        double mutation_rate = 0.1;
     
-//         vector<vector<bool>> population;
-//         vector<int> fitness;
+        vector<vector<bool>> population;
+        vector<int> fitness;
     
-//         vector<bool> generate_random_solution();
-//         int calculate_fitness(vector<bool> solution);
-//         void cross(vector<bool> parent1, vector<bool> parent2, vector<bool> &child1, vector<bool> &child2);
-//         void mutate(vector<bool> &solution);
-//         void select();
-// };
+        vector<bool> generate_random_solution();
+        int calculate_fitness(vector<bool> solution);
+        void cross(vector<bool> parent1, vector<bool> parent2, vector<bool> &child1, vector<bool> &child2);
+        void mutate(vector<bool> &solution);
+        vector<bool> tournament_selection(vector<vector<bool>> population);
+};
 
-// #endif
+#endif

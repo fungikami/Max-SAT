@@ -38,7 +38,7 @@ class GLSSolver : public MaxSATSolver {
 
     priority_queue<pair<double, int>> utility;
 
-    int evaluate_guided_flip(vector<bool> &assignment, int flipped_var);
+    pair<int, int> evaluate_guided_flip(vector<bool> &assignment, int flipped_var, int current_n_satisfied);
     int penalty_sum(vector<bool> &assignment);
     bool indicator(vector<bool> &assignment, int i);
 };

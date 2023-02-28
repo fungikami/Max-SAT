@@ -46,8 +46,8 @@ void GLSSolver::solve() {
     while (trials < MAX_TRIALS) {
         // Local search algorithm
         int i = 0;
-        int current_n_satisfied_clauses = compute_n_satisfied(optimal_assignment);
-        optimal_n_satisfied = current_n_satisfied_clauses - param * penalty_sum(optimal_assignment);
+        int current_n_satisfied = compute_n_satisfied(optimal_assignment);
+        optimal_n_satisfied = current_n_satisfied - param * penalty_sum(optimal_assignment);
 
         while (i < instance.n_vars) {
             vector<bool> assignment = optimal_assignment;
@@ -56,12 +56,16 @@ void GLSSolver::solve() {
                 // Flip a variable and evaluate the new assignment
                 assignment[i] = !assignment[i];
 
-                int new_n_satisfied_clauses = evaluate_guided_flip(assignment, i);
-                if (new_n_satisfied_clauses > optimal_n_satisfied) {
-                    optimal_n_satisfied = new_n_satisfied_clauses;
+                pair<int, int> new_n_satisfied = evaluate_guided_flip(
+                    assignment, i, current_n_satisfied
+                );
+                if (new_n_satisfied.first > optimal_n_satisfied) {
+                    optimal_n_satisfied = new_n_satisfied.first;
                     optimal_assignment = assignment;
+                    current_n_satisfied = new_n_satisfied.second;
                     break;
                 }
+                
                 // Undo the flip
                 assignment[i] = !assignment[i];
             }
@@ -98,15 +102,51 @@ void GLSSolver::solve() {
  * 
  * @param assignment The assignment to be evaluated
  * @param flipped_var The variable that was flipped to obtain the assignment
- * @param current_n_satisfied_clauses The number of satisfied_clauses of the current assignment
+ * @param current_n_satisfied The number of satisfied clauses of the current assignment
  * @return int The new number of satisfied clauses of the assignment
  */
-int GLSSolver::evaluate_guided_flip(
+pair<int, int> GLSSolver::evaluate_guided_flip(
     vector<bool> &assignment,
-    int flipped_var
+    int flipped_var,
+    int current_n_satisfied
 ) {
-    int new_n_satisfied_clauses = compute_n_satisfied(assignment);
-    return new_n_satisfied_clauses - param * penalty_sum(assignment);
+    int new_n_satisfied = current_n_satisfied;
+
+    // Scan the clauses affected by the flipped variable
+    for (auto i : affected_clauses[flipped_var]) {
+
+        bool already_satisfied = false;
+        int flipped_literal = -1;
+
+        for (auto literal : instance.clauses[i]) {
+            if (literal>>1 == flipped_var) {
+                if (flipped_literal == -1) flipped_literal = literal;
+                else if (flipped_literal != literal) {
+                    // Edge case: the clause contains p v -p
+                    already_satisfied = true;
+                    break;
+                }
+                continue;
+            }
+
+            // Check if the clause was already satisfied regardless of the flip
+            already_satisfied = instance.is_literal_true(literal, assignment);
+            if (already_satisfied) break;
+        }
+
+        // If the clause was not already satisfied, check how the flip affects
+        if (!already_satisfied) {
+            if (instance.is_literal_true(flipped_literal, assignment)) 
+                new_n_satisfied++;
+            else
+                new_n_satisfied--;
+        }
+    }
+
+    return make_pair(
+        new_n_satisfied - param * penalty_sum(assignment),
+        new_n_satisfied
+    );
 }
 
 /**

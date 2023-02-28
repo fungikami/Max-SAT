@@ -36,7 +36,7 @@ void BruteForceSolver::solve() {
 
 /**
  * @brief Recursively generates all the possible assignments and computes the
- * weight of each one, stops when the optimal assignment is found
+ * n_satisfied_clauses of each one, stops when the optimal assignment is found
  * 
  * @param assignment 
  * @param i 
@@ -47,16 +47,16 @@ void BruteForceSolver::solve_helper(vector<bool> &assignment, int i) {
 
     // If all the variables have been assigned
     if (i == instance.n_vars) {
-        // Compute the weight of the assignment
-        int weight = compute_weight(assignment);
+        // Compute the n_satisfied_clauses of the assignment
+        int n_satisfied_clauses = compute_n_satisfied(assignment);
 
         // Update the optimal assignment
-        if (weight > optimal_weight) {
-            optimal_weight = weight;
+        if (n_satisfied_clauses > optimal_n_satisfied) {
+            optimal_n_satisfied = n_satisfied_clauses;
             optimal_assignment = assignment;
         }
 
-        optimal_found = instance.total_weight == optimal_weight;
+        optimal_found = instance.n_clauses == optimal_n_satisfied;
         return;
     }
 

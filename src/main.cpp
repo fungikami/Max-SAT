@@ -35,36 +35,39 @@ int main(int argc, char *argv[]) {
     // ========== READ THE INSTANCE ==========
     SATInstance instance(filename);
 
-    // Verificar por qué local search da peores resultados si se ejecuta brute
-    // force primero
     // ========== BRUTE FORCE ==========
-    // BruteForceSolver bf_solver(SATInstance("test_data/others/test1.cnf"));
+    // cout << "Exact Algorithm" << endl;
+    // BruteForceSolver bf_solver(instance);
     // double bf_solver_t = measure_time([&] { bf_solver.solve(); });
+    // bf_solver.print_solution();
     // bf_solver.verify_solution();
 
+    cout << "\nLocal Search" << endl;
     // ========== LOCAL SEARCH ==========
     LocalSearchSolver ls_solver(instance);
     double ls_solver_t = measure_time([&] { ls_solver.solve(); });
-    // ls_solver.print_solution();
-    ls_solver.verify_solution();
+    ls_solver.print_solution();
+    // ls_solver.verify_solution();
 
+    cout << "\nGLS" << endl;
     // ========== GUIDED LOCAL SEARCH ==========
     GLSSolver gls_solver(instance, ls_solver.seed);
     double gls_solver_t = measure_time([&] { gls_solver.solve(); });
-    // gls_solver.print_solution();
-    gls_solver.verify_solution();
+    gls_solver.print_solution();
+    // gls_solver.verify_solution();
 
-    // filename,n_vars,n_clauses,seed,ls_optimal_weight,ls_time,gls_optimal_weight,gls_time
+    // filename,n_vars,n_clauses,seed,ls_optimal_n_satisfied,ls_time,gls_optimal_n_satisfied,gls_time
 
-    cout << filename << "," << instance.n_vars << "," << instance.n_clauses << ",";
-    cout << ls_solver.seed << "," << ls_solver.optimal_weight << "," << ls_solver_t << "s,";
-    cout << gls_solver.optimal_weight << "," << gls_solver_t << "s" << endl;
+    // cout << filename << "," << instance.n_vars << "," << instance.n_clauses << ",";
+    // cout << ls_solver.seed << "," << ls_solver.optimal_n_satisfied << "," << ls_solver_t << "s,";
+    // cout << gls_solver.optimal_n_satisfied << "," << gls_solver_t << "s" << endl;
+    // cout << "" << endl;
 
     // ========== PRINT RESULTS ==========
-    // cout << "Time elapsed:" << endl;
+    cout << "Time elapsed:" << endl;
     // cout << "  Exact solver: " << bf_solver_t << "s" << endl;
-    // cout << "  Local search: " << ls_solver_t << "s" << endl;
-    // cout << "           GLS: " << gls_solver_t << "s" << endl;
+    cout << "  Local search: " << ls_solver_t << "s" << endl;
+    cout << "           GLS: " << gls_solver_t << "s" << endl;
 
     return 0;
 }

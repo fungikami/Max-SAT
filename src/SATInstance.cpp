@@ -27,48 +27,23 @@ SATInstance::SATInstance(string filename) {
     }
 
     string line;
-    bool is_weighted = false;
     while (getline(file, line)) {
         // Skip comments at the beginning of the file
         if (line[0] == 'c') continue;
 
         // Read the number of variables and clauses
         if (line[0] == 'p') {
-            is_weighted = line[2] == 'w';
-
-            if (is_weighted)
-                sscanf(line.c_str(),"p wcnf %d %d", &n_vars, &n_clauses);
-            else
-                sscanf(line.c_str(), "p cnf %d %d", &n_vars, &n_clauses);
+            sscanf(line.c_str(), "p cnf %d %d", &n_vars, &n_clauses);
             continue;
         }
 
         vector<int> clause;
         int literal;
 
-        bool weight_read = false;
         while (sscanf(line.c_str(), "%d", &literal) == 1) {
-            // Reset the weight_read boolean if the clause is finished
-            if (literal == 0) {
-                weight_read = false;
-                break;
-            }
+            // End of clause
+            if (literal == 0) break;
 
-            if (!weight_read) {
-                // Push the weight of the clause
-                if (is_weighted) {
-                    weights.push_back(literal);
-                    total_weight += literal;
-                    line = line.substr(line.find(" ") + 1);
-                } else {
-                    weights.push_back(1);
-                    total_weight++;
-                }
-
-                weight_read = true;
-                continue;
-            }
-            
             /*
              * Map the literal
              *  x -> 2x-2
@@ -107,19 +82,17 @@ bool SATInstance::is_literal_true(int literal, const vector<bool> &assignment) {
 ostream& operator<<(ostream &os, const SATInstance &instance) {
     // Prints the header
     os << "c Ka Fung & Christopher Gómez, 2022" << endl;
-    os << "p wcnf " << instance.n_vars << " " << instance.n_clauses;
+    os << "p cnf " << instance.n_vars << " " << instance.n_clauses << endl;
 
     // Prints the clauses
     vector<vector<int>> clauses = instance.clauses;
     for (uint i=0; i<instance.clauses.size(); i++) {
-        os << endl << instance.weights[i] << " ";
-
         for (int literal : clauses[i]) {
             // Unmaps variables to their original form
             if (literal & 1) os << "-";
             os << ((literal>>1) +1) << " ";
         }
-        os << "0";
+        os << "0" << endl;
     }
 
     return os;

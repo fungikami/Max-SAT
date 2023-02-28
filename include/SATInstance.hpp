@@ -21,10 +21,8 @@ class SATInstance {
 
     int n_vars;
     int n_clauses;
-    int total_weight = 0;
 
     vector<vector<int>> clauses;
-    vector<int> weights;
 
     bool is_literal_true(int literal, const vector<bool> &assignment);
 };

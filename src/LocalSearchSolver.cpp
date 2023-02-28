@@ -52,8 +52,8 @@ void LocalSearchSolver::solve() {
  */
 void LocalSearchSolver::do_local_search(int penalty_sum) {
     int i = 0;
-    int current_weight = compute_weight(optimal_assignment);
-    optimal_weight = current_weight - penalty_sum;
+    int current_n_satisfied = compute_n_satisfied(optimal_assignment);
+    optimal_n_satisfied = current_n_satisfied - penalty_sum;
 
     while (i < instance.n_vars) {
         vector<bool> assignment = optimal_assignment;
@@ -61,9 +61,9 @@ void LocalSearchSolver::do_local_search(int penalty_sum) {
             // Flip a variable
             assignment[i] = !assignment[i];
 
-            int new_weight = eval_function(assignment, i);
-            if (new_weight > optimal_weight) {
-                optimal_weight = new_weight;
+            int new_n_satisfied = eval_function(assignment, i);
+            if (new_n_satisfied > optimal_n_satisfied) {
+                optimal_n_satisfied = new_n_satisfied;
                 optimal_assignment = assignment;
                 break;
             }
@@ -72,7 +72,7 @@ void LocalSearchSolver::do_local_search(int penalty_sum) {
             assignment[i] = !assignment[i];
         }
 
-        optimal_found = instance.total_weight == optimal_weight;
+        optimal_found = instance.n_clauses == optimal_n_satisfied;
         if (optimal_found) break;
     }
 }
@@ -82,13 +82,13 @@ void LocalSearchSolver::do_local_search(int penalty_sum) {
  * 
  * @param assignment The assignment to be evaluated
  * @param flipped_var The variable that was flipped to obtain the assignment
- * @return int The new weight of the assignment
+ * @return int The new number of satisfied clauses of the assignment
  */
 int LocalSearchSolver::eval_function(
     vector<bool> &assignment,
     int flipped_var
 ) {
-    int new_weight = optimal_weight;
+    int new_n_satisfied = optimal_n_satisfied;
 
     // Scan the clauses affected by the flipped variable
     for (auto i : affected_clauses[flipped_var]) {
@@ -115,13 +115,13 @@ int LocalSearchSolver::eval_function(
         // If the clause was not already satisfied, check how the flip affects
         if (!already_satisfied) {
             if (instance.is_literal_true(flipped_literal, assignment)) 
-                new_weight += instance.weights[i];
+                new_n_satisfied++;
             else
-                new_weight -= instance.weights[i];
+                new_n_satisfied--;
         }
     }
 
-    return new_weight;
+    return new_n_satisfied;
 }
 
 void LocalSearchSolver::print_solution() {

@@ -26,11 +26,11 @@ class MaxSATSolver {
     void verify_solution();
   
   // protected:
-    int compute_weight(const vector<bool> &assignment);
+    int compute_n_satisfied(const vector<bool> &assignment);
 
     SATInstance instance;
 
-    int optimal_weight = -1;
+    int optimal_n_satisfied = -1;
     bool optimal_found = false;
 
     vector<bool> optimal_assignment;

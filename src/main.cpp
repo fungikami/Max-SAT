@@ -43,38 +43,38 @@ int main(int argc, char *argv[]) {
     // bf_solver.verify_solution();
 
     // ========== LOCAL SEARCH ==========
-    LocalSearchSolver ls_solver(instance, 1675859411);
+    LocalSearchSolver ls_solver(instance);
     double ls_solver_t = measure_time([&] { ls_solver.solve(); });
     // cout << "\nLocal Search" << endl;
-    ls_solver.print_solution();
+    // ls_solver.print_solution();
     ls_solver.verify_solution();
 
     // ========== GUIDED LOCAL SEARCH ==========
-    GLSSolver gls_solver(instance, 1675859411);
+    GLSSolver gls_solver(instance, ls_solver.seed);
     double gls_solver_t = measure_time([&] { gls_solver.solve(); });
     // cout << "\nGLS" << endl;
-    gls_solver.print_solution();
+    // gls_solver.print_solution();
     gls_solver.verify_solution();
 
     // ========== GENETIC ALGORITHM ==========
-    GeneticSolver ga_solver(instance, ls_solver.seed);
-    double ga_solver_t = measure_time([&] { ga_solver.solve(); });
-    cout << "\nGenetic Algorithm" << endl;
-    ga_solver.print_solution();
-    ga_solver.verify_solution();
+    // GeneticSolver ga_solver(instance, ls_solver.seed);
+    // double ga_solver_t = measure_time([&] { ga_solver.solve(); });
+    // cout << "\nGenetic Algorithm" << endl;
+    // ga_solver.print_solution();
+    // ga_solver.verify_solution();
 
     // ========== PRINT RESULTS ==========
-    cout << "Time elapsed:" << endl;
+    // cout << "Time elapsed:" << endl;
     // cout << "  Exact solver: " << bf_solver_t << "s" << endl;
-    cout << "       Local search: " << ls_solver_t << "s" << endl;
-    cout << "                GLS: " << gls_solver_t << "s" << endl;
-    cout << "  Genetic algorithm: " << ga_solver_t << "s" << endl;
+    // cout << "       Local search: " << ls_solver_t << "s" << endl;
+    // cout << "                GLS: " << gls_solver_t << "s" << endl;
+    // cout << "  Genetic algorithm: " << ga_solver_t << "s" << endl;
 
 
-    // filename,n_vars,n_clauses,seed,ls_optimal_n_satisfied,ls_time,gls_optimal_n_satisfied,gls_time
-    // cout << filename << "\t" << instance.n_vars << "\t" << instance.n_clauses << "\t";
-    // cout << ls_solver.seed << "\t" << ls_solver.optimal_n_satisfied << "\t" << ls_solver_t << "\t";
-    // cout << gls_solver.optimal_n_satisfied << "\t" << gls_solver_t << endl;
+    // Filename	#Vars	#Clauses	Seed	Optimal found (LS)	Time (LS)	Optimal found (GLS)	Time (GLS)
+    cout << filename << "\t" << instance.n_vars << "\t" << instance.n_clauses << "\t";
+    cout << ls_solver.seed << "\t" << ls_solver.optimal_n_satisfied << "\t" << ls_solver_t << "\t";
+    cout << gls_solver.optimal_n_satisfied << "\t" << gls_solver_t << endl;
 
     return 0;
 }

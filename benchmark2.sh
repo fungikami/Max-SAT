@@ -1,4 +1,4 @@
-echo "filename	n_vars	n_clauses	seed	ls_optimal_n_satisfied	ls_time (s)	gls_optimal_n_satisfied	gls_time (s)"
+echo "Filename	#Vars	#Clauses	Seed	Optimal found (LS)	Time (LS)	Optimal found (GLS)	Time (GLS)"
 ./run.sh test_data/max_3_sat/3sat_100_200_1.cnf
 ./run.sh test_data/max_3_sat/3sat_100_200_2.cnf
 ./run.sh test_data/max_3_sat/3sat_100_200_4.cnf

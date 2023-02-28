@@ -1,3 +1,3 @@
-./benchmark1.sh > jnh_results.csv
-./benchmark2.sh > max_3_sat_results.csv
-./benchmark3.sh > max_4_sat_results.csv
+./benchmark1.sh > results/jnh_results.tsv
+./benchmark2.sh > results/max_3_sat_results.tsv
+./benchmark3.sh > results/max_4_sat_results.tsv

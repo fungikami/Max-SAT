@@ -1,3 +1,4 @@
+echo "filename	n_vars	n_clauses	seed	ls_optimal_n_satisfied	ls_time (s)	gls_optimal_n_satisfied	gls_time (s)"
 ./run.sh test_data/jnh/jnh20.cnf
 ./run.sh test_data/jnh/jnh307.cnf
 ./run.sh test_data/jnh/jnh219.cnf

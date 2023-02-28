@@ -42,32 +42,31 @@ int main(int argc, char *argv[]) {
     // bf_solver.print_solution();
     // bf_solver.verify_solution();
 
-    cout << "\nLocal Search" << endl;
+    // cout << "\nLocal Search" << endl;
     // ========== LOCAL SEARCH ==========
-    LocalSearchSolver ls_solver(instance, 1675844709);
+    LocalSearchSolver ls_solver(instance);
     double ls_solver_t = measure_time([&] { ls_solver.solve(); });
-    ls_solver.print_solution();
+    // ls_solver.print_solution();
     // ls_solver.verify_solution();
 
-    cout << "\nGLS" << endl;
+    // cout << "\nGLS" << endl;
     // ========== GUIDED LOCAL SEARCH ==========
     GLSSolver gls_solver(instance, ls_solver.seed);
     double gls_solver_t = measure_time([&] { gls_solver.solve(); });
-    gls_solver.print_solution();
+    // gls_solver.print_solution();
     // gls_solver.verify_solution();
 
     // filename,n_vars,n_clauses,seed,ls_optimal_n_satisfied,ls_time,gls_optimal_n_satisfied,gls_time
 
-    // cout << filename << "," << instance.n_vars << "," << instance.n_clauses << ",";
-    // cout << ls_solver.seed << "," << ls_solver.optimal_n_satisfied << "," << ls_solver_t << "s,";
-    // cout << gls_solver.optimal_n_satisfied << "," << gls_solver_t << "s" << endl;
-    // cout << "" << endl;
+    cout << filename << "\t" << instance.n_vars << "\t" << instance.n_clauses << "\t";
+    cout << ls_solver.seed << "\t" << ls_solver.optimal_n_satisfied << "\t" << ls_solver_t << "\t";
+    cout << gls_solver.optimal_n_satisfied << "\t" << gls_solver_t << endl;
 
     // ========== PRINT RESULTS ==========
-    cout << "Time elapsed:" << endl;
-    // cout << "  Exact solver: " << bf_solver_t << "s" << endl;
-    cout << "  Local search: " << ls_solver_t << "s" << endl;
-    cout << "           GLS: " << gls_solver_t << "s" << endl;
+    // cout << "Time elapsed:" << endl;
+    // // cout << "  Exact solver: " << bf_solver_t << "s" << endl;
+    // cout << "  Local search: " << ls_solver_t << "s" << endl;
+    // cout << "           GLS: " << gls_solver_t << "s" << endl;
 
     return 0;
 }

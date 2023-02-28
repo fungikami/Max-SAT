@@ -43,18 +43,18 @@ int main(int argc, char *argv[]) {
     // bf_solver.verify_solution();
 
     // ========== LOCAL SEARCH ==========
-    LocalSearchSolver ls_solver(instance);
+    LocalSearchSolver ls_solver(instance, 1675859411);
     double ls_solver_t = measure_time([&] { ls_solver.solve(); });
     // cout << "\nLocal Search" << endl;
     ls_solver.print_solution();
-    // ls_solver.verify_solution();
+    ls_solver.verify_solution();
 
     // ========== GUIDED LOCAL SEARCH ==========
-    GLSSolver gls_solver(instance, ls_solver.seed);
+    GLSSolver gls_solver(instance, 1675859411);
     double gls_solver_t = measure_time([&] { gls_solver.solve(); });
     // cout << "\nGLS" << endl;
     gls_solver.print_solution();
-    // gls_solver.verify_solution();
+    gls_solver.verify_solution();
 
     // ========== GENETIC ALGORITHM ==========
     GeneticSolver ga_solver(instance, ls_solver.seed);

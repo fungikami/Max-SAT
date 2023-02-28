@@ -90,7 +90,7 @@ void GLSSolver::solve() {
         // Calculate the utility of each clause
         priority_queue<pair<double, int>> utility;
         for (int i = 0; i < instance.n_clauses; i++) {
-            bool i_s = indicator(optimal_assignment, i);
+            bool i_s = indicator(internal_optimal_assignment, i);
             double util = i_s / (double) (1 + penalty[i]);
             utility.push(make_pair(util, i));
         }
@@ -105,8 +105,6 @@ void GLSSolver::solve() {
 
         trials++;
     }
-
-    optimal_n_satisfied = compute_n_satisfied(optimal_assignment);
 }
 
 /**

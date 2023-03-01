@@ -8,8 +8,8 @@ INCLUDE_DIR = include
 
 all: $(BIN_DIR)/maxsatsolver
 
-$(BIN_DIR)/maxsatsolver: $(SRC_DIR)/main.cpp $(BUILD_DIR)/SATInstance.o $(BUILD_DIR)/BruteForceSolver.o $(BUILD_DIR)/LocalSearchSolver.o $(BUILD_DIR)/GLSSolver.o $(BUILD_DIR)/SimulatedAnnealingSolver.o $(BUILD_DIR)/GeneticSolver.o $(BUILD_DIR)/MaxSATSolver.o 
-	$(CC) $(CFLAGS) -o $(BIN_DIR)/maxsatsolver $(SRC_DIR)/main.cpp $(BUILD_DIR)/SATInstance.o $(BUILD_DIR)/BruteForceSolver.o $(BUILD_DIR)/LocalSearchSolver.o $(BUILD_DIR)/GLSSolver.o $(BUILD_DIR)/SimulatedAnnealingSolver.o $(BUILD_DIR)/GeneticSolver.o $(BUILD_DIR)/MaxSATSolver.o
+$(BIN_DIR)/maxsatsolver: $(SRC_DIR)/main.cpp $(BUILD_DIR)/SATInstance.o $(BUILD_DIR)/BruteForceSolver.o $(BUILD_DIR)/LocalSearchSolver.o $(BUILD_DIR)/GLSSolver.o $(BUILD_DIR)/SimulatedAnnealingSolver.o $(BUILD_DIR)/GeneticAlgorithmSolver.o $(BUILD_DIR)/MaxSATSolver.o 
+	$(CC) $(CFLAGS) -o $(BIN_DIR)/maxsatsolver $(SRC_DIR)/main.cpp $(BUILD_DIR)/SATInstance.o $(BUILD_DIR)/BruteForceSolver.o $(BUILD_DIR)/LocalSearchSolver.o $(BUILD_DIR)/GLSSolver.o $(BUILD_DIR)/SimulatedAnnealingSolver.o $(BUILD_DIR)/GeneticAlgorithmSolver.o $(BUILD_DIR)/MaxSATSolver.o
 
 $(BUILD_DIR)/BruteForceSolver.o: $(SRC_DIR)/BruteForceSolver.cpp $(INCLUDE_DIR)/BruteForceSolver.hpp
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/BruteForceSolver.cpp -o $(BUILD_DIR)/BruteForceSolver.o
@@ -23,8 +23,8 @@ $(BUILD_DIR)/GLSSolver.o: $(SRC_DIR)/GLSSolver.cpp $(INCLUDE_DIR)/GLSSolver.hpp
 $(BUILD_DIR)/SimulatedAnnealingSolver.o: $(SRC_DIR)/SimulatedAnnealingSolver.cpp $(INCLUDE_DIR)/SimulatedAnnealingSolver.hpp
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/SimulatedAnnealingSolver.cpp -o $(BUILD_DIR)/SimulatedAnnealingSolver.o
 
-$(BUILD_DIR)/GeneticSolver.o: $(SRC_DIR)/GeneticSolver.cpp $(INCLUDE_DIR)/GeneticSolver.hpp
-	$(CC) $(CFLAGS) -c $(SRC_DIR)/GeneticSolver.cpp -o $(BUILD_DIR)/GeneticSolver.o
+$(BUILD_DIR)/GeneticAlgorithmSolver.o: $(SRC_DIR)/GeneticAlgorithmSolver.cpp $(INCLUDE_DIR)/GeneticAlgorithmSolver.hpp
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/GeneticAlgorithmSolver.cpp -o $(BUILD_DIR)/GeneticAlgorithmSolver.o
 
 $(BUILD_DIR)/MaxSATSolver.o: $(SRC_DIR)/MaxSATSolver.cpp $(INCLUDE_DIR)/MaxSATSolver.hpp
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/MaxSATSolver.cpp -o $(BUILD_DIR)/MaxSATSolver.o

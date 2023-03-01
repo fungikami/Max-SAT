@@ -5,7 +5,7 @@
  */
 
 #include <iostream>
-#include "../include/GeneticSolver.hpp"
+#include "../include/GeneticAlgorithmSolver.hpp"
 #include "../include/SATInstance.hpp"
 
 /**
@@ -13,12 +13,11 @@
  *
  * @return vector<bool> The random solution
  */
-vector<bool> GeneticSolver::generate_random_solution() {
+vector<bool> GeneticAlgorithmSolver::generate_random_solution() {
     vector<bool> solution;
     for (int i = 0; i < instance.n_vars; i++)
         solution.push_back(rand() & 1);
     return solution;
-
 }
 
 /**
@@ -27,7 +26,7 @@ vector<bool> GeneticSolver::generate_random_solution() {
  * @param solution The solution to calculate the fitness
  * @return int The fitness of the solution
  */
-int GeneticSolver::calculate_fitness(vector<bool> solution) {
+int GeneticAlgorithmSolver::calculate_fitness(vector<bool> solution) {
     int fitness = 0;
     for (int i = 0; i < instance.n_clauses; i++) {
         bool clause_satisfied = false;
@@ -58,7 +57,7 @@ int GeneticSolver::calculate_fitness(vector<bool> solution) {
  * @param child1 The first child
  * @param child2 The second child
  */
-void GeneticSolver::cross(vector<bool> parent1, vector<bool> parent2, vector<bool> &child1, vector<bool> &child2) {
+void GeneticAlgorithmSolver::cross(vector<bool> parent1, vector<bool> parent2, vector<bool> &child1, vector<bool> &child2) {
     int cross_point = rand() % instance.n_vars;
     for (int i = 0; i < cross_point; i++) {
         child1.push_back(parent1[i]);
@@ -75,7 +74,7 @@ void GeneticSolver::cross(vector<bool> parent1, vector<bool> parent2, vector<boo
  *
  * @param solution The solution to mutate
  */
-void GeneticSolver::mutate(vector<bool> &solution) {
+void GeneticAlgorithmSolver::mutate(vector<bool> &solution) {
     for (int i = 0; i < instance.n_vars; i++) {
         if (rand() % 100 < mutation_rate * 100)
             solution[i] = !solution[i];
@@ -89,7 +88,7 @@ void GeneticSolver::mutate(vector<bool> &solution) {
  * @param tournament_size The size of the tournament
  * @return vector<bool> The selected solution
  */
-vector<bool> GeneticSolver::tournament_selection(vector<vector<bool>> population) {
+vector<bool> GeneticAlgorithmSolver::tournament_selection(vector<vector<bool>> population) {
     vector<bool> best_solution;
     int best_fitness = 0;
     for (int i = 0; i < tournament_size; i++) {
@@ -103,7 +102,7 @@ vector<bool> GeneticSolver::tournament_selection(vector<vector<bool>> population
     return best_solution;
 }
 
-GeneticSolver::GeneticSolver(
+GeneticAlgorithmSolver::GeneticAlgorithmSolver(
     const SATInstance &instance, uint seed
 ) : MaxSATSolver(instance) {
     srand(seed);
@@ -112,7 +111,7 @@ GeneticSolver::GeneticSolver(
 /**
  * @brief Solves the instance using genetic algorithm
  */
-void GeneticSolver::solve() {
+void GeneticAlgorithmSolver::solve() {
     vector<vector<bool>> population;
     for (int i = 0; i < population_size; i++)
         population.push_back(generate_random_solution());
@@ -153,7 +152,7 @@ void GeneticSolver::solve() {
     optimal_assignment = population[0];
 }
 
-void GeneticSolver::print_solution() {
+void GeneticAlgorithmSolver::print_solution() {
     cout << "c seed = " << seed << endl;
     MaxSATSolver::print_solution();
 }

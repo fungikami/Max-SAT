@@ -80,7 +80,7 @@ void GLSSolver::solve() {
         }
 
         // Update the overall optimal assignment if the internal optimal is better
-        if (internal_optimal_n_satisfied > optimal_n_satisfied) {
+        if (current_n_satisfied > optimal_n_satisfied) {
             optimal_assignment = internal_optimal_assignment;
             optimal_n_satisfied = current_n_satisfied;
         }

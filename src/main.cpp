@@ -12,7 +12,7 @@
 #include "../include/BruteForceSolver.hpp"
 #include "../include/LocalSearchSolver.hpp"
 #include "../include/GLSSolver.hpp"
-#include "../include/GeneticSolver.hpp"
+#include "../include/GeneticAlgorithmSolver.hpp"
 #include "../include/SATInstance.hpp"
 
 using namespace std;
@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
     // bf_solver.verify_solution();
 
     // ========== LOCAL SEARCH ==========
-    LocalSearchSolver ls_solver(instance);
+    LocalSearchSolver ls_solver(instance, 1677633637);
     double ls_solver_t = measure_time([&] { ls_solver.solve(); });
     // cout << "\nLocal Search" << endl;
     // ls_solver.print_solution();
@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
     // gls_solver.verify_solution();
 
     // ========== GENETIC ALGORITHM ==========
-    // GeneticSolver ga_solver(instance, ls_solver.seed);
+    // GeneticAlgorithmSolver ga_solver(instance, ls_solver.seed);
     // double ga_solver_t = measure_time([&] { ga_solver.solve(); });
     // cout << "\nGenetic Algorithm" << endl;
     // ga_solver.print_solution();

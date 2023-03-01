@@ -50,7 +50,7 @@ GeneticAlgorithmSolver:: GeneticAlgorithmSolver(
     // Calculate fitness of each solution
     for (int i = 0; i < population_size; i++)
         fitness.push_back(compute_n_satisfied(population[i]));
-};
+}
 
 /* ========== IDEAS ==========
 - Poner probabilidad de mutación (encima del ratio que ya se tiene, que es la

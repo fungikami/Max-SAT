@@ -1,6 +1,7 @@
 # Compile c++ code
 CC = g++
-CFLAGS = -Wall -g -std=c++11
+# Optimize the maximum
+CFLAGS = -Wpedantic -std=c++17 -Ofast -march=native -mtune=native
 BUILD_DIR = build
 BIN_DIR = bin
 SRC_DIR = src

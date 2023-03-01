@@ -45,16 +45,16 @@ int main(int argc, char *argv[]) {
     // ========== LOCAL SEARCH ==========
     LocalSearchSolver ls_solver(instance);
     double ls_solver_t = measure_time([&] { ls_solver.solve(); });
-    cout << "\nLocal Search" << endl;
-    ls_solver.print_solution();
+    // cout << "\nLocal Search" << endl;
+    // ls_solver.print_solution();
     ls_solver.verify_solution();
 
     // ========== GUIDED LOCAL SEARCH ==========
-    // GLSSolver gls_solver(instance, ls_solver.seed);
-    // double gls_solver_t = measure_time([&] { gls_solver.solve(); });
+    GLSSolver gls_solver(instance, ls_solver.seed);
+    double gls_solver_t = measure_time([&] { gls_solver.solve(); });
     // cout << "\nGLS" << endl;
     // gls_solver.print_solution();
-    // gls_solver.verify_solution();
+    gls_solver.verify_solution();
 
     // ========== GENETIC ALGORITHM ==========
     /*
@@ -69,23 +69,23 @@ int main(int argc, char *argv[]) {
      *  0.5: 1083
      *    1: 1093
      */
-    GeneticAlgorithmSolver ga_solver(instance, 100, 1000, 100, 5, 0.01, 0);
-    double ga_solver_t = measure_time([&] { ga_solver.solve(); });
-    cout << "\nGenetic Algorithm" << endl;
-    ga_solver.print_solution();
-    ga_solver.verify_solution();
+    // GeneticAlgorithmSolver ga_solver(instance, 100, 1000, 100, 5, 0.01, 0);
+    // double ga_solver_t = measure_time([&] { ga_solver.solve(); });
+    // cout << "\nGenetic Algorithm" << endl;
+    // ga_solver.print_solution();
+    // ga_solver.verify_solution();
 
     // ========== PRINT RESULTS ==========
-    cout << "Time elapsed:" << endl;
+    // cout << "Time elapsed:" << endl;
     // // cout << "  Exact solver: " << bf_solver_t << "s" << endl;
-    cout << "       Local search: " << ls_solver_t << "s" << endl;
+    // cout << "       Local search: " << ls_solver_t << "s" << endl;
     // cout << "                GLS: " << gls_solver_t << "s" << endl;
-    cout << "  Genetic algorithm: " << ga_solver_t << "s" << endl;
+    // cout << "  Genetic algorithm: " << ga_solver_t << "s" << endl;
 
     // Filename	Seed	#Vars	#Clauses	Optimal found (LS)	Time (LS)	Optimal found (GLS)	Time (GLS)
-    // cout << filename << "\t" << ls_solver.seed << "\t" << instance.n_vars << "\t" << instance.n_clauses << "\t";
-    // cout << ls_solver.optimal_n_satisfied << "\t" << ls_solver_t << "\t";
-    // cout << gls_solver.optimal_n_satisfied << "\t" << gls_solver_t << endl;
+    cout << filename << "\t" << ls_solver.seed << "\t" << instance.n_vars << "\t" << instance.n_clauses << "\t";
+    cout << ls_solver.optimal_n_satisfied << "\t" << ls_solver_t << "\t";
+    cout << gls_solver.optimal_n_satisfied << "\t" << gls_solver_t << endl;
 
     return 0;
 }

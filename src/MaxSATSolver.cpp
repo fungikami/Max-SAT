@@ -13,7 +13,8 @@
 using namespace std;
 
 /**
- * @brief Computes the n_satisfied_clauses given an assignment according to the SAT instance
+ * @brief Computes the n_satisfied_clauses given an assignment according to the 
+ * SAT instance
  * 
  * @param assignment The assignment to be evaluated
  */

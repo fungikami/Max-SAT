@@ -8,45 +8,76 @@
 #include "../include/GeneticAlgorithmSolver.hpp"
 #include "../include/SATInstance.hpp"
 
-/**
- * @brief Generate a random solution
- *
- * @return vector<bool> The random solution
- */
-vector<bool> GeneticAlgorithmSolver::generate_random_solution() {
-    vector<bool> solution;
-    for (int i = 0; i < instance.n_vars; i++)
-        solution.push_back(rand() & 1);
-    return solution;
-}
+GeneticAlgorithmSolver:: GeneticAlgorithmSolver(
+    const SATInstance &instance,
+    int population_size,
+    int max_generations,
+    int max_stagnation,
+    int tournament_size,
+    double mutation_rate,
+    uint seed
+) : MaxSATSolver(instance),
+    seed(seed),
+    population_size(population_size),
+    max_generations(max_generations),
+    max_stagnation(max_stagnation),
+    tournament_size(tournament_size),
+    mutation_rate(mutation_rate)
+{
+    // Initialize the population with random solutions
+    srand(seed);
+
+    // Generate population_size random solutions
+    for (int i = 0; i < population_size; i++) {
+        vector<bool> solution;
+        for (int i = 0; i < instance.n_vars; i++) solution.push_back(rand() & 1);
+        population.push_back(solution);
+    }
+
+    // Calculate fitness of each solution
+    for (int i = 0; i < population_size; i++)
+        fitness.push_back(compute_n_satisfied(population[i]));
+};
+
 
 /**
- * @brief Calculate fitness of a solution
- *
- * @param solution The solution to calculate the fitness
- * @return int The fitness of the solution
+ * @brief Solves the instance using genetic algorithm
  */
-int GeneticAlgorithmSolver::calculate_fitness(vector<bool> solution) {
-    int fitness = 0;
-    for (int i = 0; i < instance.n_clauses; i++) {
-        bool clause_satisfied = false;
-        for (auto literal : instance.clauses[i]) {
-            if (literal & 1) {
-                if (!solution[literal >> 1]) {
-                    clause_satisfied = true;
-                    break;
-                }
-            } else {
-                if (solution[literal >> 1]) {
-                    clause_satisfied = true;
-                    break;
-                }
-            }
+void GeneticAlgorithmSolver::solve() {
+    int generation = 0;
+    int stagnation = 0;
+    while (generation < max_generations && stagnation < max_stagnation) {
+        // Reproduction phase
+        vector<vector<bool>> new_population;
+        for (int i = 0; i < population_size; i++) {
+            vector<bool> parent1 = tournament_selection();
+            vector<bool> parent2 = tournament_selection();
+            vector<bool> child1, child2;
+            cross(parent1, parent2, child1, child2);
+            mutate(child1);
+            mutate(child2);
+            new_population.push_back(child1);
+            new_population.push_back(child2);
         }
-        if (clause_satisfied)
-            fitness += 1;
+        population = new_population;
+
+        int current_best_fitness = 0;
+        for (int i = 0; i < population_size; i++) {
+            int fitness = compute_n_satisfied(population[i]);
+            if (fitness > current_best_fitness)
+                current_best_fitness = fitness;
+        }
+        if (current_best_fitness > optimal_n_satisfied) {
+            optimal_n_satisfied = current_best_fitness;
+            stagnation = 0;
+        } else {
+            stagnation++;
+        }
+        generation++;
     }
-    return fitness;
+
+    optimal_assignment = population[0];
+    
 }
 
 /**
@@ -57,7 +88,12 @@ int GeneticAlgorithmSolver::calculate_fitness(vector<bool> solution) {
  * @param child1 The first child
  * @param child2 The second child
  */
-void GeneticAlgorithmSolver::cross(vector<bool> parent1, vector<bool> parent2, vector<bool> &child1, vector<bool> &child2) {
+void GeneticAlgorithmSolver::cross(
+    const vector<bool> &parent1,
+    const vector<bool> &parent2,
+    vector<bool> &child1,
+    vector<bool> &child2
+) {
     int cross_point = rand() % instance.n_vars;
     for (int i = 0; i < cross_point; i++) {
         child1.push_back(parent1[i]);
@@ -84,72 +120,20 @@ void GeneticAlgorithmSolver::mutate(vector<bool> &solution) {
 /**
  * @brief Tournament selection
  *
- * @param population The population to select from
- * @param tournament_size The size of the tournament
  * @return vector<bool> The selected solution
  */
-vector<bool> GeneticAlgorithmSolver::tournament_selection(vector<vector<bool>> population) {
+vector<bool> GeneticAlgorithmSolver::tournament_selection() {
     vector<bool> best_solution;
     int best_fitness = 0;
     for (int i = 0; i < tournament_size; i++) {
-        int index = rand() % population.size();
-        int fitness = calculate_fitness(population[index]);
+        int index = rand() % population_size;
+        int fitness = compute_n_satisfied(population[index]);
         if (fitness > best_fitness) {
             best_fitness = fitness;
             best_solution = population[index];
         }
     }
     return best_solution;
-}
-
-GeneticAlgorithmSolver::GeneticAlgorithmSolver(
-    const SATInstance &instance, uint seed
-) : MaxSATSolver(instance) {
-    srand(seed);
-}
-
-/**
- * @brief Solves the instance using genetic algorithm
- */
-void GeneticAlgorithmSolver::solve() {
-    vector<vector<bool>> population;
-    for (int i = 0; i < population_size; i++)
-        population.push_back(generate_random_solution());
-
-    int generation = 0;
-    int stagnation = 0;
-    int best_fitness = 0;
-    while (generation < max_generations && stagnation < max_stagnation) {
-        vector<vector<bool>> new_population;
-        for (int i = 0; i < population_size; i++) {
-            vector<bool> parent1 = tournament_selection(population);
-            vector<bool> parent2 = tournament_selection(population);
-            vector<bool> child1, child2;
-            cross(parent1, parent2, child1, child2);
-            mutate(child1);
-            mutate(child2);
-            new_population.push_back(child1);
-            new_population.push_back(child2);
-        }
-        population = new_population;
-
-        int current_best_fitness = 0;
-        for (int i = 0; i < population_size; i++) {
-            int fitness = calculate_fitness(population[i]);
-            if (fitness > current_best_fitness)
-                current_best_fitness = fitness;
-        }
-        if (current_best_fitness > best_fitness) {
-            best_fitness = current_best_fitness;
-            stagnation = 0;
-        } else {
-            stagnation++;
-        }
-        generation++;
-    }
-
-    optimal_n_satisfied = best_fitness;
-    optimal_assignment = population[0];
 }
 
 void GeneticAlgorithmSolver::print_solution() {

@@ -24,8 +24,7 @@ class MaxSATSolver {
 
     void print_solution();
     void verify_solution();
-  
-  // protected:
+
     int compute_n_satisfied(const vector<bool> &assignment);
 
     SATInstance instance;

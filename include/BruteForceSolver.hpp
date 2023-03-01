@@ -19,7 +19,6 @@ class BruteForceSolver : public MaxSATSolver {
 
     virtual void solve();
 
-  // private:
     void solve_helper(vector<bool> &assignment, int i);
 };
 

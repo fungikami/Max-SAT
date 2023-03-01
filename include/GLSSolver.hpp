@@ -22,10 +22,8 @@ class GLSSolver : public MaxSATSolver {
     GLSSolver(const SATInstance &instance, uint seed = time(NULL));
 
     virtual void solve();
-
     void print_solution();
 
-  // private:
     uint seed;
     int trials = 0;
     double param = 1;

@@ -24,7 +24,6 @@ class LocalSearchSolver : public MaxSATSolver {
     void do_local_search(int penalty_sum);
     void print_solution();
 
-  // private:
     uint seed;
 
     // Maps a variable to the clauses it appears in

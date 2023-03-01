@@ -8,6 +8,19 @@
 #include "../include/GeneticAlgorithmSolver.hpp"
 #include "../include/SATInstance.hpp"
 
+/**
+ * @brief Generates an initial population for the instance to be solved, using
+ * the given seed
+ * 
+ * @param instance The SAT instance
+ * @param population_size The size of the population
+ * @param max_generations Maximum number of generations
+ * @param max_stagnation Maximum number of generations without improvement
+ * @param tournament_size Size of the tournament
+ * @param mutation_rate Probability of mutation
+ * @param seed The seed for the random number generator
+ * @return GeneticAlgorithmSolver:: 
+ */
 GeneticAlgorithmSolver:: GeneticAlgorithmSolver(
     const SATInstance &instance,
     int population_size,
@@ -39,6 +52,15 @@ GeneticAlgorithmSolver:: GeneticAlgorithmSolver(
         fitness.push_back(compute_n_satisfied(population[i]));
 };
 
+/* ========== IDEAS ==========
+- Poner probabilidad de mutación (encima del ratio que ya se tiene, que es la
+  tasa de flips que se hacen por cada hijo)
+- Ver si se pueden tener padres ordenados por fitness o algo asi (?)
+- Hacer otro tipo de selecciones
+- Seleccionar solo el mejor de los dos hijos y dejar el mejor padre (para que
+  la población no quede siempre enteramente sustituida)
+- Paralelizar jojo
+============================== */
 
 /**
  * @brief Solves the instance using genetic algorithm
@@ -47,37 +69,58 @@ void GeneticAlgorithmSolver::solve() {
     int generation = 0;
     int stagnation = 0;
     while (generation < max_generations && stagnation < max_stagnation) {
-        // Reproduction phase
         vector<vector<bool>> new_population;
-        for (int i = 0; i < population_size; i++) {
+        vector<int> new_fitness;
+        bool improved = false;
+        while (new_population.size() < population_size) {
+            // Generate two parents
             vector<bool> parent1 = tournament_selection();
             vector<bool> parent2 = tournament_selection();
+
+            // Generate two children from the parents
             vector<bool> child1, child2;
             cross(parent1, parent2, child1, child2);
+
+            // Mutate the children
             mutate(child1);
             mutate(child2);
-            new_population.push_back(child1);
-            new_population.push_back(child2);
-        }
-        population = new_population;
 
-        int current_best_fitness = 0;
-        for (int i = 0; i < population_size; i++) {
-            int fitness = compute_n_satisfied(population[i]);
-            if (fitness > current_best_fitness)
-                current_best_fitness = fitness;
+            // Compute the fitness of the new children
+            int child1_fitness = compute_n_satisfied(child1);
+            int child2_fitness = compute_n_satisfied(child2);
+
+            // Update the optimal solution if a new one is found
+            if (child1_fitness > optimal_n_satisfied) {
+                optimal_n_satisfied = child1_fitness;
+                optimal_assignment = child1;
+                improved = true;
+            }
+
+            if (child2_fitness > optimal_n_satisfied) {
+                optimal_n_satisfied = child2_fitness;
+                optimal_assignment = child2;
+                improved = true;
+            }
+
+            if (optimal_n_satisfied == instance.n_clauses)
+                optimal_found = true;
+
+            // Add the children to the new population
+            new_population.push_back(child1);
+            new_fitness.push_back(child1_fitness);
+
+            new_population.push_back(child2);
+            new_fitness.push_back(child2_fitness);
         }
-        if (current_best_fitness > optimal_n_satisfied) {
-            optimal_n_satisfied = current_best_fitness;
-            stagnation = 0;
-        } else {
-            stagnation++;
-        }
+        if (optimal_found) break;
+
+        population = new_population;
+        fitness = new_fitness;
+        if (improved) stagnation = 0;
+        else stagnation++;
+
         generation++;
     }
-
-    optimal_assignment = population[0];
-    
 }
 
 /**
@@ -85,8 +128,8 @@ void GeneticAlgorithmSolver::solve() {
  *
  * @param parent1 The first solution
  * @param parent2 The second solution
- * @param child1 The first child
- * @param child2 The second child
+ * @param child1 [out] The first child
+ * @param child2 [out] The second child
  */
 void GeneticAlgorithmSolver::cross(
     const vector<bool> &parent1,
@@ -94,7 +137,11 @@ void GeneticAlgorithmSolver::cross(
     vector<bool> &child1,
     vector<bool> &child2
 ) {
+    // Choose a random point to cross
     int cross_point = rand() % instance.n_vars;
+
+    // First children gets the first part of the first parent and the second
+    // part of the second parent; and viceversa for the second child
     for (int i = 0; i < cross_point; i++) {
         child1.push_back(parent1[i]);
         child2.push_back(parent2[i]);
@@ -124,12 +171,13 @@ void GeneticAlgorithmSolver::mutate(vector<bool> &solution) {
  */
 vector<bool> GeneticAlgorithmSolver::tournament_selection() {
     vector<bool> best_solution;
-    int best_fitness = 0;
+    int best_fitness = -1;
+
+    // Choose tournament_size random solutions and select the best one
     for (int i = 0; i < tournament_size; i++) {
         int index = rand() % population_size;
-        int fitness = compute_n_satisfied(population[index]);
-        if (fitness > best_fitness) {
-            best_fitness = fitness;
+        if (fitness[index] > best_fitness) {
+            best_fitness = fitness[index];
             best_solution = population[index];
         }
     }

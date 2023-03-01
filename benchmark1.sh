@@ -1,4 +1,4 @@
-echo "Filename	#Vars	#Clauses	Seed	Optimal found (LS)	Time (LS)	Optimal found (GLS)	Time (GLS)"
+echo "Filename	Seed	#Vars	#Clauses	Optimal found (LS)	Time (LS)	Optimal found (GLS)	Time (GLS)"
 ./run.sh test_data/jnh/jnh20.cnf
 ./run.sh test_data/jnh/jnh307.cnf
 ./run.sh test_data/jnh/jnh219.cnf

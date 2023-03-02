@@ -12,6 +12,7 @@
 #include "../include/BruteForceSolver.hpp"
 #include "../include/LocalSearchSolver.hpp"
 #include "../include/GLSSolver.hpp"
+#include "../include/SimulatedAnnealingSolver.hpp"
 #include "../include/GeneticAlgorithmSolver.hpp"
 #include "../include/SATInstance.hpp"
 
@@ -43,26 +44,26 @@ int main(int argc, char *argv[]) {
     // bf_solver.verify_solution();
 
     // ========== LOCAL SEARCH ==========
-    LocalSearchSolver ls_solver(instance);
-    double ls_solver_t = measure_time([&] { ls_solver.solve(); });
-    cout << "\nLocal Search" << endl;
-    ls_solver.print_solution();
-    ls_solver.verify_solution();
+    // LocalSearchSolver ls_solver(instance);
+    // double ls_solver_t = measure_time([&] { ls_solver.solve(); });
+    // cout << "\nLocal Search" << endl;
+    // ls_solver.print_solution();
+    // ls_solver.verify_solution();
 
     // ========== GUIDED LOCAL SEARCH ==========
-    GLSSolver gls_solver(instance, ls_solver.seed);
-    double gls_solver_t = measure_time([&] { gls_solver.solve(); });
-    cout << "\nGLS" << endl;
-    gls_solver.print_solution();
-    gls_solver.verify_solution();
+    // GLSSolver gls_solver(instance, ls_solver.seed);
+    // double gls_solver_t = measure_time([&] { gls_solver.solve(); });
+    // cout << "\nGLS" << endl;
+    // gls_solver.print_solution();
+    // gls_solver.verify_solution();
 
     // ========== SIMULATED ANNEALING ==========
     // Param: max_stagnation, max_no_improvement, initial_temperature
-    // SimulatedAnnealingSolver sa_solver(instance, 100, 0.99, 0.1);
-    // double sa_solver_t = measure_time([&] { sa_solver.solve(); });
-    // cout << "\nSimulated Annealing" << endl;
-    // sa_solver.print_solution();
-    // sa_solver.verify_solution();
+    SimulatedAnnealingSolver sa_solver(instance, 100, 100, 1);
+    double sa_solver_t = measure_time([&] { sa_solver.solve(); });
+    cout << "\nSimulated Annealing" << endl;
+    sa_solver.print_solution();
+    sa_solver.verify_solution();
 
     // ========== GENETIC ALGORITHM ==========
     /*
@@ -78,18 +79,19 @@ int main(int argc, char *argv[]) {
      * 500: 1083
      * 100: 1093
      */
-    GeneticAlgorithmSolver ga_solver(instance, 100, 100, 5, 1, 0);
-    double ga_solver_t = measure_time([&] { ga_solver.solve(); });
-    cout << "\nGenetic Algorithm" << endl;
-    ga_solver.print_solution();
-    ga_solver.verify_solution();
+    // GeneticAlgorithmSolver ga_solver(instance, 100, 100, 5, 1, 0);
+    // double ga_solver_t = measure_time([&] { ga_solver.solve(); });
+    // cout << "\nGenetic Algorithm" << endl;
+    // ga_solver.print_solution();
+    // ga_solver.verify_solution();
 
     // ========== PRINT RESULTS ==========
     cout << "Time elapsed:" << endl;
     // // cout << "  Exact solver: " << bf_solver_t << "s" << endl;
-    cout << "       Local search: " << ls_solver_t << "s" << endl;
-    cout << "                GLS: " << gls_solver_t << "s" << endl;
-    cout << "  Genetic algorithm: " << ga_solver_t << "s" << endl;
+    // cout << "       Local search: " << ls_solver_t << "s" << endl;
+    // cout << "                GLS: " << gls_solver_t << "s" << endl;
+    cout << "  Simulated annealing: " << sa_solver_t << "s" << endl;
+    // cout << "  Genetic algorithm: " << ga_solver_t << "s" << endl;
 
     // Filename	Seed	#Vars	#Clauses	Optimal found (LS)	Time (LS)	Optimal found (GLS)	Time (GLS)
     // cout << filename << "\t" << ls_solver.seed << "\t" << instance.n_vars << "\t" << instance.n_clauses << "\t";

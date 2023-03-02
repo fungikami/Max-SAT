@@ -64,9 +64,8 @@ GeneticAlgorithmSolver::GeneticAlgorithmSolver(
  * @brief Solves the instance using genetic algorithm
  */
 void GeneticAlgorithmSolver::solve() {
-    int generation = 0;
     int stagnation = 0;
-    while (generation < max_generations && stagnation < max_stagnation) {
+    while (generation < MAX_GENS && stagnation < max_stagnation) {
         vector<vector<bool>> new_population;
         vector<int> new_fitness;
         bool improved = false;

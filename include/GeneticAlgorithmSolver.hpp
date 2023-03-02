@@ -36,7 +36,7 @@ class GeneticAlgorithmSolver : public MaxSATSolver {
 
         uint seed;
         uint population_size;
-        int max_generations = MAX_GENS;
+        int generation = 0;
         int max_stagnation;
         int tournament_size;
         int mutation_percent;

@@ -7,8 +7,8 @@
 #ifndef SIMULATEDANNEALINGSOLVER_H
 #define SIMULATEDANNEALINGSOLVER_H
 
-#define MAX_ITER 100
-#define COOLING_FACTOR 0.99
+#define MAX_ITER 10000
+#define COOLING_FACTOR 0.999
 
 #include <time.h>
 #include <vector>
@@ -32,14 +32,21 @@ class SimulatedAnnealingSolver : public MaxSATSolver {
 
     virtual void solve();
 
-    // void print_solution();
+    void print_solution();
 
     uint seed;
-    int max_iterations = MAX_ITER;
+    int iterations = 0;
     int max_stagnation;
     int max_no_improvement;
     double initial_temperature;
+    double temperature;
     double cooling_factor = COOLING_FACTOR;
+
+    int eval_function(
+      vector<bool> &assignment, 
+      int flipped_var,
+      int current_n_satisfied
+    );
 
     // vector<bool> solution;
     // int fitness;

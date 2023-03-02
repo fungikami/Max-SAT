@@ -5,8 +5,9 @@
  */
 
 #include <iostream>
-#include "../include/GeneticAlgorithmSolver.hpp"
+
 #include "../include/SATInstance.hpp"
+#include "../include/GeneticAlgorithmSolver.hpp"
 
 /**
  * @brief Generates an initial population for the instance to be solved, using
@@ -14,28 +15,25 @@
  * 
  * @param instance The SAT instance
  * @param population_size The size of the population
- * @param max_generations Maximum number of generations
  * @param max_stagnation Maximum number of generations without improvement
  * @param tournament_size Size of the tournament
- * @param mutation_rate Probability of mutation
+ * @param mutation_percent Percentage of mutation of each child
  * @param seed The seed for the random number generator
  * @return GeneticAlgorithmSolver:: 
  */
-GeneticAlgorithmSolver:: GeneticAlgorithmSolver(
+GeneticAlgorithmSolver::GeneticAlgorithmSolver(
     const SATInstance &instance,
     int population_size,
-    int max_generations,
     int max_stagnation,
     int tournament_size,
-    double mutation_rate,
+    int mutation_percent,
     uint seed
 ) : MaxSATSolver(instance),
     seed(seed),
     population_size(population_size),
-    max_generations(max_generations),
     max_stagnation(max_stagnation),
     tournament_size(tournament_size),
-    mutation_rate(mutation_rate)
+    mutation_percent(mutation_percent)
 {
     // Initialize the population with random solutions
     srand(seed);
@@ -159,7 +157,7 @@ void GeneticAlgorithmSolver::cross(
  */
 void GeneticAlgorithmSolver::mutate(vector<bool> &solution) {
     for (int i = 0; i < instance.n_vars; i++) {
-        if (rand() % 100 < mutation_rate * 100)
+        if (rand() % 100 < mutation_percent)
             solution[i] = !solution[i];
     }
 }

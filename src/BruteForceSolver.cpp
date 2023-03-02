@@ -6,8 +6,8 @@
 #include <iostream>
 #include <vector>
 
-#include "../include/BruteForceSolver.hpp"
 #include "../include/SATInstance.hpp"
+#include "../include/BruteForceSolver.hpp"
 
 using namespace std;
 

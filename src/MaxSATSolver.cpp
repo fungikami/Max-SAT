@@ -12,6 +12,17 @@
 
 using namespace std;
 
+MaxSATSolver::MaxSATSolver(const SATInstance &instance)
+    : instance(instance), affected_clauses(instance.n_vars) {
+    optimal_found = false;
+    optimal_n_satisfied = 0;
+
+    // For each clause, save for each variable the clauses it affects
+    for (int i = 0; i < instance.n_clauses; i++)
+        for (auto literal : instance.clauses[i])
+            affected_clauses[literal>>1].push_back(i);
+}
+
 /**
  * @brief Computes the n_satisfied_clauses given an assignment according to the 
  * SAT instance

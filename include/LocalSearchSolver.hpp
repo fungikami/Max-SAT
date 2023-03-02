@@ -8,6 +8,7 @@
 #define LOCALSEARCHSOLVER_H
 
 #include <time.h>
+
 #include "../include/MaxSATSolver.hpp"
 
 /**
@@ -25,9 +26,6 @@ class LocalSearchSolver : public MaxSATSolver {
     void print_solution();
 
     uint seed;
-
-    // Maps a variable to the clauses it appears in
-    vector<vector<int>> affected_clauses;
 };
 
 #endif

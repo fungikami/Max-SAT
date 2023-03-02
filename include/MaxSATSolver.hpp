@@ -18,7 +18,7 @@ using namespace std;
  */
 class MaxSATSolver {
   public:
-    MaxSATSolver(const SATInstance &instance) : instance(instance) {};
+    MaxSATSolver(const SATInstance &instance);
 
     virtual void solve() = 0;
 
@@ -29,10 +29,12 @@ class MaxSATSolver {
 
     SATInstance instance;
 
-    int optimal_n_satisfied = -1;
-    bool optimal_found = false;
-
+    int optimal_n_satisfied;
+    bool optimal_found;
     vector<bool> optimal_assignment;
+
+    // Maps a variable to the clauses it appears in
+    vector<vector<int>> affected_clauses;
 };
 
 #endif

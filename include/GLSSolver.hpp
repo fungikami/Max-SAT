@@ -11,6 +11,7 @@
 
 #include <time.h>
 #include <queue>
+
 #include "../include/MaxSATSolver.hpp"
 
 /**
@@ -27,9 +28,6 @@ class GLSSolver : public MaxSATSolver {
     uint seed;
     int trials = 0;
     double param = 1;
-
-    // Maps a variable to the clauses it appears in
-    vector<vector<int>> affected_clauses;
 
     // Penality for each variable
     vector<int> penalty;

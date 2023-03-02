@@ -8,8 +8,8 @@
 #include <iostream>
 #include <vector>
 
-#include "../include/LocalSearchSolver.hpp"
 #include "../include/SATInstance.hpp"
+#include "../include/LocalSearchSolver.hpp"
 
 using namespace std;
 
@@ -21,16 +21,11 @@ using namespace std;
  * @param seed The seed for the random number generator
  */
 LocalSearchSolver::LocalSearchSolver(const SATInstance &instance, uint seed)
-    : MaxSATSolver(instance), seed(seed), affected_clauses(instance.n_vars, vector<int>()) {
+    : MaxSATSolver(instance), seed(seed) {
     // Initialize the optimal assignment with random values
     srand(seed);
     for (int i = 0; i < instance.n_vars; i++)
         optimal_assignment.push_back(rand() & 1);
-
-    // For each clause, save for each variable the clauses it affects
-    for (int i = 0; i < instance.n_clauses; i++)
-        for (auto literal : instance.clauses[i])
-            affected_clauses[literal>>1].push_back(i);
 }
 
 /**

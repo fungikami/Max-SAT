@@ -7,8 +7,11 @@
 #ifndef GENETICALGORITHMSOLVER_H
 #define GENETICALGORITHMSOLVER_H
 
+#define MAX_GENS 1000
+
 #include <time.h>
 #include <vector>
+
 #include "../include/MaxSATSolver.hpp"
 
 /**
@@ -21,10 +24,9 @@ class GeneticAlgorithmSolver : public MaxSATSolver {
         GeneticAlgorithmSolver(
             const SATInstance &instance,
             int population_size,
-            int max_generations,
             int max_stagnation,
             int tournament_size,
-            double mutation_rate,
+            int mutation_percent,
             uint seed = time(NULL)
         );
 
@@ -34,10 +36,10 @@ class GeneticAlgorithmSolver : public MaxSATSolver {
 
         uint seed;
         uint population_size;
-        int max_generations;
+        int max_generations = MAX_GENS;
         int max_stagnation;
         int tournament_size;
-        double mutation_rate;
+        int mutation_percent;
 
         vector<vector<bool>> population;
         vector<int> fitness;

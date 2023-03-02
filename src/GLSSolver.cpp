@@ -7,8 +7,8 @@
 #include <iostream>
 #include <vector>
 
-#include "../include/GLSSolver.hpp"
 #include "../include/SATInstance.hpp"
+#include "../include/GLSSolver.hpp"
 
 using namespace std;
 
@@ -20,20 +20,11 @@ using namespace std;
  * @param seed The seed for the random number generator
  */
 GLSSolver::GLSSolver(const SATInstance &instance, uint seed)
-    : MaxSATSolver(instance),
-    seed(seed),
-    affected_clauses(instance.n_vars, vector<int>()),
-    penalty(instance.n_clauses, 0)
-{
+    : MaxSATSolver(instance), seed(seed), penalty(instance.n_clauses, 0) {
     // Initialize the optimal assignment with random values
     srand(seed);
     for (int i = 0; i < instance.n_vars; i++)
         optimal_assignment.push_back(rand() & 1);
-
-    // For each clause, save for each variable the clauses it affects
-    for (int i = 0; i < instance.n_clauses; i++)
-        for (auto literal : instance.clauses[i])
-            affected_clauses[literal>>1].push_back(i);
 }
 
 /**

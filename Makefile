@@ -1,7 +1,7 @@
 # Compile c++ code
 CC = g++
 # Optimize the maximum
-CFLAGS = -Wpedantic -std=c++17 -Ofast -march=native -mtune=native
+CFLAGS = -Wall -std=c++17 -Ofast -march=native -mtune=native
 BUILD_DIR = build
 BIN_DIR = bin
 SRC_DIR = src
@@ -21,11 +21,11 @@ $(BUILD_DIR)/LocalSearchSolver.o: $(SRC_DIR)/LocalSearchSolver.cpp $(INCLUDE_DIR
 $(BUILD_DIR)/GLSSolver.o: $(SRC_DIR)/GLSSolver.cpp $(INCLUDE_DIR)/GLSSolver.hpp
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/GLSSolver.cpp -o $(BUILD_DIR)/GLSSolver.o
 
-$(BUILD_DIR)/SimulatedAnnealingSolver.o: $(SRC_DIR)/SimulatedAnnealingSolver.cpp $(INCLUDE_DIR)/SimulatedAnnealingSolver.hpp
-	$(CC) $(CFLAGS) -c $(SRC_DIR)/SimulatedAnnealingSolver.cpp -o $(BUILD_DIR)/SimulatedAnnealingSolver.o
-
 $(BUILD_DIR)/GeneticAlgorithmSolver.o: $(SRC_DIR)/GeneticAlgorithmSolver.cpp $(INCLUDE_DIR)/GeneticAlgorithmSolver.hpp
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/GeneticAlgorithmSolver.cpp -o $(BUILD_DIR)/GeneticAlgorithmSolver.o
+
+$(BUILD_DIR)/SimulatedAnnealingSolver.o: $(SRC_DIR)/SimulatedAnnealingSolver.cpp $(INCLUDE_DIR)/SimulatedAnnealingSolver.hpp
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/SimulatedAnnealingSolver.cpp -o $(BUILD_DIR)/SimulatedAnnealingSolver.o
 
 $(BUILD_DIR)/MaxSATSolver.o: $(SRC_DIR)/MaxSATSolver.cpp $(INCLUDE_DIR)/MaxSATSolver.hpp
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/MaxSATSolver.cpp -o $(BUILD_DIR)/MaxSATSolver.o

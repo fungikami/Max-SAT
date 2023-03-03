@@ -24,7 +24,6 @@ class GeneticAlgorithmSolver : public MaxSATSolver {
         GeneticAlgorithmSolver(
             const SATInstance &instance,
             int population_size,
-            int max_stagnation,
             int tournament_size,
             int mutation_percent,
             uint seed = time(NULL)
@@ -37,7 +36,6 @@ class GeneticAlgorithmSolver : public MaxSATSolver {
         uint seed;
         uint population_size;
         int generation = 0;
-        int max_stagnation;
         int tournament_size;
         int mutation_percent;
 

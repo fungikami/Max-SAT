@@ -18,14 +18,10 @@
  */
 SimulatedAnnealingSolver::SimulatedAnnealingSolver(
     const SATInstance &instance,
-    int max_stagnation,
-    int max_no_improvement,
     double initial_temperature,
     uint seed
 ) : MaxSATSolver(instance),
     seed(seed),
-    max_stagnation(max_stagnation),
-    max_no_improvement(max_no_improvement),
     initial_temperature(initial_temperature),
     temperature(initial_temperature)
 {
@@ -36,19 +32,13 @@ SimulatedAnnealingSolver::SimulatedAnnealingSolver(
 }
 
 void SimulatedAnnealingSolver::solve() {
-    int stagnation = 0;
-    int no_improvement = 0;
-
     optimal_n_satisfied = compute_n_satisfied(optimal_assignment);
     vector<bool> assignment = optimal_assignment;
 
     int internal_n_satisfied = optimal_n_satisfied;
-    while (
-        stagnation < max_stagnation &&
-        no_improvement < max_no_improvement &&
-        iterations < MAX_ITER
-    ) {
-        while (temperature > 0.0000001) {
+    while (iterations < MAX_ITER) {
+        
+        while (temperature > 0) {
             // cout << "Iteration: " << iterations << endl;
             // cout << "Temperature: " << temperature << endl;
 
@@ -66,22 +56,15 @@ void SimulatedAnnealingSolver::solve() {
             // With probability p keeps the current solution
             if (improved || (double) rand() / RAND_MAX < probability) {
                 if (improved) {
-                    // cout << "Improved!" << endl;
-                    // cout << "New n_satisfied: " << new_n_satisfied << endl;
-
                     optimal_assignment = assignment;
                     optimal_n_satisfied = new_n_satisfied;
-                    no_improvement = -1;
                 }
 
                 internal_n_satisfied = new_n_satisfied;
-                no_improvement++;
-                stagnation = 0;
                 break;
             }
 
             assignment[i] = !assignment[i];
-            stagnation++;
         }
 
         temperature *= cooling_factor;

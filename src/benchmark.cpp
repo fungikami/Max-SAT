@@ -36,54 +36,31 @@ int main(int argc, char *argv[]) {
     // ========== MAXSAT INSTANCE ==========
     SATInstance instance(filename);
 
-    // ========== BRUTE FORCE ==========
-    // BruteForceSolver bf_solver(instance);
-    // double bf_solver_t = measure_time([&] { bf_solver.solve(); });
-    // cout << "c BF " << bf_solver_t << "s" << endl;
-    // bf_solver.print_solution();
-    // bf_solver.verify_solution();
-
     // ========== LOCAL SEARCH ==========
-    // LocalSearchSolver ls_solver(instance);
-    // double ls_solver_t = measure_time([&] { ls_solver.solve(); });
-    // cout << "c LS " << ls_solver_t << "s" << endl;
-    // ls_solver.print_solution();
-    // ls_solver.verify_solution();
+    LocalSearchSolver ls_solver(instance);
+    double ls_solver_t = measure_time([&] { ls_solver.solve(); });
+    ls_solver.verify_solution();
+    // Filename	Seed	#Vars	#Clauses	Optimal found (LS)	Time (LS)	Optimal found (GLS)	Time (GLS)
+    cout << filename << "\t" << ls_solver.seed << "\t" << instance.n_vars << "\t" << instance.n_clauses << "\t";
+    cout << ls_solver.optimal_n_satisfied << "\t" << ls_solver_t << "\t";
 
     // ========== GUIDED LOCAL SEARCH ==========
-    // GLSSolver gls_solver(instance, ls_solver.seed);
-    // double gls_solver_t = measure_time([&] { gls_solver.solve(); });
-    // cout << "c GLS " << gls_solver_t << "s" << endl;
-    // gls_solver.print_solution();
-    // gls_solver.verify_solution();
+    GLSSolver gls_solver(instance, ls_solver.seed);
+    double gls_solver_t = measure_time([&] { gls_solver.solve(); });
+    gls_solver.verify_solution();
+    cout << gls_solver.optimal_n_satisfied << "\t" << gls_solver_t << endl;
 
     // ========== SIMULATED ANNEALING ==========
-    // Param: max_no_improvement, initial_temperature
-    SimulatedAnnealingSolver sa_solver(instance, 1,  1677778529);
-    double sa_solver_t = measure_time([&] { sa_solver.solve(); });
-    cout << "c SA " << sa_solver_t << "s" << endl;
-    sa_solver.print_solution();
-    sa_solver.verify_solution();
+    // SimulatedAnnealingSolver sa_solver(instance, 1);
+    // double sa_solver_t = measure_time([&] { sa_solver.solve(); });
+    // sa_solver.verify_solution();
+    // cout << sa_solver.optimal_n_satisfied << "\t" << sa_solver_t << endl;
 
     // ========== GENETIC ALGORITHM ==========
-    /*
-     * Resultados para cada porcentaje de mutacion (
-     *     test4.cnf, seed 0, 100 individuos, 1000 generaciones,
-     *     100 estancamiento, 5 tamano torneo
-     * )
-     * 
-     * 0: 1102
-     * 1: 1160
-     * 2: 1142
-     * 10: 1094
-     * 500: 1083
-     * 100: 1093
-     */
     // GeneticAlgorithmSolver ga_solver(instance, 100, 5, 1, 0);
     // double ga_solver_t = measure_time([&] { ga_solver.solve(); });
-    // cout << "c GA " << ga_solver_t << "s" << endl;
-    // ga_solver.print_solution();
     // ga_solver.verify_solution();
+    // cout << ga_solver.optimal_ngatisfied << "\t" << ga_solver_t << endl;
 
     return 0;
 }

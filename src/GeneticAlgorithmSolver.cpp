@@ -15,7 +15,6 @@
  * 
  * @param instance The SAT instance
  * @param population_size The size of the population
- * @param max_stagnation Maximum number of generations without improvement
  * @param tournament_size Size of the tournament
  * @param mutation_percent Percentage of mutation of each child
  * @param seed The seed for the random number generator
@@ -24,14 +23,12 @@
 GeneticAlgorithmSolver::GeneticAlgorithmSolver(
     const SATInstance &instance,
     int population_size,
-    int max_stagnation,
     int tournament_size,
     int mutation_percent,
     uint seed
 ) : MaxSATSolver(instance),
     seed(seed),
     population_size(population_size),
-    max_stagnation(max_stagnation),
     tournament_size(tournament_size),
     mutation_percent(mutation_percent)
 {
@@ -64,11 +61,9 @@ GeneticAlgorithmSolver::GeneticAlgorithmSolver(
  * @brief Solves the instance using genetic algorithm
  */
 void GeneticAlgorithmSolver::solve() {
-    int stagnation = 0;
-    while (generation < MAX_GENS && stagnation < max_stagnation) {
+    while (generation < MAX_GENS) {
         vector<vector<bool>> new_population;
         vector<int> new_fitness;
-        bool improved = false;
         while (new_population.size() < population_size) {
             // Generate two parents
             vector<bool> parent1 = tournament_selection();
@@ -90,13 +85,11 @@ void GeneticAlgorithmSolver::solve() {
             if (child1_fitness > optimal_n_satisfied) {
                 optimal_n_satisfied = child1_fitness;
                 optimal_assignment = child1;
-                improved = true;
             }
 
             if (child2_fitness > optimal_n_satisfied) {
                 optimal_n_satisfied = child2_fitness;
                 optimal_assignment = child2;
-                improved = true;
             }
 
             if (optimal_n_satisfied == instance.n_clauses)
@@ -113,8 +106,6 @@ void GeneticAlgorithmSolver::solve() {
 
         population = new_population;
         fitness = new_fitness;
-        if (improved) stagnation = 0;
-        else stagnation++;
 
         generation++;
     }

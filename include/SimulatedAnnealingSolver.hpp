@@ -24,8 +24,6 @@ class SimulatedAnnealingSolver : public MaxSATSolver {
 
     SimulatedAnnealingSolver(
         const SATInstance &instance,
-        int max_stagnation,
-        int max_no_improvement,
         double initial_temperature,
         uint seed = time(NULL)
     );
@@ -36,8 +34,6 @@ class SimulatedAnnealingSolver : public MaxSATSolver {
 
     uint seed;
     int iterations = 0;
-    int max_stagnation;
-    int max_no_improvement;
     double initial_temperature;
     double temperature;
     double cooling_factor = COOLING_FACTOR;
@@ -47,12 +43,6 @@ class SimulatedAnnealingSolver : public MaxSATSolver {
       int flipped_var,
       int current_n_satisfied
     );
-
-    // vector<bool> solution;
-    // int fitness;
-
-    // void perturb(vector<bool> &solution);
-    // double acceptance_probability(int delta, double temperature);
 };
 
 #endif

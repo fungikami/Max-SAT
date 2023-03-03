@@ -61,13 +61,13 @@ int main(int argc, char *argv[]) {
     // Param: max_stagnation, max_no_improvement, initial_temperature
     SimulatedAnnealingSolver sa_solver(instance, 100, 100, 1);
     double sa_solver_t = measure_time([&] { sa_solver.solve(); });
-    cout << "\nSimulated Annealing" << endl;
-    sa_solver.print_solution();
+    // cout << "\nSimulated Annealing" << endl;
+    // sa_solver.print_solution();
     sa_solver.verify_solution();
 
     // ========== GENETIC ALGORITHM ==========
     /*
-     * Resultados para cada ratio de mutacion (
+     * Resultados para cada porcentaje de mutacion (
      *     test4.cnf, seed 0, 100 individuos, 1000 generaciones,
      *     100 estancamiento, 5 tamano torneo
      * )
@@ -86,17 +86,18 @@ int main(int argc, char *argv[]) {
     // ga_solver.verify_solution();
 
     // ========== PRINT RESULTS ==========
-    cout << "Time elapsed:" << endl;
+    // cout << "Time elapsed:" << endl;
     // // cout << "  Exact solver: " << bf_solver_t << "s" << endl;
     // cout << "       Local search: " << ls_solver_t << "s" << endl;
     // cout << "                GLS: " << gls_solver_t << "s" << endl;
-    cout << "  Simulated annealing: " << sa_solver_t << "s" << endl;
+    // cout << "  Simulated annealing: " << sa_solver_t << "s" << endl;
     // cout << "  Genetic algorithm: " << ga_solver_t << "s" << endl;
 
     // Filename	Seed	#Vars	#Clauses	Optimal found (LS)	Time (LS)	Optimal found (GLS)	Time (GLS)
-    // cout << filename << "\t" << ls_solver.seed << "\t" << instance.n_vars << "\t" << instance.n_clauses << "\t";
+    cout << filename << "\t" << sa_solver.seed << "\t" << instance.n_vars << "\t" << instance.n_clauses << "\t";
     // cout << ls_solver.optimal_n_satisfied << "\t" << ls_solver_t << "\t";
-    // cout << gls_solver.optimal_n_satisfied << "\t" << gls_solver_t << endl;
+    // cout << gls_solver.optimal_n_satisfied << "\t" << gls_solver_t << "\t";
+    cout << sa_solver.optimal_n_satisfied << "\t" << sa_solver_t << endl;
 
     return 0;
 }

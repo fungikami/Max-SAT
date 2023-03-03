@@ -48,13 +48,13 @@ int main(int argc, char *argv[]) {
     GLSSolver gls_solver(instance, ls_solver.seed);
     double gls_solver_t = measure_time([&] { gls_solver.solve(); });
     gls_solver.verify_solution();
-    cout << gls_solver.optimal_n_satisfied << "\t" << gls_solver_t << endl;
+    cout << gls_solver.optimal_n_satisfied << "\t" << gls_solver_t << "\t";
 
     // ========== SIMULATED ANNEALING ==========
-    // SimulatedAnnealingSolver sa_solver(instance, 1);
-    // double sa_solver_t = measure_time([&] { sa_solver.solve(); });
-    // sa_solver.verify_solution();
-    // cout << sa_solver.optimal_n_satisfied << "\t" << sa_solver_t << endl;
+    SimulatedAnnealingSolver sa_solver(instance, 1);
+    double sa_solver_t = measure_time([&] { sa_solver.solve(); });
+    sa_solver.verify_solution();
+    cout << sa_solver.optimal_n_satisfied << "\t" << sa_solver_t << endl;
 
     // ========== GENETIC ALGORITHM ==========
     // GeneticAlgorithmSolver ga_solver(instance, 100, 5, 1, 0);

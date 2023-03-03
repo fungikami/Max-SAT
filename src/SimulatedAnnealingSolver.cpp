@@ -36,12 +36,10 @@ void SimulatedAnnealingSolver::solve() {
     vector<bool> assignment = optimal_assignment;
 
     int internal_n_satisfied = optimal_n_satisfied;
-    while (iterations < MAX_ITER) {
+    while (iterations < MAX_ITER && temperature > 0) {
         
-        while (temperature > 0) {
-            // cout << "Iteration: " << iterations << endl;
-            // cout << "Temperature: " << temperature << endl;
-
+        // While true, try to find a neighbor that improves the solution
+        while (true) {
             // Take a random neighbor (flip a random variable)
             int i = rand() % instance.n_vars;
             assignment[i] = !assignment[i];
@@ -67,7 +65,21 @@ void SimulatedAnnealingSolver::solve() {
             assignment[i] = !assignment[i];
         }
 
-        temperature *= cooling_factor;
+        if (optimal_n_satisfied == instance.n_clauses) {
+            optimal_found = true;
+            break;
+        }
+
+        // Exponential cooling
+        // temperature *= cooling_factor;
+
+        // Logarithmic cooling
+        // temperature /= (1 + cooling_factor * log(iterations + 1));
+
+        // Boltzmann cooling
+        // temperature = initial_temperature / (1 + cooling_factor * log(iterations + 1));
+
+
         iterations++;
     }
 }

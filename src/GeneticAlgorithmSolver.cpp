@@ -24,12 +24,14 @@ GeneticAlgorithmSolver::GeneticAlgorithmSolver(
     const SATInstance &instance,
     int population_size,
     int tournament_size,
+    int mutation_probability,
     int mutation_percent,
     uint seed
 ) : MaxSATSolver(instance),
     seed(seed),
     population_size(population_size),
     tournament_size(tournament_size),
+    mutation_probability(mutation_probability),
     mutation_percent(mutation_percent)
 {
     // Initialize the population with random solutions
@@ -48,13 +50,15 @@ GeneticAlgorithmSolver::GeneticAlgorithmSolver(
 }
 
 /* ========== IDEAS ==========
-- Poner probabilidad de mutación (encima del ratio que ya se tiene, que es la
-  tasa de flips que se hacen por cada hijo)
 - Ver si se pueden tener padres ordenados por fitness o algo asi (?)
-- Hacer otro tipo de selecciones
 - Seleccionar solo el mejor de los dos hijos y dejar el mejor padre (para que
-  la población no quede siempre enteramente sustituida)
-- Paralelizar jojo
+  la población no quede siempre enteramente sustituida) o elegir mejores entre
+  los 4
+- Más de 2 hijos (o padres)
+- Implementar elitismo
+- Cruce verificando que cierta clausula se satisfaga
+- Diversidad o fitness promedio como criterio de terminación
+- Paralelizar jojononojojononononojojononononojojonononojojo
 ============================== */
 
 /**
@@ -73,9 +77,11 @@ void GeneticAlgorithmSolver::solve() {
             vector<bool> child1, child2;
             cross(parent1, parent2, child1, child2);
 
-            // Mutate the children
-            mutate(child1);
-            mutate(child2);
+            // Mutate the children with a given probability
+            if (rand() % 100 < mutation_probability) {
+                mutate(child1);
+                mutate(child2);
+            }
 
             // Compute the fitness of the new children
             int child1_fitness = compute_n_satisfied(child1);
@@ -99,7 +105,8 @@ void GeneticAlgorithmSolver::solve() {
             new_population.push_back(child1);
             new_fitness.push_back(child1_fitness);
 
-            new_population.push_back(child2);
+            new_population.push_back(childurnament_selection();
+            vector<bool> parent2 = tournament_selection();2);
             new_fitness.push_back(child2_fitness);
         }
         if (optimal_found) break;
@@ -122,8 +129,8 @@ void GeneticAlgorithmSolver::solve() {
 void GeneticAlgorithmSolver::cross(
     const vector<bool> &parent1,
     const vector<bool> &parent2,
-    vector<bool> &child1,
-    vector<bool> &child2
+    vector<bool> &child1,urnament_selection();
+            vector<bool> parent2 = tournament_selection();
 ) {
     // Choose a random point to cross
     int cross_point = rand() % instance.n_vars;
@@ -167,6 +174,55 @@ vector<bool> GeneticAlgorithmSolver::tournament_selection() {
         if (fitness[index] > best_fitness) {
             best_fitness = fitness[index];
             best_solution = population[index];
+        }
+    }
+    return best_solution;
+}
+
+/**
+ * @brief Roulette Wheel Selection
+ *
+ * @return vector<bool> The selected solution
+ */
+vector<bool> GeneticAlgorithmSolver::roulette_wheel_selection() {
+    // Calculate the total fitness of the population
+    int total_fitness = 0;
+    for (uint i = 0; i < population_size; i++) total_fitness += fitness[i];
+
+    // Calculate the probability of each solution
+    vector<double> probabilities;
+    for (uint i = 0; i < population_size; i++)
+        probabilities.push_back((double) fitness[i] / total_fitness);
+
+    // Choose a random number between 0 and 1
+    double random = (double) rand() / RAND_MAX;
+
+    // Choose the solution that corresponds to the random number
+    double sum = 0;
+    for (uint i = 0; i < population_size; i++) {
+        sum += probabilities[i];
+        if (sum >= random)
+            return population[i];
+    }
+
+    // If the random number is 1, return the last solution
+    return population[population_size - 1];
+}
+
+/**
+ * @brief Elitist Selection
+ *
+ * @return vector<bool> The selected solution
+ */
+vector<bool> GeneticAlgorithmSolver::elitist_selection() {
+    vector<bool> best_solution;
+    int best_fitness = -1;
+
+    // Choose the best solution
+    for (uint i = 0; i < population_size; i++) {
+        if (fitness[i] > best_fitness) {
+            best_fitness = fitness[i];
+            best_solution = population[i];
         }
     }
     return best_solution;

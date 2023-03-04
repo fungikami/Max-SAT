@@ -67,31 +67,21 @@ int main(int argc, char *argv[]) {
     // temp auto, cool fact 0.01, log cool, 9974, 0.240004s
     // 4sat_300_2500_35 
     // temp auto, cool fact 0.01, log cool, 2500, 0.029113s
-    SimulatedAnnealingSolver sa_solver(instance);
-    double sa_solver_t = measure_time([&] { sa_solver.solve(); });
-    cout << "c SA " << sa_solver_t << "s" << endl;
-    sa_solver.print_solution();
-    sa_solver.verify_solution();
+    // SimulatedAnnealingSolver sa_solver(instance);
+    // double sa_solver_t = measure_time([&] { sa_solver.solve(); });
+    // cout << "c SA " << sa_solver_t << "s" << endl;
+    // sa_solver.print_solution();
+    // sa_solver.verify_solution();
 
     // ========== GENETIC ALGORITHM ==========
     /*
-     * Resultados para cada porcentaje de mutacion (
-     *     test4.cnf, seed 0, 100 individuos, 1000 generaciones,
-     *     100 estancamiento, 5 tamano torneo
-     * )
      * 
-     * 0: 1102
-     * 1: 1160
-     * 2: 1142
-     * 10: 1094
-     * 500: 1083
-     * 100: 1093
      */
-    // GeneticAlgorithmSolver ga_solver(instance, 100, 5, 1, 0);
-    // double ga_solver_t = measure_time([&] { ga_solver.solve(); });
-    // cout << "c GA " << ga_solver_t << "s" << endl;
-    // ga_solver.print_solution();
-    // ga_solver.verify_solution();
+    GeneticAlgorithmSolver ga_solver(instance, 100, 5, 60, 1);
+    double ga_solver_t = measure_time([&] { ga_solver.solve(); });
+    cout << "c GA " << ga_solver_t << "s" << endl;
+    ga_solver.print_solution();
+    ga_solver.verify_solution();
 
     return 0;
 }

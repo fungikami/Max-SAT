@@ -25,6 +25,7 @@ class GeneticAlgorithmSolver : public MaxSATSolver {
             const SATInstance &instance,
             int population_size,
             int tournament_size,
+            int mutation_probability,
             int mutation_percent,
             uint seed = time(NULL)
         );
@@ -37,6 +38,7 @@ class GeneticAlgorithmSolver : public MaxSATSolver {
         uint population_size;
         int generation = 0;
         int tournament_size;
+        int mutation_probability;
         int mutation_percent;
 
         vector<vector<bool>> population;
@@ -50,6 +52,8 @@ class GeneticAlgorithmSolver : public MaxSATSolver {
         );
         void mutate(vector<bool> &solution);
         vector<bool> tournament_selection();
+        vector<bool> roulette_wheel_selection();
+        vector<bool> elitist_selection();
 };
 
 #endif

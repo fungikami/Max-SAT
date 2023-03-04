@@ -59,8 +59,15 @@ int main(int argc, char *argv[]) {
 
     // ========== SIMULATED ANNEALING ==========
     // Param: max_no_improvement, initial_temperature
-    // temp 1, cool fact 0.999, exp cool
-    SimulatedAnnealingSolver sa_solver(instance, 1);
+    // 4sat_1000_10000_50
+    // temp 1, cool fact 0.999, exp cool, 9971
+    // temp 1, cool fact 0.01, log cool, 9973, 0.24396s
+    // temp 10, cool fact 0.01, log cool, 9974, 0.271507s
+    // temp 100, cool fact 0.01, log cool, 9973, 0.231603s
+    // temp auto, cool fact 0.01, log cool, 9974, 0.240004s
+    // 4sat_300_2500_35 
+    // temp auto, cool fact 0.01, log cool, 2500, 0.029113s
+    SimulatedAnnealingSolver sa_solver(instance);
     double sa_solver_t = measure_time([&] { sa_solver.solve(); });
     cout << "c SA " << sa_solver_t << "s" << endl;
     sa_solver.print_solution();

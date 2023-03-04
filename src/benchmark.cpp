@@ -45,16 +45,16 @@ int main(int argc, char *argv[]) {
     cout << ls_solver.optimal_n_satisfied << "\t" << ls_solver_t << "\t";
 
     // ========== GUIDED LOCAL SEARCH ==========
-    GLSSolver gls_solver(instance, ls_solver.seed);
-    double gls_solver_t = measure_time([&] { gls_solver.solve(); });
-    gls_solver.verify_solution();
-    cout << gls_solver.optimal_n_satisfied << "\t" << gls_solver_t << "\t";
+    // GLSSolver gls_solver(instance, ls_solver.seed);
+    // double gls_solver_t = measure_time([&] { gls_solver.solve(); });
+    // gls_solver.verify_solution();
+    // cout << gls_solver.optimal_n_satisfied << "\t" << gls_solver_t << "\t";
 
     // ========== SIMULATED ANNEALING ==========
-    SimulatedAnnealingSolver sa_solver(instance, 1);
+    SimulatedAnnealingSolver sa_solver(instance, ls_solver.seed);
     double sa_solver_t = measure_time([&] { sa_solver.solve(); });
     sa_solver.verify_solution();
-    cout << sa_solver.optimal_n_satisfied << "\t" << sa_solver_t << endl;
+    cout << sa_solver.initial_temperature << "\t" << sa_solver.optimal_n_satisfied << "\t" << sa_solver_t << endl;
 
     // ========== GENETIC ALGORITHM ==========
     // GeneticAlgorithmSolver ga_solver(instance, 100, 5, 1, 0);

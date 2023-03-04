@@ -18,21 +18,38 @@
  */
 SimulatedAnnealingSolver::SimulatedAnnealingSolver(
     const SATInstance &instance,
-    double initial_temperature,
     uint seed
 ) : MaxSATSolver(instance),
-    seed(seed),
-    initial_temperature(initial_temperature),
-    temperature(initial_temperature)
+    seed(seed)
 {
     // Initialize the optimal assignment with random values
     srand(seed);
     for (int i = 0; i < instance.n_vars; i++)
         optimal_assignment.push_back(rand() & 1);
+
+    optimal_n_satisfied = compute_n_satisfied(optimal_assignment);
+    // Calculate initial temperature
+    double n_flips = instance.n_vars / 2;
+    initial_temperature = 0;
+
+    // Take a random variable and flip it, calculate the average
+    // |delta n_satisfied| for each flip
+    for (int i = 0; i < n_flips; i++) {
+        int j = rand() % instance.n_vars;
+        optimal_assignment[j] = !optimal_assignment[j];
+
+        int new_n_satisfied = eval_function(optimal_assignment, j, optimal_n_satisfied);
+        initial_temperature += (
+            abs(new_n_satisfied - optimal_n_satisfied) / (double) n_flips
+        );
+        optimal_n_satisfied = new_n_satisfied;
+    }
+
+    initial_temperature *= 50;
+    temperature = initial_temperature;
 }
 
 void SimulatedAnnealingSolver::solve() {
-    optimal_n_satisfied = compute_n_satisfied(optimal_assignment);
     vector<bool> assignment = optimal_assignment;
 
     int internal_n_satisfied = optimal_n_satisfied;
@@ -70,16 +87,8 @@ void SimulatedAnnealingSolver::solve() {
             break;
         }
 
-        // Exponential cooling
-        // temperature *= cooling_factor;
-
-        // Logarithmic cooling
-        // temperature /= (1 + cooling_factor * log(iterations + 1));
-
-        // Boltzmann cooling
-        // temperature = initial_temperature / (1 + cooling_factor * log(iterations + 1));
-
-
+        // Executes logarithmic cooling
+        temperature /= 1 + cooling_factor * log(iterations + 1);
         iterations++;
     }
 }

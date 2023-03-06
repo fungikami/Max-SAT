@@ -1,1 +1,1 @@
-./bin/maxsatsolver_test $1
+./bin/maxsatsolver_test $*

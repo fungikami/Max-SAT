@@ -100,7 +100,6 @@ void GeneticAlgorithmSolver::solve() {
                 if (optimal_n_satisfied == instance.n_clauses)
                     optimal_found = true;
             }
-            
         }
 
         if (optimal_found) break;

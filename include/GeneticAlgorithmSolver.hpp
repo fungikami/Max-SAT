@@ -27,6 +27,7 @@ class GeneticAlgorithmSolver : public MaxSATSolver {
             int tournament_size,
             int mutation_probability,
             int mutation_percent,
+            int elite_percent,
             uint seed = time(NULL)
         );
 
@@ -40,20 +41,45 @@ class GeneticAlgorithmSolver : public MaxSATSolver {
         int tournament_size;
         int mutation_probability;
         int mutation_percent;
+        int elite_percent;
 
         vector<vector<bool>> population;
         vector<int> fitness;
 
+        // Crossover
         void cross(
             const vector<bool> &parent1,
             const vector<bool> &parent2,
             vector<bool> &child1,
             vector<bool> &child2
         );
-        void mutate(vector<bool> &solution);
+
+        void two_point_crossover(
+            const vector<bool> &parent1,
+            const vector<bool> &parent2,
+            vector<bool> &child1,
+            vector<bool> &child2
+        );
+
+        // Mutation
+        int mutate(vector<bool> &solution);
+        int mutateGreedy(vector<bool> &solution);
+        int eval_function(
+            vector<bool> &assignment,
+            int flipped_var,
+            int current_n_satisfied
+        );
+
+        // Selection
         vector<bool> tournament_selection();
         vector<bool> roulette_wheel_selection();
         vector<bool> elitist_selection();
+
+        void select_elite(
+            vector<vector<bool>> &population,
+            vector<int> &fitness,
+            int n_elite
+        );
 };
 
 #endif

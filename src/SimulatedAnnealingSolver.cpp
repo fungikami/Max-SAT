@@ -18,9 +18,11 @@
  */
 SimulatedAnnealingSolver::SimulatedAnnealingSolver(
     const SATInstance &instance,
+    double cooling_factor,
     uint seed
 ) : MaxSATSolver(instance),
-    seed(seed)
+    seed(seed),
+    cooling_factor(cooling_factor)
 {
     // Initialize the optimal assignment with random values
     srand(seed);
@@ -28,6 +30,7 @@ SimulatedAnnealingSolver::SimulatedAnnealingSolver(
         optimal_assignment.push_back(rand() & 1);
 
     optimal_n_satisfied = compute_n_satisfied(optimal_assignment);
+    
     // Calculate initial temperature
     double n_flips = instance.n_vars / 2;
     initial_temperature = 0;

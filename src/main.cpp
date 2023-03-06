@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
     // gls_solver.verify_solution();
 
     // ========== SIMULATED ANNEALING ==========
-    // Param: max_no_improvement, initial_temperature
+    // Param: cooling_factor, seed
     // 4sat_1000_10000_50
     // temp 1, cool fact 0.999, exp cool, 9971
     // temp 1, cool fact 0.01, log cool, 9973, 0.24396s
@@ -67,17 +67,21 @@ int main(int argc, char *argv[]) {
     // temp auto, cool fact 0.01, log cool, 9974, 0.240004s
     // 4sat_300_2500_35 
     // temp auto, cool fact 0.01, log cool, 2500, 0.029113s
-    // SimulatedAnnealingSolver sa_solver(instance);
-    // double sa_solver_t = measure_time([&] { sa_solver.solve(); });
-    // cout << "c SA " << sa_solver_t << "s" << endl;
-    // sa_solver.print_solution();
-    // sa_solver.verify_solution();
+    SimulatedAnnealingSolver sa_solver(instance, 0.01);
+    double sa_solver_t = measure_time([&] { sa_solver.solve(); });
+    cout << "c SA " << sa_solver_t << "s" << endl;
+    sa_solver.print_solution();
+    sa_solver.verify_solution();
 
     // ========== GENETIC ALGORITHM ==========
-    /*
-     * 
+    /* Param: population_size, tournament_size, 
+     *      mutation_probability, mutation_percent, elite_rate
+     * Con 4sat_1000_10000_50
+     *  Elite: 0.2, 9857/9860/9868/9870. Elite: 0.1, 9848/9858/9870
+     *  Elite: 0.5, 9854/9857/9876. Elite: 0.3 9853/9858/clearl
+     
      */
-    GeneticAlgorithmSolver ga_solver(instance, 100, 5, 60, 1);
+    GeneticAlgorithmSolver ga_solver(instance, 100, 5, 60, 1, 5);
     double ga_solver_t = measure_time([&] { ga_solver.solve(); });
     cout << "c GA " << ga_solver_t << "s" << endl;
     ga_solver.print_solution();

@@ -43,5 +43,21 @@ def main():
                 ga_params[i][4]
             )
 
+    
+    # Prints the full relative path of the file
+    # for filename in sorted(os.listdir("test_data/jnh")):
+    #     filename = "test_data/jnh/" + filename
+    #     for i in range(len(sa_params)):
+    #         print(
+    #             executable,
+    #             filename,
+    #             sa_params[i],
+    #             ga_params[i][0],
+    #             ga_params[i][1],
+    #             ga_params[i][2],
+    #             ga_params[i][3],
+    #             ga_params[i][4]
+    #         )
+
 if __name__ == "__main__":
     main()

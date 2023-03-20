@@ -56,7 +56,7 @@ void SimulatedAnnealingSolver::solve() {
     vector<bool> assignment = optimal_assignment;
 
     int internal_n_satisfied = optimal_n_satisfied;
-    while (iterations < MAX_ITER && temperature > 0) {
+    while (iterations < MAX_CYCLES && temperature > 0) {
         
         // While true, try to find a neighbor that improves the solution
         while (true) {

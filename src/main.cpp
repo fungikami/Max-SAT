@@ -14,6 +14,7 @@
 #include "../include/GLSSolver.hpp"
 #include "../include/SimulatedAnnealingSolver.hpp"
 #include "../include/GeneticAlgorithmSolver.hpp"
+#include "../include/ACOSolver.hpp"
 #include "../include/SATInstance.hpp"
 
 using namespace std;
@@ -86,6 +87,16 @@ int main(int argc, char *argv[]) {
     cout << "c GA " << ga_solver_t << "s" << endl;
     ga_solver.print_solution();
     ga_solver.verify_solution();
+
+    // ========== ACO ==========
+    /* Param: n_ants, alpha, beta, rho, q0, tau0,
+     *
+     */
+    ACOSolver aco_solver(instance, 100, 1, 1, 0.001, 0.001, 1);
+    double aco_solver_t = measure_time([&] { aco_solver.solve(); });
+    cout << "c ACO " << aco_solver_t << "s" << endl;
+    aco_solver.print_solution();
+    aco_solver.verify_solution();
 
     return 0;
 }

@@ -7,7 +7,7 @@
 #ifndef SIMULATEDANNEALINGSOLVER_H
 #define SIMULATEDANNEALINGSOLVER_H
 
-#define MAX_ITER 1000000
+#define MAX_CYCLES 1000000
 
 #include <time.h>
 #include <vector>

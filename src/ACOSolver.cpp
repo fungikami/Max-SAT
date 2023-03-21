@@ -46,20 +46,21 @@ ACOSolver::ACOSolver(
     // Initialize the population with random solutions
     srand(seed);
 
+    tau0 = instance.n_vars / (1 - rho);
+    q0 = 0;
+
     // Initialize the pheromone vector
-    double max_pheromone = instance.n_vars / (1.0 - rho);
-    for (int i = 0; i < instance.n_vars; i++) {
-        pheromone.push_back(max_pheromone);
+    int n_vertices = 2*instance.n_vars - 2;
+    for (int i = 0; i < n_vertices; i++) {
+        pheromone.push_back(make_pair(tau0, tau0));
     }
+    src_pheromone = make_pair(tau0, tau0);
 
     // Initialize the heuristic vector
-    for (int i = 0; i < instance.n_vars; i++) {
-        heuristic.push_back(1);
+    for (int i = 0; i < n_vertices; i++) {
+        heuristic.push_back(make_pair(1.0, 1.0));
     }
-
-    // Compute the probability denominator
-    for (int i = 0; i < instance.n_clauses; i++)
-        sum_probs += pow(pheromone[i], alpha) * pow(heuristic[i], beta);
+    src_heuristic = make_pair(1.0, 1.0);
 }
 
 /**
@@ -68,6 +69,9 @@ ACOSolver::ACOSolver(
 void ACOSolver::solve() {
     // For each iteration
     for (int i = 0; i < MAX_SEARCHES; i++) {
+        int internal_optimal_n_satisfied = 0;
+        vector<bool> internal_optimal_assignment;
+
         // For each ant
         for (int j = 0; j < n_ants; j++) {
             // Generate a random solution
@@ -77,70 +81,92 @@ void ACOSolver::solve() {
             int n_satisfied = compute_n_satisfied(assignment);
 
             // If the solution is better than the current best, update the best
-            if (n_satisfied > optimal_n_satisfied) {
-                optimal_n_satisfied = n_satisfied;
-                optimal_assignment = assignment;
+            if (n_satisfied > internal_optimal_n_satisfied) {
+                internal_optimal_n_satisfied = n_satisfied;
+                internal_optimal_assignment = assignment;
             }
 
-            optimal_found = instance.n_clauses == optimal_n_satisfied;
-            if (optimal_found) return;
+            optimal_found = instance.n_clauses == internal_optimal_n_satisfied;
+            if (optimal_found) break;
         }
 
-        // For each variable in the best solution
-        for (int j = 0; j < instance.n_vars; j++) {
-            // If the variable is true in the best solution
-            if (optimal_assignment[j]) {
-                sum_probs -= pheromone[j];
-
-                pheromone[j] *= (1 - rho);
-                pheromone[j] += optimal_n_satisfied;
-
-                sum_probs += pheromone[j];
-            }
+        // If the solution is better than the current best, update the best
+        if (internal_optimal_n_satisfied > optimal_n_satisfied) {
+            optimal_n_satisfied = internal_optimal_n_satisfied;
+            optimal_assignment = internal_optimal_assignment;
         }
 
-        if (i > 0 && i % 3 == 0) {
-            // Blur the pheromone vector
-            for (int j = 0; j < instance.n_vars; j++) {
-                // Random number between -max and max, where max = 0.9e^(-i/50)
-                double max = 0.9 * exp(-i / 50.0);
-                double r = (double) rand() / RAND_MAX;
-                r = (2*r - 1) * max;
+        // If the solution is optimal, stop the search
+        optimal_found = instance.n_clauses == optimal_n_satisfied;
+        if (optimal_found) break;
 
-                double value = r * pheromone[j];
-                pheromone[j] += value;
-                sum_probs += value;
-            }
+        // Evaporate the pheromones
+        src_pheromone.first *= (1 - rho);
+        src_pheromone.second *= (1 - rho);
+        for (uint j = 0; j < pheromone.size(); j++) {
+            pheromone[j].first *= (1 - rho);
+            pheromone[j].second *= (1 - rho);
         }
 
-        cout << "i = " << i << ", sum_probs = " << sum_probs << endl;
+        bool current_src = internal_optimal_assignment[0];
+        int literal = current_src;
+        if (current_src) src_pheromone.second += q0 * internal_optimal_n_satisfied;
+        else src_pheromone.first += q0 * internal_optimal_n_satisfied;
 
-        // // Prints the pheromone vector as a Python list
-        // cout << "pheromone = [";
-        // for (int j = 0; j < instance.n_vars; j++) {
-        //     cout << pheromone[j];
-        //     if (j < instance.n_vars - 1) cout << ", ";
+        // For each variable in the optimal assignment
+        for (int k = 1; k < instance.n_vars; k++) {
+            if (literal > 2*instance.n_vars - 3) break;
+
+            // Saves a reference to the current pheromone
+            pair<double, double> &ref = pheromone[literal];
+
+            // Calculate the next node
+            literal += 1 + !current_src;
+            current_src = internal_optimal_assignment[k];
+            literal += current_src;
+
+            // If the literal is true in the best solution
+            if (current_src) ref.second += q0 * internal_optimal_n_satisfied;
+            else ref.first += q0 * internal_optimal_n_satisfied;
+        }
+
+        // Print pheronomes like a list in python
+        // cout << "Pheromones: [";
+        // for (uint i = 0; i < pheromone.size(); i++) {
+        //     int var = (i & 1) ? (i >> 1) : -(i >> 1);
+        //     cout << "var " << var << ": ";
+        //     cout << "(" << pheromone[i].first << ", " << pheromone[i].second << ")";
+        //     if (i != pheromone.size() - 1) cout << ", ";
         // }
         // cout << "]" << endl;
-
-
     }
 }
 
 vector<bool> ACOSolver::generate_solution() {
     // Initialize the solution vector
-    vector<bool> assignment(instance.n_vars, false);
+    vector<bool> assignment;
 
-    // For each variable
-    for (int i = 0; i < instance.n_vars ; i++) {
-        // Compute the probability of setting the variable to true
-        double p = (pow(pheromone[i], alpha) * pow(heuristic[i], beta)) / sum_probs;
+    // Calculate probability src_node 
+    double p;
+    p = pow(src_pheromone.first, alpha) * pow(src_heuristic.first, beta);
+    p /= p + pow(src_pheromone.second, alpha) * pow(src_heuristic.second, beta);
 
-        cout << "p = " << p << endl;
+    bool current_src = rand() < p * RAND_MAX;
+    int literal = current_src;
+    // Walk the graph
+    while (true) {
+        assignment.push_back(current_src);
+        // End of the graph
+        if (literal > 2*instance.n_vars - 3) break;
 
-        // Set the variable to true with probability p
-        bool value = ((double) rand() / RAND_MAX) < p;
-        assignment[i] = value;
+        // Calculate the next node according to the probability
+        p = pow(pheromone[literal].first, alpha) * pow(heuristic[literal].first, beta);
+        p /= p + pow(pheromone[literal].second, alpha) * pow(heuristic[literal].second, beta);
+
+        // Calculate the next node
+        literal += 1 + !current_src;
+        current_src = rand() < p * RAND_MAX;
+        literal += current_src;
     }
 
     return assignment;

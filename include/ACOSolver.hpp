@@ -7,7 +7,7 @@
 #ifndef ACOSOLVER_H
 #define ACOSOLVER_H
 
-#define MAX_SEARCHES 10
+#define MAX_SEARCHES 100
 
 #include <time.h>
 #include <vector>
@@ -48,11 +48,13 @@ class ACOSolver : public MaxSATSolver {
         double q0;
         double tau0;
 
-        // Pheromone vector
-        vector<double> pheromone;
+        // Pheromone vector of pairs
+        vector<pair<double, double>> pheromone;
+        pair<double, double> src_pheromone;
 
         // Heuristic vector
-        vector<double> heuristic;
+        vector<pair<double, double>> heuristic;
+        pair<double, double> src_heuristic;
 
         double sum_probs = 0;
 

@@ -14,6 +14,12 @@
  * @brief 
  * 
  * @param instance The SAT instance
+ * @param n_ants The number of ants
+ * @param alpha The alpha parameter
+ * @param beta The beta parameter
+ * @param rho The rho parameter
+ * @param q0 The q0 parameter
+ * @param tau0 The tau0 parameter
  * @param seed The seed for the random number generator
  * @return ACOSolver:: 
  */
@@ -40,9 +46,10 @@ ACOSolver::ACOSolver(
     // Initialize the population with random solutions
     srand(seed);
 
-    // Initialize the pheromone vector 
+    // Initialize the pheromone vector
+    double max_pheromone = instance.n_vars / (1.0 - rho);
     for (int i = 0; i < instance.n_vars; i++) {
-        pheromone.push_back(tau0);
+        pheromone.push_back(max_pheromone);
     }
 
     // Initialize the heuristic vector
@@ -79,23 +86,44 @@ void ACOSolver::solve() {
             if (optimal_found) return;
         }
 
-        // Blur the pheromone vector
-        for (int j = 0; j < instance.n_vars; j++) {
-            pheromone[j] *= (1 - rho);
-        }
-        sum_probs *= (1 - rho);
-
         // For each variable in the best solution
         for (int j = 0; j < instance.n_vars; j++) {
             // If the variable is true in the best solution
             if (optimal_assignment[j]) {
-                // Increase the pheromone of the variable
-                // Other options: pheromone[j] += q0 / optimal_n_satisfied;
-                //                pheromone[j] += q0
-                pheromone[j] += q0;
-                sum_probs += q0;
+                sum_probs -= pheromone[j];
+
+                pheromone[j] *= (1 - rho);
+                pheromone[j] += optimal_n_satisfied;
+
+                sum_probs += pheromone[j];
             }
         }
+
+        if (i > 0 && i % 3 == 0) {
+            // Blur the pheromone vector
+            for (int j = 0; j < instance.n_vars; j++) {
+                // Random number between -max and max, where max = 0.9e^(-i/50)
+                double max = 0.9 * exp(-i / 50.0);
+                double r = (double) rand() / RAND_MAX;
+                r = (2*r - 1) * max;
+
+                double value = r * pheromone[j];
+                pheromone[j] += value;
+                sum_probs += value;
+            }
+        }
+
+        cout << "i = " << i << ", sum_probs = " << sum_probs << endl;
+
+        // // Prints the pheromone vector as a Python list
+        // cout << "pheromone = [";
+        // for (int j = 0; j < instance.n_vars; j++) {
+        //     cout << pheromone[j];
+        //     if (j < instance.n_vars - 1) cout << ", ";
+        // }
+        // cout << "]" << endl;
+
+
     }
 }
 
@@ -106,9 +134,9 @@ vector<bool> ACOSolver::generate_solution() {
     // For each variable
     for (int i = 0; i < instance.n_vars ; i++) {
         // Compute the probability of setting the variable to true
-        double p = (
-            pow(pheromone[i], alpha) * pow(heuristic[i], beta) / sum_probs
-        );
+        double p = (pow(pheromone[i], alpha) * pow(heuristic[i], beta)) / sum_probs;
+
+        cout << "p = " << p << endl;
 
         // Set the variable to true with probability p
         bool value = ((double) rand() / RAND_MAX) < p;

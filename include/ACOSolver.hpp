@@ -7,7 +7,7 @@
 #ifndef ACOSOLVER_H
 #define ACOSOLVER_H
 
-#define MAX_SEARCHES 1000
+#define MAX_SEARCHES 10
 
 #include <time.h>
 #include <vector>

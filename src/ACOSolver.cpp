@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <cmath>
+#include <omp.h>
 
 #include "../include/SATInstance.hpp"
 #include "../include/ACOSolver.hpp"
@@ -38,24 +39,45 @@ ACOSolver::ACOSolver(
     alpha(alpha),
     beta(beta),
     rho(rho),
-    q0(q0),
+    q0(q0 / instance.n_clauses),
     tau0(tau0)
 {
     // Initialize the population with random solutions
     srand(seed);
 
-    // Initialize the pheromone vector
+    // Initialize the pheromone graph
+    src_pheromone = make_pair(tau0, tau0);
     int n_vertices = 2*instance.n_vars - 2;
     for (int i = 0; i < n_vertices; i++) {
         pheromone.push_back(make_pair(tau0, tau0));
     }
-    src_pheromone = make_pair(tau0, tau0);
 
-    // Initialize the heuristic vector
-    for (int i = 0; i < n_vertices; i++) {
-        heuristic.push_back(make_pair(1.0, 1.0));
+    int count_pos = 0;
+    int count_neg = 0;
+    for (auto i : affected_clauses[0]) {
+        for (auto literal : instance.clauses[i]) {
+            count_pos += !(literal & 1);
+            count_neg += literal & 1;
+        }
     }
-    src_heuristic = make_pair(1.0, 1.0);
+
+    // Initialize the heuristic graph
+    src_heuristic = make_pair(count_neg, count_pos);
+    for (int i = 0; i < n_vertices; i++) {
+        // Coloca la cantidad de clausulas que contienen el literal
+        count_pos = 0;
+        count_neg = 0;
+        for (auto j : affected_clauses[i>>1]) {
+            for (auto literal : instance.clauses[j]) {
+                if (literal >> 1 == i >> 1) {
+                    count_pos += !(literal & 1);
+                    count_neg += literal & 1;
+                }
+            }
+        }
+        heuristic.push_back(make_pair(count_neg, count_pos));
+        // heuristic.push_back(make_pair(1.0, 1.0));
+    }
 }
 
 /**
@@ -68,6 +90,7 @@ void ACOSolver::solve() {
         vector<bool> internal_optimal_assignment;
 
         // For each ant
+        #pragma omp parallel for num_threads(6)
         for (int j = 0; j < n_ants; j++) {
             // Generate a random solution
             vector<bool> assignment = generate_solution();
@@ -80,30 +103,30 @@ void ACOSolver::solve() {
                 internal_optimal_n_satisfied = n_satisfied;
                 internal_optimal_assignment = assignment;
             }
-
-            optimal_found = instance.n_clauses == internal_optimal_n_satisfied;
-            if (optimal_found) break;
-
-            // Deposit pheromones in the edges of the solution
-            deposit_pheromones(assignment, n_satisfied);
         }
 
+        optimal_found = instance.n_clauses == internal_optimal_n_satisfied;
+        if (optimal_found) break;
+
         // Applies local search to the best solution found by the current colony
-        while (i < instance.n_vars) {
-            vector<bool> assignment = internal_optimal_assignment;
-            for (i = 0; i < instance.n_vars; i++) {
-                // Flip a variable
-                assignment[i] = !assignment[i];
+        if (i % 10 == 0) {
+            int i = 0;
+            while (i < instance.n_vars) {
+                vector<bool> assignment = internal_optimal_assignment;
+                for (i = 0; i < instance.n_vars; i++) {
+                    // Flip a variable
+                    assignment[i] = !assignment[i];
 
-                int new_n_satisfied = compute_n_satisfied(assignment);
-                if (new_n_satisfied > internal_optimal_n_satisfied) {
-                    internal_optimal_n_satisfied = new_n_satisfied;
-                    internal_optimal_assignment = assignment;
-                    break;
+                    int new_n_satisfied = compute_n_satisfied(assignment);
+                    if (new_n_satisfied > internal_optimal_n_satisfied) {
+                        internal_optimal_n_satisfied = new_n_satisfied;
+                        internal_optimal_assignment = assignment;
+                        break;
+                    }
+
+                    // Undo the flip
+                    assignment[i] = !assignment[i];
                 }
-
-                // Undo the flip
-                assignment[i] = !assignment[i];
             }
         }
 
@@ -125,21 +148,9 @@ void ACOSolver::solve() {
             pheromone[j].second *= (1 - rho);
         }
 
-
         // Deposit more pheromones in the edges of the best solution found by the current colony
         deposit_pheromones(internal_optimal_assignment, internal_optimal_n_satisfied);
-
-
     }
-    // Print pheronomes like a list in python
-    cout << "Pheromones: [";
-    for (uint i = 0; i < pheromone.size(); i++) {
-        int var = (i & 1) ? (i >> 1) : -(i >> 1);
-        cout << "var " << var << ": ";
-        cout << "(" << pheromone[i].first << ", " << pheromone[i].second << ")";
-        if (i != pheromone.size() - 1) cout << ", ";
-    }
-    cout << "]" << endl;
 }
 
 /**
@@ -171,10 +182,6 @@ void ACOSolver::deposit_pheromones(const vector<bool> &assignment, int n_satisfi
         // If the literal is true in the assignment
         if (current_src) ref.second += q0 * n_satisfied;
         else ref.first += q0 * n_satisfied;
-
-        // Cout the pheromone
-        // cout << "q0: " << q0 << endl;
-        // cout << "Pheromone: (" << ref.first << ", " << ref.second << ")" << endl;
     }
 }
 
@@ -187,7 +194,8 @@ vector<bool> ACOSolver::generate_solution() {
     p = pow(src_pheromone.first, alpha) * pow(src_heuristic.first, beta);
     p /= p + pow(src_pheromone.second, alpha) * pow(src_heuristic.second, beta);
 
-    bool current_src = rand() < p * RAND_MAX;
+    bool current_src = rand() >= p * RAND_MAX;
+
     int literal = current_src;
     int limit = 2*instance.n_vars - 3;
     // Walk the graph
@@ -202,7 +210,7 @@ vector<bool> ACOSolver::generate_solution() {
 
         // Calculate the next node
         literal += 1 + !current_src;
-        current_src = rand() < p * RAND_MAX;
+        current_src = rand() >= p * RAND_MAX;
         literal += current_src;
     }
 

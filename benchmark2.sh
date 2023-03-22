@@ -1,166 +1,51 @@
-echo "Filename	Seed	#Vars	#Clauses	Initial Temperature	Cooling Factor	Optimal found (SA)	Time (SA)	Population size	Tournament size	Mutation Prob.	%Mutation	%Elite	Optimal found (GA)	Time (GA)"
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_13.cnf 0.005 100 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_13.cnf 0.01 200 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_13.cnf 0.01 50 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_13.cnf 0.01 100 10 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_13.cnf 0.01 100 2 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_13.cnf 0.05 100 5 80 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_13.cnf 0.1 100 5 30 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_13.cnf 0.25 100 5 60 5 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_13.cnf 0.5 100 5 60 2 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_13.cnf 0.75 100 5 60 1 8
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_13.cnf 0.9 100 5 60 1 2
-./benchmark.sh test_data/max_3_sat/3sat_300_2000_6.cnf 0.005 100 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_2000_6.cnf 0.01 200 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_2000_6.cnf 0.01 50 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_2000_6.cnf 0.01 100 10 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_2000_6.cnf 0.01 100 2 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_2000_6.cnf 0.05 100 5 80 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_2000_6.cnf 0.1 100 5 30 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_2000_6.cnf 0.25 100 5 60 5 5
-./benchmark.sh test_data/max_3_sat/3sat_300_2000_6.cnf 0.5 100 5 60 2 5
-./benchmark.sh test_data/max_3_sat/3sat_300_2000_6.cnf 0.75 100 5 60 1 8
-./benchmark.sh test_data/max_3_sat/3sat_300_2000_6.cnf 0.9 100 5 60 1 2
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_16.cnf 0.005 100 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_16.cnf 0.01 200 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_16.cnf 0.01 50 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_16.cnf 0.01 100 10 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_16.cnf 0.01 100 2 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_16.cnf 0.05 100 5 80 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_16.cnf 0.1 100 5 30 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_16.cnf 0.25 100 5 60 5 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_16.cnf 0.5 100 5 60 2 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_16.cnf 0.75 100 5 60 1 8
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_16.cnf 0.9 100 5 60 1 2
-./benchmark.sh test_data/max_3_sat/3sat_100_500_28.cnf 0.005 100 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_100_500_28.cnf 0.01 200 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_100_500_28.cnf 0.01 50 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_100_500_28.cnf 0.01 100 10 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_100_500_28.cnf 0.01 100 2 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_100_500_28.cnf 0.05 100 5 80 1 5
-./benchmark.sh test_data/max_3_sat/3sat_100_500_28.cnf 0.1 100 5 30 1 5
-./benchmark.sh test_data/max_3_sat/3sat_100_500_28.cnf 0.25 100 5 60 5 5
-./benchmark.sh test_data/max_3_sat/3sat_100_500_28.cnf 0.5 100 5 60 2 5
-./benchmark.sh test_data/max_3_sat/3sat_100_500_28.cnf 0.75 100 5 60 1 8
-./benchmark.sh test_data/max_3_sat/3sat_100_500_28.cnf 0.9 100 5 60 1 2
-./benchmark.sh test_data/max_3_sat/3sat_1000_10000_37.cnf 0.005 100 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_1000_10000_37.cnf 0.01 200 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_1000_10000_37.cnf 0.01 50 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_1000_10000_37.cnf 0.01 100 10 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_1000_10000_37.cnf 0.01 100 2 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_1000_10000_37.cnf 0.05 100 5 80 1 5
-./benchmark.sh test_data/max_3_sat/3sat_1000_10000_37.cnf 0.1 100 5 30 1 5
-./benchmark.sh test_data/max_3_sat/3sat_1000_10000_37.cnf 0.25 100 5 60 5 5
-./benchmark.sh test_data/max_3_sat/3sat_1000_10000_37.cnf 0.5 100 5 60 2 5
-./benchmark.sh test_data/max_3_sat/3sat_1000_10000_37.cnf 0.75 100 5 60 1 8
-./benchmark.sh test_data/max_3_sat/3sat_1000_10000_37.cnf 0.9 100 5 60 1 2
-./benchmark.sh test_data/max_3_sat/3sat_100_700_1.cnf 0.005 100 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_100_700_1.cnf 0.01 200 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_100_700_1.cnf 0.01 50 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_100_700_1.cnf 0.01 100 10 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_100_700_1.cnf 0.01 100 2 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_100_700_1.cnf 0.05 100 5 80 1 5
-./benchmark.sh test_data/max_3_sat/3sat_100_700_1.cnf 0.1 100 5 30 1 5
-./benchmark.sh test_data/max_3_sat/3sat_100_700_1.cnf 0.25 100 5 60 5 5
-./benchmark.sh test_data/max_3_sat/3sat_100_700_1.cnf 0.5 100 5 60 2 5
-./benchmark.sh test_data/max_3_sat/3sat_100_700_1.cnf 0.75 100 5 60 1 8
-./benchmark.sh test_data/max_3_sat/3sat_100_700_1.cnf 0.9 100 5 60 1 2
-./benchmark.sh test_data/max_3_sat/3sat_100_200_22.cnf 0.005 100 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_100_200_22.cnf 0.01 200 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_100_200_22.cnf 0.01 50 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_100_200_22.cnf 0.01 100 10 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_100_200_22.cnf 0.01 100 2 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_100_200_22.cnf 0.05 100 5 80 1 5
-./benchmark.sh test_data/max_3_sat/3sat_100_200_22.cnf 0.1 100 5 30 1 5
-./benchmark.sh test_data/max_3_sat/3sat_100_200_22.cnf 0.25 100 5 60 5 5
-./benchmark.sh test_data/max_3_sat/3sat_100_200_22.cnf 0.5 100 5 60 2 5
-./benchmark.sh test_data/max_3_sat/3sat_100_200_22.cnf 0.75 100 5 60 1 8
-./benchmark.sh test_data/max_3_sat/3sat_100_200_22.cnf 0.9 100 5 60 1 2
-./benchmark.sh test_data/max_3_sat/3sat_1000_10000_13.cnf 0.005 100 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_1000_10000_13.cnf 0.01 200 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_1000_10000_13.cnf 0.01 50 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_1000_10000_13.cnf 0.01 100 10 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_1000_10000_13.cnf 0.01 100 2 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_1000_10000_13.cnf 0.05 100 5 80 1 5
-./benchmark.sh test_data/max_3_sat/3sat_1000_10000_13.cnf 0.1 100 5 30 1 5
-./benchmark.sh test_data/max_3_sat/3sat_1000_10000_13.cnf 0.25 100 5 60 5 5
-./benchmark.sh test_data/max_3_sat/3sat_1000_10000_13.cnf 0.5 100 5 60 2 5
-./benchmark.sh test_data/max_3_sat/3sat_1000_10000_13.cnf 0.75 100 5 60 1 8
-./benchmark.sh test_data/max_3_sat/3sat_1000_10000_13.cnf 0.9 100 5 60 1 2
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_4.cnf 0.005 100 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_4.cnf 0.01 200 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_4.cnf 0.01 50 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_4.cnf 0.01 100 10 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_4.cnf 0.01 100 2 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_4.cnf 0.05 100 5 80 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_4.cnf 0.1 100 5 30 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_4.cnf 0.25 100 5 60 5 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_4.cnf 0.5 100 5 60 2 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_4.cnf 0.75 100 5 60 1 8
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_4.cnf 0.9 100 5 60 1 2
-./benchmark.sh test_data/max_3_sat/3sat_300_800_45.cnf 0.005 100 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_45.cnf 0.01 200 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_45.cnf 0.01 50 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_45.cnf 0.01 100 10 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_45.cnf 0.01 100 2 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_45.cnf 0.05 100 5 80 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_45.cnf 0.1 100 5 30 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_45.cnf 0.25 100 5 60 5 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_45.cnf 0.5 100 5 60 2 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_45.cnf 0.75 100 5 60 1 8
-./benchmark.sh test_data/max_3_sat/3sat_300_800_45.cnf 0.9 100 5 60 1 2
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_24.cnf 0.005 100 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_24.cnf 0.01 200 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_24.cnf 0.01 50 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_24.cnf 0.01 100 10 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_24.cnf 0.01 100 2 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_24.cnf 0.05 100 5 80 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_24.cnf 0.1 100 5 30 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_24.cnf 0.25 100 5 60 5 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_24.cnf 0.5 100 5 60 2 5
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_24.cnf 0.75 100 5 60 1 8
-./benchmark.sh test_data/max_3_sat/3sat_300_1500_24.cnf 0.9 100 5 60 1 2
-./benchmark.sh test_data/max_3_sat/3sat_500_5000_37.cnf 0.005 100 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_500_5000_37.cnf 0.01 200 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_500_5000_37.cnf 0.01 50 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_500_5000_37.cnf 0.01 100 10 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_500_5000_37.cnf 0.01 100 2 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_500_5000_37.cnf 0.05 100 5 80 1 5
-./benchmark.sh test_data/max_3_sat/3sat_500_5000_37.cnf 0.1 100 5 30 1 5
-./benchmark.sh test_data/max_3_sat/3sat_500_5000_37.cnf 0.25 100 5 60 5 5
-./benchmark.sh test_data/max_3_sat/3sat_500_5000_37.cnf 0.5 100 5 60 2 5
-./benchmark.sh test_data/max_3_sat/3sat_500_5000_37.cnf 0.75 100 5 60 1 8
-./benchmark.sh test_data/max_3_sat/3sat_500_5000_37.cnf 0.9 100 5 60 1 2
-./benchmark.sh test_data/max_3_sat/3sat_300_800_10.cnf 0.005 100 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_10.cnf 0.01 200 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_10.cnf 0.01 50 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_10.cnf 0.01 100 10 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_10.cnf 0.01 100 2 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_10.cnf 0.05 100 5 80 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_10.cnf 0.1 100 5 30 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_10.cnf 0.25 100 5 60 5 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_10.cnf 0.5 100 5 60 2 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_10.cnf 0.75 100 5 60 1 8
-./benchmark.sh test_data/max_3_sat/3sat_300_800_10.cnf 0.9 100 5 60 1 2
-./benchmark.sh test_data/max_3_sat/3sat_300_2000_49.cnf 0.005 100 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_2000_49.cnf 0.01 200 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_2000_49.cnf 0.01 50 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_2000_49.cnf 0.01 100 10 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_2000_49.cnf 0.01 100 2 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_2000_49.cnf 0.05 100 5 80 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_2000_49.cnf 0.1 100 5 30 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_2000_49.cnf 0.25 100 5 60 5 5
-./benchmark.sh test_data/max_3_sat/3sat_300_2000_49.cnf 0.5 100 5 60 2 5
-./benchmark.sh test_data/max_3_sat/3sat_300_2000_49.cnf 0.75 100 5 60 1 8
-./benchmark.sh test_data/max_3_sat/3sat_300_2000_49.cnf 0.9 100 5 60 1 2
-./benchmark.sh test_data/max_3_sat/3sat_300_800_22.cnf 0.005 100 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_22.cnf 0.01 200 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_22.cnf 0.01 50 5 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_22.cnf 0.01 100 10 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_22.cnf 0.01 100 2 60 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_22.cnf 0.05 100 5 80 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_22.cnf 0.1 100 5 30 1 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_22.cnf 0.25 100 5 60 5 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_22.cnf 0.5 100 5 60 2 5
-./benchmark.sh test_data/max_3_sat/3sat_300_800_22.cnf 0.75 100 5 60 1 8
-./benchmark.sh test_data/max_3_sat/3sat_300_800_22.cnf 0.9 100 5 60 1 2
+echo "Filename	Seed	Vars	Clauses	Population size	Tournament size	Mutation Prob.	%Mutation	%Elite	Optimal found (MA)	Time (MA)	#Ants	Alpha	Beta	Rho	q0	tau0	Optimal found (ACO)	Time (ACO)"
+./benchmark.sh tests/max_3_sat/3sat_100_500_2.cnf
+./benchmark.sh tests/max_3_sat/3sat_300_2000_34.cnf
+./benchmark.sh tests/max_3_sat/3sat_300_2000_15.cnf
+./benchmark.sh tests/max_3_sat/3sat_500_5000_1.cnf
+./benchmark.sh tests/max_3_sat/3sat_300_2000_25.cnf
+./benchmark.sh tests/max_3_sat/3sat_300_800_48.cnf
+./benchmark.sh tests/max_3_sat/3sat_1000_10000_4.cnf
+./benchmark.sh tests/max_3_sat/3sat_300_800_47.cnf
+./benchmark.sh tests/max_3_sat/3sat_500_5000_2.cnf
+./benchmark.sh tests/max_3_sat/3sat_1000_10000_11.cnf
+./benchmark.sh tests/max_3_sat/3sat_300_800_20.cnf
+./benchmark.sh tests/max_3_sat/3sat_1000_10000_24.cnf
+./benchmark.sh tests/max_3_sat/3sat_100_700_34.cnf
+./benchmark.sh tests/max_3_sat/3sat_300_2000_24.cnf
+./benchmark.sh tests/max_3_sat/3sat_300_1500_25.cnf
+./benchmark.sh tests/max_3_sat/3sat_1000_10000_31.cnf
+./benchmark.sh tests/max_3_sat/3sat_500_5000_32.cnf
+./benchmark.sh tests/max_3_sat/3sat_500_5000_38.cnf
+./benchmark.sh tests/max_3_sat/3sat_1000_10000_22.cnf
+./benchmark.sh tests/max_3_sat/3sat_100_500_1.cnf
+./benchmark.sh tests/max_3_sat/3sat_1000_10000_44.cnf
+./benchmark.sh tests/max_3_sat/3sat_300_1500_23.cnf
+./benchmark.sh tests/max_3_sat/3sat_100_700_32.cnf
+./benchmark.sh tests/max_3_sat/3sat_300_2000_26.cnf
+./benchmark.sh tests/max_3_sat/3sat_500_5000_42.cnf
+./benchmark.sh tests/max_3_sat/3sat_100_500_4.cnf
+./benchmark.sh tests/max_3_sat/3sat_300_2000_17.cnf
+./benchmark.sh tests/max_3_sat/3sat_300_2000_32.cnf
+./benchmark.sh tests/max_3_sat/3sat_300_800_4.cnf
+./benchmark.sh tests/max_3_sat/3sat_500_5000_16.cnf
+./benchmark.sh tests/max_3_sat/3sat_300_1500_42.cnf
+./benchmark.sh tests/max_3_sat/3sat_500_5000_17.cnf
+./benchmark.sh tests/max_3_sat/3sat_500_5000_41.cnf
+./benchmark.sh tests/max_3_sat/3sat_1000_10000_50.cnf
+./benchmark.sh tests/max_3_sat/3sat_100_700_8.cnf
+./benchmark.sh tests/max_3_sat/3sat_300_2000_7.cnf
+./benchmark.sh tests/max_3_sat/3sat_300_1500_24.cnf
+./benchmark.sh tests/max_3_sat/3sat_100_500_3.cnf
+./benchmark.sh tests/max_3_sat/3sat_100_700_7.cnf
+./benchmark.sh tests/max_3_sat/3sat_300_800_24.cnf
+./benchmark.sh tests/max_3_sat/3sat_1000_10000_26.cnf
+./benchmark.sh tests/max_3_sat/3sat_100_500_5.cnf
+./benchmark.sh tests/max_3_sat/3sat_1000_10000_23.cnf
+./benchmark.sh tests/max_3_sat/3sat_500_5000_46.cnf
+./benchmark.sh tests/max_3_sat/3sat_300_2000_4.cnf
+./benchmark.sh tests/max_3_sat/3sat_1000_10000_14.cnf
+./benchmark.sh tests/max_3_sat/3sat_100_700_35.cnf
+./benchmark.sh tests/max_3_sat/3sat_300_1500_29.cnf
+./benchmark.sh tests/max_3_sat/3sat_300_2000_18.cnf
+./benchmark.sh tests/max_3_sat/3sat_500_5000_20.cnf

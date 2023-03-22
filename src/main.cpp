@@ -14,6 +14,7 @@
 #include "../include/GLSSolver.hpp"
 #include "../include/SimulatedAnnealingSolver.hpp"
 #include "../include/GeneticAlgorithmSolver.hpp"
+#include "../include/MemeticAlgorithmSolver.hpp"
 #include "../include/ACOSolver.hpp"
 #include "../include/SATInstance.hpp"
 
@@ -92,11 +93,19 @@ int main(int argc, char *argv[]) {
     /* Param: n_ants, alpha, beta, rho, q0, tau0,
      *
      */
-    ACOSolver aco_solver(instance, 100, 1, 1, 0.15, 0.1, 1);
+    ACOSolver aco_solver(instance, 100, 0.7, 0.3, 0.25, 15, 10);
     double aco_solver_t = measure_time([&] { aco_solver.solve(); });
     cout << "c ACO " << aco_solver_t << "s" << endl;
     aco_solver.print_solution();
     aco_solver.verify_solution();
+
+    // ========== MEMETIC ALGORITHM ==========
+    MemeticAlgorithmSolver ma_solver(instance, 100, 5, 60, 1, 5);
+    double ma_solver_t = measure_time([&] { ma_solver.solve(); });
+    cout << "c MA " << ma_solver_t << "s" << endl;
+    ma_solver.print_solution();
+    ma_solver.verify_solution();
+
 
     return 0;
 }

@@ -26,13 +26,11 @@
 ACOSolver::ACOSolver(
     const SATInstance &instance,
     int n_ants,
-
     double alpha,
     double beta,
     double rho,
     double q0,
     double tau0,
-    
     uint seed
 ) : MaxSATSolver(instance),
     seed(seed),
@@ -45,9 +43,6 @@ ACOSolver::ACOSolver(
 {
     // Initialize the population with random solutions
     srand(seed);
-
-    tau0 = instance.n_vars / (1 - rho);
-    q0 = 0;
 
     // Initialize the pheromone vector
     int n_vertices = 2*instance.n_vars - 2;
@@ -88,6 +83,28 @@ void ACOSolver::solve() {
 
             optimal_found = instance.n_clauses == internal_optimal_n_satisfied;
             if (optimal_found) break;
+
+            // Deposit pheromones in the edges of the solution
+            deposit_pheromones(assignment, n_satisfied);
+        }
+
+        // Applies local search to the best solution found by the current colony
+        while (i < instance.n_vars) {
+            vector<bool> assignment = internal_optimal_assignment;
+            for (i = 0; i < instance.n_vars; i++) {
+                // Flip a variable
+                assignment[i] = !assignment[i];
+
+                int new_n_satisfied = compute_n_satisfied(assignment);
+                if (new_n_satisfied > internal_optimal_n_satisfied) {
+                    internal_optimal_n_satisfied = new_n_satisfied;
+                    internal_optimal_assignment = assignment;
+                    break;
+                }
+
+                // Undo the flip
+                assignment[i] = !assignment[i];
+            }
         }
 
         // If the solution is better than the current best, update the best
@@ -108,37 +125,56 @@ void ACOSolver::solve() {
             pheromone[j].second *= (1 - rho);
         }
 
-        bool current_src = internal_optimal_assignment[0];
-        int literal = current_src;
-        if (current_src) src_pheromone.second += q0 * internal_optimal_n_satisfied;
-        else src_pheromone.first += q0 * internal_optimal_n_satisfied;
 
-        // For each variable in the optimal assignment
-        for (int k = 1; k < instance.n_vars; k++) {
-            if (literal > 2*instance.n_vars - 3) break;
+        // Deposit more pheromones in the edges of the best solution found by the current colony
+        deposit_pheromones(internal_optimal_assignment, internal_optimal_n_satisfied);
 
-            // Saves a reference to the current pheromone
-            pair<double, double> &ref = pheromone[literal];
 
-            // Calculate the next node
-            literal += 1 + !current_src;
-            current_src = internal_optimal_assignment[k];
-            literal += current_src;
+    }
+    // Print pheronomes like a list in python
+    cout << "Pheromones: [";
+    for (uint i = 0; i < pheromone.size(); i++) {
+        int var = (i & 1) ? (i >> 1) : -(i >> 1);
+        cout << "var " << var << ": ";
+        cout << "(" << pheromone[i].first << ", " << pheromone[i].second << ")";
+        if (i != pheromone.size() - 1) cout << ", ";
+    }
+    cout << "]" << endl;
+}
 
-            // If the literal is true in the best solution
-            if (current_src) ref.second += q0 * internal_optimal_n_satisfied;
-            else ref.first += q0 * internal_optimal_n_satisfied;
-        }
+/**
+ * @brief Backtrace the solution from the optimal assignment and deposit pheromones
+ * in the edges of the solution
+ * 
+ * @param assignment The solution found by the ant
+ * @param n_satisfied The number of satisfied clauses in the optimal assignment
+ */
+void ACOSolver::deposit_pheromones(const vector<bool> &assignment, int n_satisfied) {
+    bool current_src = assignment[0];
+    int literal = current_src;
+    if (current_src) src_pheromone.second += q0 * n_satisfied;
+    else src_pheromone.first += q0 * n_satisfied;
 
-        // Print pheronomes like a list in python
-        // cout << "Pheromones: [";
-        // for (uint i = 0; i < pheromone.size(); i++) {
-        //     int var = (i & 1) ? (i >> 1) : -(i >> 1);
-        //     cout << "var " << var << ": ";
-        //     cout << "(" << pheromone[i].first << ", " << pheromone[i].second << ")";
-        //     if (i != pheromone.size() - 1) cout << ", ";
-        // }
-        // cout << "]" << endl;
+    // For each variable in the optimal assignment
+    int limit = 2*instance.n_vars - 3;
+    for (int k = 1; k < instance.n_vars; k++) {
+        if (literal > limit) break;
+
+        // Saves a reference to the current pheromone
+        pair<double, double> &ref = pheromone[literal];
+
+        // Calculate the next node
+        literal += 1 + !current_src;
+        current_src = assignment[k];
+        literal += current_src;
+
+        // If the literal is true in the assignment
+        if (current_src) ref.second += q0 * n_satisfied;
+        else ref.first += q0 * n_satisfied;
+
+        // Cout the pheromone
+        // cout << "q0: " << q0 << endl;
+        // cout << "Pheromone: (" << ref.first << ", " << ref.second << ")" << endl;
     }
 }
 
@@ -153,11 +189,12 @@ vector<bool> ACOSolver::generate_solution() {
 
     bool current_src = rand() < p * RAND_MAX;
     int literal = current_src;
+    int limit = 2*instance.n_vars - 3;
     // Walk the graph
     while (true) {
         assignment.push_back(current_src);
         // End of the graph
-        if (literal > 2*instance.n_vars - 3) break;
+        if (literal > limit) break;
 
         // Calculate the next node according to the probability
         p = pow(pheromone[literal].first, alpha) * pow(heuristic[literal].first, beta);

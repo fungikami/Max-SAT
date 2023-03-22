@@ -59,6 +59,7 @@ class ACOSolver : public MaxSATSolver {
         double sum_probs = 0;
 
         vector<bool> generate_solution();
+        void deposit_pheromones(const vector<bool> &assignment, int n_satisfied);
 };
 
 #endif

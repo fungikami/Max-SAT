@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
     /* Param: n_ants, alpha, beta, rho, q0, tau0,
      *
      */
-    ACOSolver aco_solver(instance, 100, 1, 1, 0.15, 1, 10);
+    ACOSolver aco_solver(instance, 100, 1, 1, 0.15, 0.1, 1);
     double aco_solver_t = measure_time([&] { aco_solver.solve(); });
     cout << "c ACO " << aco_solver_t << "s" << endl;
     aco_solver.print_solution();

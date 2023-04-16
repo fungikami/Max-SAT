@@ -4,7 +4,6 @@
  * Copyright (C) 2023 Christopher Gómez, Ka Fung
  */
 
-#include <functional>
 #include <iostream>
 #include <vector>
 

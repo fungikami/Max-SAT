@@ -17,6 +17,7 @@
 #include "../include/MemeticAlgorithmSolver.hpp"
 #include "../include/ACOSolver.hpp"
 #include "../include/SATInstance.hpp"
+#include "../include/SolutionTreeSolver.hpp"
 
 using namespace std;
 
@@ -46,11 +47,11 @@ int main(int argc, char *argv[]) {
     // bf_solver.verify_solution();
 
     // ========== LOCAL SEARCH ==========
-    // LocalSearchSolver ls_solver(instance);
-    // double ls_solver_t = measure_time([&] { ls_solver.solve(); });
-    // cout << "c LS " << ls_solver_t << "s" << endl;
-    // ls_solver.print_solution();
-    // ls_solver.verify_solution();
+    LocalSearchSolver ls_solver(instance);
+    double ls_solver_t = measure_time([&] { ls_solver.solve(); });
+    cout << "c LS " << ls_solver_t << "s" << endl;
+    ls_solver.print_solution();
+    ls_solver.verify_solution();
 
     // ========== GUIDED LOCAL SEARCH ==========
     // GLSSolver gls_solver(instance, ls_solver.seed);
@@ -69,11 +70,11 @@ int main(int argc, char *argv[]) {
     // temp auto, cool fact 0.01, log cool, 9974, 0.240004s
     // 4sat_300_2500_35 
     // temp auto, cool fact 0.01, log cool, 2500, 0.029113s
-    SimulatedAnnealingSolver sa_solver(instance, 0.01);
-    double sa_solver_t = measure_time([&] { sa_solver.solve(); });
-    cout << "c SA " << sa_solver_t << "s" << endl;
-    sa_solver.print_solution();
-    sa_solver.verify_solution();
+    // SimulatedAnnealingSolver sa_solver(instance, 0.01);
+    // double sa_solver_t = measure_time([&] { sa_solver.solve(); });
+    // cout << "c SA " << sa_solver_t << "s" << endl;
+    // sa_solver.print_solution();
+    // sa_solver.verify_solution();
 
     // ========== GENETIC ALGORITHM ==========
     /* Param: population_size, tournament_size, 
@@ -83,29 +84,35 @@ int main(int argc, char *argv[]) {
      *  Elite: 0.5, 9854/9857/9876. Elite: 0.3 9853/9858/clearl
      
      */
-    GeneticAlgorithmSolver ga_solver(instance, 100, 5, 60, 1, 5);
-    double ga_solver_t = measure_time([&] { ga_solver.solve(); });
-    cout << "c GA " << ga_solver_t << "s" << endl;
-    ga_solver.print_solution();
-    ga_solver.verify_solution();
+    // GeneticAlgorithmSolver ga_solver(instance, 100, 5, 60, 1, 5);
+    // double ga_solver_t = measure_time([&] { ga_solver.solve(); });
+    // cout << "c GA " << ga_solver_t << "s" << endl;
+    // ga_solver.print_solution();
+    // ga_solver.verify_solution();
 
     // ========== ACO ==========
     /* Param: n_ants, alpha, beta, rho, q0, tau0,
      *
      */
-    ACOSolver aco_solver(instance, 100, 0.7, 0.3, 0.25, 15, 10);
-    double aco_solver_t = measure_time([&] { aco_solver.solve(); });
-    cout << "c ACO " << aco_solver_t << "s" << endl;
-    aco_solver.print_solution();
-    aco_solver.verify_solution();
+    // ACOSolver aco_solver(instance, 100, 0.7, 0.3, 0.25, 15, 10);
+    // double aco_solver_t = measure_time([&] { aco_solver.solve(); });
+    // cout << "c ACO " << aco_solver_t << "s" << endl;
+    // aco_solver.print_solution();
+    // aco_solver.verify_solution();
 
     // ========== MEMETIC ALGORITHM ==========
-    MemeticAlgorithmSolver ma_solver(instance, 100, 5, 60, 1, 5);
-    double ma_solver_t = measure_time([&] { ma_solver.solve(); });
-    cout << "c MA " << ma_solver_t << "s" << endl;
-    ma_solver.print_solution();
-    ma_solver.verify_solution();
+    // MemeticAlgorithmSolver ma_solver(instance, 100, 5, 60, 1, 5);
+    // double ma_solver_t = measure_time([&] { ma_solver.solve(); });
+    // cout << "c MA " << ma_solver_t << "s" << endl;
+    // ma_solver.print_solution();
+    // ma_solver.verify_solution();
 
+    // ========== SOLUTION TREE ==========
+    SolutionTreeSolver st_solver(instance, 40, 3);
+    double st_solver_t = measure_time([&] { st_solver.solve(); });
+    cout << "c ST " << st_solver_t << "s" << endl;
+    st_solver.print_solution();
+    st_solver.verify_solution();
 
     return 0;
 }

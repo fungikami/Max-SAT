@@ -119,6 +119,7 @@ int LocalSearchSolver::eval_function(
 }
 
 void LocalSearchSolver::print_solution() {
+    cout << "c Local Search Solver" << endl;
     cout << "c seed = " << seed << endl;
     MaxSATSolver::print_solution();
 }

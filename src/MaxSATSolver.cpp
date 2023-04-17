@@ -56,6 +56,7 @@ int MaxSATSolver::compute_n_satisfied(const vector<bool> &assignment) {
  */
 void MaxSATSolver::print_solution() {
     // Print the optimal assignment
+    cout << "c Ka Fung & Christopher Gómez (c) 2023 " << endl;
     string solution = optimal_found ? "OPTIMUM FOUND" : "UNKNOWN";
     cout << "s " << solution << endl;
     cout << "o " << optimal_n_satisfied << endl;

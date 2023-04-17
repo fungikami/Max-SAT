@@ -145,6 +145,9 @@ int SimulatedAnnealingSolver::eval_function(
 }
 
 void SimulatedAnnealingSolver::print_solution() {
+    cout << "c Simulated Annealing Solver" << endl;
+    cout << "c MAX_CYCLES = " << MAX_CYCLES << endl;
+    cout << "c cooling_factor = " << cooling_factor << endl;
     cout << "c seed = " << seed << endl;
     MaxSATSolver::print_solution();
 }

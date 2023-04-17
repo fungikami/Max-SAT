@@ -45,8 +45,6 @@ void SolutionTreeSolver::solve() {
     optimal_n_satisfied = compute_n_satisfied(optimal_assignment);
     bool found_better;
 
-    cout << "initial solution was: " << optimal_n_satisfied << endl;
-
     while (iteration < MAX_GROWS) {
         int ñ = 1;
         found_better = false;
@@ -78,7 +76,11 @@ void SolutionTreeSolver::solve() {
                         optimal_assignment = child.first;
                         optimal_n_satisfied = child.second;
                         found_better = true;
+                        continue;
                     }
+
+                    // If its not better, removes it from the queue
+                    
                 }
                 q.pop();
             }
@@ -142,7 +144,10 @@ int SolutionTreeSolver::eval_function(
 }
 
 void SolutionTreeSolver::print_solution() {
+    cout << "c Solution Tree Solver" << endl;
+    cout << "c MAX_GROWS = " << MAX_GROWS << endl;
+    cout << "c branching_factor = " << branching_factor << endl;
+    cout << "c max_depth = " << max_depth << endl;
     cout << "c seed = " << seed << endl;
-    cout << "c total iterations = " << iteration << endl;
     MaxSATSolver::print_solution();
 }

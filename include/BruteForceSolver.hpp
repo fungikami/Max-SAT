@@ -18,6 +18,7 @@ class BruteForceSolver : public MaxSATSolver {
     BruteForceSolver(const SATInstance &instance);
 
     virtual void solve();
+    void print_solution();
 
     void solve_helper(vector<bool> &assignment, int i);
 };

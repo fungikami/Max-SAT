@@ -364,6 +364,13 @@ vector<bool> GeneticAlgorithmSolver::elitist_selection() {
 }
 
 void GeneticAlgorithmSolver::print_solution() {
+    cout << "c Genetic Algorithm Solver" << endl;
+    cout << "c MAX_GENS = " << MAX_GENS << endl;
+    cout << "c population_size = " << population_size << endl;
+    cout << "c tournament_size = " << tournament_size << endl;
+    cout << "c mutation_probability = " << mutation_probability << endl;
+    cout << "c mutation_percent = " << mutation_percent << endl;
+    cout << "c elite_percent = " << elite_percent << endl;
     cout << "c seed = " << seed << endl;
     MaxSATSolver::print_solution();
 }

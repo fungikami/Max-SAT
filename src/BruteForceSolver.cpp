@@ -66,3 +66,8 @@ void BruteForceSolver::solve_helper(vector<bool> &assignment, int i) {
         solve_helper(assignment, i+1);
     }
 }
+
+void BruteForceSolver::print_solution() {
+    cout << "c Brute Force Solver" << endl;
+    MaxSATSolver::print_solution();
+}

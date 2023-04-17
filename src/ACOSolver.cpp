@@ -218,6 +218,14 @@ vector<bool> ACOSolver::generate_solution() {
 }
 
 void ACOSolver::print_solution() {
+    cout << "c Ant Colony Optimization Solver" << endl;
+    cout << "c MAX_SEARCHES = " << MAX_SEARCHES << endl;
+    cout << "c n_ants = " << n_ants << endl;
+    cout << "c alpha = " << alpha << endl;
+    cout << "c beta = " << beta << endl;
+    cout << "c rho = " << rho << endl;
+    cout << "c q0 = " << q0 << endl;
+    cout << "c tau0 = " << tau0 << endl;
     cout << "c seed = " << seed << endl;
     MaxSATSolver::print_solution();
 }

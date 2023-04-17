@@ -180,6 +180,8 @@ int GLSSolver::penalty_sum(vector<bool> &assignment) {
 }
 
 void GLSSolver::print_solution() {
+    cout << "c Guided Local Search Solver" << endl;
+    cout << "c MAX_TRIALS = " << MAX_TRIALS << endl;
     cout << "c seed = " << seed << endl;
     MaxSATSolver::print_solution();
 }

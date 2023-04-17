@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <cmath>
 
 #include "../include/SATInstance.hpp"
 #include "../include/SolutionTreeSolver.hpp"
@@ -46,7 +47,6 @@ void SolutionTreeSolver::solve() {
     bool found_better;
 
     while (iteration < MAX_GROWS) {
-        int ñ = 1;
         found_better = false;
 
         // Creates a queue and push the root of the tree
@@ -56,7 +56,6 @@ void SolutionTreeSolver::solve() {
         for (int i = 0; i < max_depth; i++) {
             queue<pair<vector<bool>, int>> q_aux;
             while (q.size()) {
-
                 // Generates branching_factor children
                 for (int j = 0; j < branching_factor; j++) {
                     // Copies the front of the queue to the back of the auxiliar queue
@@ -66,7 +65,6 @@ void SolutionTreeSolver::solve() {
                     // Flips a random variable
                     int k = rand() % instance.n_vars;
                     child.first[k] = !child.first[k];
-                    ñ++;
 
                     // Evaluates the new assignment
                     child.second = eval_function(child.first, k, child.second);
@@ -79,11 +77,12 @@ void SolutionTreeSolver::solve() {
                         continue;
                     }
 
-                    // If its not better, removes it from the queue
-                    
+                    // Rejects the new assignment with probability 0.5
+                    if (rand() & 1) q_aux.pop();
                 }
                 q.pop();
             }
+
             // Swaps the queues
             q = move(q_aux);
         }

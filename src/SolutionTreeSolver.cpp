@@ -44,10 +44,8 @@ SolutionTreeSolver::SolutionTreeSolver(
  */
 void SolutionTreeSolver::solve() {
     optimal_n_satisfied = compute_n_satisfied(optimal_assignment);
-    bool found_better;
 
     while (iteration < MAX_GROWS) {
-        found_better = false;
 
         // Creates a queue and push the root of the tree
         queue<pair<vector<bool>, int>> q;
@@ -73,12 +71,11 @@ void SolutionTreeSolver::solve() {
                     if (child.second > optimal_n_satisfied) {
                         optimal_assignment = child.first;
                         optimal_n_satisfied = child.second;
-                        found_better = true;
                         continue;
                     }
 
                     // Rejects the new assignment with probability 0.5
-                    if (rand() & 1) q_aux.pop();
+                    if (rand() & 1) q_aux.pop();;
                 }
                 q.pop();
             }
@@ -86,8 +83,6 @@ void SolutionTreeSolver::solve() {
             // Swaps the queues
             q = move(q_aux);
         }
-        // If no better assignment was found, stop the search
-        // if (!found_better) break;
 
         iteration++;
     }

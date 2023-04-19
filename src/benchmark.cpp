@@ -17,6 +17,7 @@
 #include "../include/MemeticAlgorithmSolver.hpp"
 #include "../include/ACOSolver.hpp"
 #include "../include/SATInstance.hpp"
+#include "../include/SolutionTreeSolver.hpp"
 
 using namespace std;
 
@@ -70,8 +71,7 @@ int main(int argc, char *argv[]) {
 
     // GeneticAlgorithmSolver ga_solver(
     //     instance, population_size, tournament_size, 
-    //     mutation_probability, mutation_percent, elite_percent
-    // );
+    //     mutation_probability, mutation_percent, elite_percent, sa_solver.seed);
     // double ga_solver_t = measure_time([&] { ga_solver.solve(); });
     // ga_solver.verify_solution();
 
@@ -81,29 +81,44 @@ int main(int argc, char *argv[]) {
     // cout << ga_solver.elite_percent << "\t" << ga_solver.optimal_n_satisfied << "\t" << ga_solver_t << endl;
 
     // ========== MEMETIC ALGORITHM ==========
-    MemeticAlgorithmSolver ma_solver(instance, 100, 5, 60, 1, 5);
-    double ma_solver_t = measure_time([&] { ma_solver.solve(); });
-    ma_solver.verify_solution();
+    // MemeticAlgorithmSolver ma_solver(instance, 100, 5, 60, 1, 5, ls_solver.seed);
+    // double ma_solver_t = measure_time([&] { ma_solver.solve(); });
+    // // ma_solver.verify_solution();
+
+    // // #Population	#Tournament	Prob. Mutacion	Porcentaje Mutacion	Porcentaje Elite	Optimal found (MA)	Time (MA)
+    // cout << ma_solver.population_size << "\t" << ma_solver.tournament_size << "\t";
+    // cout << ma_solver.mutation_probability << "\t" << ma_solver.mutation_percent << "\t";
+    // cout << ma_solver.elite_percent << "\t" << ma_solver.optimal_n_satisfied << "\t" << ma_solver_t << "\t";
+
+    // // ========== ANT COLONY OPTIMIZATION ==========
+    // ACOSolver aco_solver(instance, 100, 0.7, 0.3, 0.25, 15, 10, ma_solver.seed);
+    // double aco_solver_t = measure_time([&] { aco_solver.solve(); });
+    // // aco_solver.verify_solution();
+
+    // // #Ants	Alpha	Beta	Rho Q0  Tau0 
+    // cout << aco_solver.n_ants << "\t" << aco_solver.alpha << "\t";
+    // cout << aco_solver.beta << "\t" << aco_solver.rho << "\t";
+    // cout << aco_solver.q0 << "\t" << aco_solver.tau0 << "\t";
+    // cout << aco_solver.optimal_n_satisfied << "\t" << aco_solver_t << endl;
+
+    // ========== SOLUTION TREE ==========
+    int branching_factor = 40;
+    int max_depth = 3;
+    double alpha = 0.7;
+
+    SolutionTreeSolver st_solver(instance, branching_factor, max_depth, alpha);
+    double st_solver_t = measure_time([&] { st_solver.solve(); });
 
     // Filename	Seed	#Vars	#Clauses
-    cout << filename << "\t" << ma_solver.seed << "\t" << instance.n_vars << "\t";
+    cout << filename << "\t" << st_solver.seed << "\t" << instance.n_vars << "\t";
     cout << instance.n_clauses << "\t";
-
-    // #Population	#Tournament	Prob. Mutacion	Porcentaje Mutacion	Porcentaje Elite	Optimal found (MA)	Time (MA)
-    cout << ma_solver.population_size << "\t" << ma_solver.tournament_size << "\t";
-    cout << ma_solver.mutation_probability << "\t" << ma_solver.mutation_percent << "\t";
-    cout << ma_solver.elite_percent << "\t" << ma_solver.optimal_n_satisfied << "\t" << ma_solver_t << "\t";
-
-    // ========== ANT COLONY OPTIMIZATION ==========
-    ACOSolver aco_solver(instance, 100, 0.7, 0.3, 0.25, 15, 10, ma_solver.seed);
-    double aco_solver_t = measure_time([&] { aco_solver.solve(); });
-    aco_solver.verify_solution();
-
-    // #Ants	Alpha	Beta	Rho Q0  Tau0 
-    cout << aco_solver.n_ants << "\t" << aco_solver.alpha << "\t";
-    cout << aco_solver.beta << "\t" << aco_solver.rho << "\t";
-    cout << aco_solver.q0 << "\t" << aco_solver.tau0 << "\t";
-    cout << aco_solver.optimal_n_satisfied << "\t" << aco_solver_t << endl;
+    // cout << ls_solver.optimal_n_satisfied << "\t" << ls_solver.optimal_n_satisfied / (double)instance.n_clauses << "\t" << ls_solver_t << "\t";
+    // cout << gls_solver.optimal_n_satisfied << "\t" << gls_solver.optimal_n_satisfied / (double)instance.n_clauses << "\t" << gls_solver_t << "\t";
+    // cout << sa_solver.optimal_n_satisfied << "\t" << sa_solver.optimal_n_satisfied / (double)instance.n_clauses << "\t" << sa_solver_t << "\t";
+    // cout << ga_solver.optimal_n_satisfied << "\t" << ga_solver.optimal_n_satisfied / (double)instance.n_clauses << "\t" << ga_solver_t << "\t";
+    // cout << ma_solver.optimal_n_satisfied << "\t" << ma_solver.optimal_n_satisfied / (double)instance.n_clauses << "\t" << ma_solver_t << "\t";
+    // cout << aco_solver.optimal_n_satisfied << "\t" << aco_solver.optimal_n_satisfied / (double)instance.n_clauses << "\t" << aco_solver_t << "\t";
+    cout << st_solver.optimal_n_satisfied << "\t" << st_solver.optimal_n_satisfied / (double)instance.n_clauses << "\t" << st_solver_t << endl;
 
     return 0;
 }

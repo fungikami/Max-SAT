@@ -1,4 +1,3 @@
-echo "Filename	Seed	Vars	Clauses	Population size	Tournament size	Mutation Prob.	%Mutation	%Elite	Optimal found (MA)	Time (MA)	#Ants	Alpha	Beta	Rho	q0	tau0	Optimal found (ACO)	Time (ACO)"
 ./benchmark.sh tests/jnh/jnh19.cnf
 ./benchmark.sh tests/jnh/jnh213.cnf
 ./benchmark.sh tests/jnh/jnh207.cnf

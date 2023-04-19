@@ -23,12 +23,14 @@ class SolutionTreeSolver : public MaxSATSolver {
       const SATInstance &instance,
       int branching_factor,
       int max_depth,
+      double alpha,
       uint seed = time(NULL)
     );
 
     int iteration = 0;
     int branching_factor;
     int max_depth;
+    double alpha;
 
     virtual void solve();
 

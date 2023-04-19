@@ -110,8 +110,9 @@ int main(int argc, char *argv[]) {
     // ========== SOLUTION TREE ==========
     int branching_factor = stoi(argv[2]);
     int max_depth = stoi(argv[3]);
+    double alpha = stod(argv[4]);
 
-    SolutionTreeSolver st_solver(instance, branching_factor, max_depth);
+    SolutionTreeSolver st_solver(instance, branching_factor, max_depth, alpha);
     double st_solver_t = measure_time([&] { st_solver.solve(); });
     cout << "c time = " << st_solver_t << "s" << endl;
     st_solver.print_solution();

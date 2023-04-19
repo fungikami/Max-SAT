@@ -25,10 +25,12 @@ SolutionTreeSolver::SolutionTreeSolver(
     const SATInstance &instance,
     int branching_factor,
     int max_depth,
+    double alpha,
     uint seed
 ) : MaxSATSolver(instance),
     branching_factor(branching_factor),
     max_depth(max_depth),
+    alpha(alpha),
     seed(seed)
 {
     // Initialize the optimal assignment with random values
@@ -46,7 +48,6 @@ void SolutionTreeSolver::solve() {
     optimal_n_satisfied = compute_n_satisfied(optimal_assignment);
 
     while (iteration < MAX_GROWS) {
-
         // Creates a queue and push the root of the tree
         queue<pair<vector<bool>, int>> q;
         q.emplace(make_pair(optimal_assignment, optimal_n_satisfied));
@@ -74,8 +75,8 @@ void SolutionTreeSolver::solve() {
                         continue;
                     }
 
-                    // Rejects the new assignment with probability 0.5
-                    if (rand() & 1) q_aux.pop();;
+                    // Rejects the new assignment with a probability alpha
+                    if (alpha * RAND_MAX >= rand()) q_aux.pop();
                 }
                 q.pop();
             }
@@ -142,6 +143,7 @@ void SolutionTreeSolver::print_solution() {
     cout << "c MAX_GROWS = " << MAX_GROWS << endl;
     cout << "c branching_factor = " << branching_factor << endl;
     cout << "c max_depth = " << max_depth << endl;
+    cout << "c alpha = " << alpha << endl;
     cout << "c seed = " << seed << endl;
     MaxSATSolver::print_solution();
 }

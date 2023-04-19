@@ -35,17 +35,25 @@ SimulatedAnnealingSolver::SimulatedAnnealingSolver(
     double n_flips = instance.n_vars / 2;
     initial_temperature = 0;
 
+    int aux_n_satisfied = optimal_n_satisfied;
+    vector<bool> aux_assignment = optimal_assignment;
+
     // Take a random variable and flip it, calculate the average
     // |delta n_satisfied| for each flip
     for (int i = 0; i < n_flips; i++) {
         int j = rand() % instance.n_vars;
-        optimal_assignment[j] = !optimal_assignment[j];
+        aux_assignment[j] = !aux_assignment[j];
 
-        int new_n_satisfied = eval_function(optimal_assignment, j, optimal_n_satisfied);
+        int new_n_satisfied = eval_function(aux_assignment, j, aux_n_satisfied);
         initial_temperature += (
-            abs(new_n_satisfied - optimal_n_satisfied) / (double) n_flips
+            abs(new_n_satisfied - aux_n_satisfied) / (double) n_flips
         );
-        optimal_n_satisfied = new_n_satisfied;
+        aux_n_satisfied = new_n_satisfied;
+
+        if (aux_n_satisfied > optimal_n_satisfied) {
+            optimal_n_satisfied = aux_n_satisfied;
+            optimal_assignment = aux_assignment;
+        }
     }
 
     initial_temperature *= 50;
